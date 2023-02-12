@@ -6,7 +6,7 @@ function Hero() {
   return (
     <header>
       <Layout className="pt-20 pb-16 text-center lg:pt-32">
-        <h1 className="mx-auto max-w-4xl font-display text-5xl font-semibold text-slate-900 sm:text-7xl">
+        <h1 className="mx-auto max-w-4xl font-display text-5xl font-semibold text-zinc-900 sm:text-6xl">
           Networking for{" "}
           <span className="relative whitespace-nowrap text-violet-700">
             <svg
@@ -21,7 +21,7 @@ function Hero() {
           </span>{" "}
           students and alumni.
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
+        <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-zinc-700">
           Lorem Ipsum has been the industry,s standard dummy text ever since the
           1500s, when an unknown printer took a galley of type and scrambled it
           to make a type specimen.
