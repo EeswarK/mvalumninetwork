@@ -24,9 +24,13 @@ interface LayoutProps
 export const Layout: React.FC<LayoutProps> = (props) => {
   const { narrow, className } = props;
 
-  return (
+  if (narrow) {
     <div className={clsx(layoutStyles(), className)}>
       <div className={layoutStyles({ narrow })}>{props.children}</div>
-    </div>
+    </div>;
+  }
+
+  return (
+    <div className={clsx(layoutStyles(), className)}>{props.children}</div>
   );
 };
