@@ -6,8 +6,8 @@ import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
 
 import { Layout } from "./Layout";
-import { Logo } from "./Logo";
 import { Button } from "./Button";
+import { Logo } from "./Logo";
 
 function MobileNavigation() {
   return (
@@ -18,7 +18,7 @@ function MobileNavigation() {
             <span className="sr-only">Toggle Navigation</span>
             <svg
               aria-hidden="true"
-              className="h-3.5 w-3.5 overflow-visible stroke-slate-700"
+              className="h-3.5 w-3.5 overflow-visible stroke-zinc-700"
               fill="none"
               strokeWidth={2}
               strokeLinecap="round"
@@ -47,7 +47,7 @@ function MobileNavigation() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Popover.Overlay className="fixed inset-0 bg-slate-300/50" />
+              <Popover.Overlay className="fixed inset-0 bg-zinc-300/50" />
             </Transition.Child>
             <Transition.Child
               as={Fragment}
@@ -60,7 +60,7 @@ function MobileNavigation() {
             >
               <Popover.Panel
                 as="ul"
-                className="absolute inset-x-0 top-full mt-4 origin-top space-y-4 rounded-2xl bg-white p-6 text-lg tracking-tight text-slate-900 shadow-xl ring-1 ring-slate-900/5"
+                className="absolute inset-x-0 top-full mt-4 origin-top space-y-4 rounded-2xl bg-white p-6 text-lg tracking-tight text-zinc-900 shadow-xl ring-1 ring-zinc-900/5"
               >
                 <li>
                   <Link href="#features">
@@ -83,7 +83,7 @@ function MobileNavigation() {
                     </a>
                   </Link>
                 </li>
-                <li className="border-t border-slate-300/40 pt-4">
+                <li className="border-t border-zinc-300/40 pt-4">
                   <Link href="/login">
                     <a className="block w-full">Sign in</a>
                   </Link>
@@ -102,17 +102,14 @@ export function NavBar() {
     <header className="py-10">
       <Layout>
         <nav className="relative z-50 text-sm">
-          <ul className="flex items-center">
+          <ul className="flex items-end">
             <li>
-              <Link href="#">
-                <span className="sr-only">Home</span>
-                <Logo className="h-10 w-auto" />
-              </Link>
+              <Logo />
             </li>
-            <li className="ml-12 hidden md:block">
+            {/* <li className="ml-20 hidden md:block">
               <Link
                 href="#features"
-                className="rounded-lg py-1 px-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                className="rounded-lg py-1 px-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
               >
                 <span>Features</span>
               </Link>
@@ -120,7 +117,7 @@ export function NavBar() {
             <li className="ml-6 hidden md:block">
               <Link
                 href="#testimonials"
-                className="rounded-lg py-1 px-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                className="rounded-lg py-1 px-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
               >
                 <span>Testimonials</span>
               </Link>
@@ -128,21 +125,19 @@ export function NavBar() {
             <li className="ml-6 hidden md:block">
               <Link
                 href="#pricing"
-                className="rounded-lg py-1 px-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                className="rounded-lg py-1 px-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
               >
                 <span>Pricing</span>
               </Link>
-            </li>
+            </li> */}
             <li className="ml-auto hidden md:block">
               <Button href="/login" intent="tertiary">
-                <span>Sign in</span>
+                <span>Login</span>
               </Button>
             </li>
             <li className="ml-auto md:ml-6">
               <Button href="/register">
-                <span>
-                  Get started<span className="hidden lg:inline"> today</span>
-                </span>
+                <span>Sign Up!</span>
               </Button>
             </li>
             <li className="ml-5 -mr-1 md:hidden">
