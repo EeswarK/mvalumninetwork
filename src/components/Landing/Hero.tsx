@@ -1,8 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Button } from "@/components/ui/Button";
 import { Layout } from "@/components/ui/Layout";
-import React from "react";
+import { api } from "@/utils/api";
+import React, { useState } from "react";
 
-function Hero() {
+export default function Hero() {
+  const [hello, setHello] = useState(
+    api.example.hello.useQuery({ text: "from tRPC" })
+  );
+
   return (
     <header>
       <Layout className="pt-20 pb-16 text-center lg:pt-32">
@@ -26,8 +32,10 @@ function Hero() {
           1500s, when an unknown printer took a galley of type and scrambled it
           to make a type specimen.
         </p>
+        {/* {hello && <p>{hello.data?.greeting}</p>} */}
+
         <div className="mt-10 flex justify-center space-x-6">
-          <Button href="/register">Get 6 months free</Button>
+          <Button>Get 6 months free</Button>
           <Button
             href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
             intent="tertiary"
@@ -45,5 +53,3 @@ function Hero() {
     </header>
   );
 }
-
-export default Hero;

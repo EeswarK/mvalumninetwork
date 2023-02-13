@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { Layout } from "./Layout";
 import { Button } from "./Button";
 import { Logo } from "./Logo";
+import { useSession } from "next-auth/react";
 
 function MobileNavigation() {
   return (
@@ -98,6 +99,8 @@ function MobileNavigation() {
 }
 
 export function NavBar() {
+  const { data: session } = useSession();
+
   return (
     <header className="py-10">
       <Layout>
@@ -130,11 +133,20 @@ export function NavBar() {
                 <span>Pricing</span>
               </Link>
             </li> */}
-            <li className="ml-auto hidden md:block">
-              <Button href="/login" intent="tertiary">
-                <span>Login</span>
-              </Button>
-            </li>
+            {session ? (
+              <li className="ml-auto hidden md:block">
+                <Button href="/login" intent="tertiary">
+                  <span>Logged In!</span>
+                </Button>
+              </li>
+            ) : (
+              <li className="ml-auto hidden md:block">
+                <Button href="/register" intent="tertiary">
+                  <span>Login</span>
+                </Button>
+              </li>
+            )}
+
             <li className="ml-auto md:ml-6">
               <Button href="/register">
                 <span>Sign Up!</span>
