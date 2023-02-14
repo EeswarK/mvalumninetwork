@@ -2,12 +2,10 @@
 import { Button } from "@/components/ui/Button";
 import { Layout } from "@/components/ui/Layout";
 import { api } from "@/utils/api";
-import React, { useState } from "react";
+import React from "react";
 
 export default function Hero() {
-  const [hello, setHello] = useState(
-    api.example.hello.useQuery({ text: "from tRPC" })
-  );
+  const hello = api.example.hello.useQuery({ text: "yoooo" });
 
   return (
     <header>
@@ -32,7 +30,7 @@ export default function Hero() {
           1500s, when an unknown printer took a galley of type and scrambled it
           to make a type specimen.
         </p>
-        {/* {hello && <p>{hello.data?.greeting}</p>} */}
+        {hello && <p>{hello.data?.greeting}</p>}
 
         <div className="mt-10 flex justify-center space-x-6">
           <Button>Get 6 months free</Button>
