@@ -1,11 +1,29 @@
 import { Button } from "@/components/ui/Button";
 import { Layout } from "@/components/ui/Layout";
 import { Logo } from "@/components/ui/Logo";
-import Image from "next/image";
+import TextTip from "@/components/ui/TextTip";
+import Email from "next-auth/providers/email";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
-function Register() {
+function SignIn() {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  const [email, setEmail] = React.useState("");
+
+  if (session) {
+    void router.replace("/");
+  }
+
+  function sendEmail() {
+    console.log("rubber ducky");
+    void signIn("email", { email });
+    // void router.replace("/api/auth/verify-request?provider=email&type=email");
+  }
+
   return (
     <Layout className="flex min-h-screen flex-col items-center justify-center py-12">
       <div className="text-center sm:mx-auto sm:w-full sm:max-w-md">
@@ -26,7 +44,7 @@ function Register() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" action="#" method="POST">
+          <div className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -42,61 +60,21 @@ function Register() {
                   autoComplete="email"
                   required
                   className="block w-full appearance-none rounded-md border border-zinc-300 px-3 py-2 placeholder-zinc-400 shadow-sm focus:border-violet-500 focus:outline-none focus:ring-violet-500 sm:text-sm"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
+              <span className="mt-1 flex gap-1 text-xs font-medium text-zinc-500">
+                Utilizing
+                <TextTip tip="An email will be sent to your inbox to finish signing in.">
+                  <span>passwordless sign in. </span>
+                </TextTip>
+              </span>
             </div>
 
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-zinc-700"
-              >
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="block w-full appearance-none rounded-md border border-zinc-300 px-3 py-2 placeholder-zinc-400 shadow-sm focus:border-violet-500 focus:outline-none focus:ring-violet-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-zinc-300 text-violet-700 focus:ring-0"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-zinc-900"
-                >
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-violet-600 hover:text-violet-500"
-                >
-                  Forgot your password?
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <Button type="submit" className="w-full justify-center">
-                Sign In
-              </Button>
-            </div>
-          </form>
+            <Button onClick={sendEmail} className="w-full justify-center">
+              Sign In
+            </Button>
+          </div>
 
           <div className="mt-6">
             <div className="relative">
@@ -110,9 +88,28 @@ function Register() {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-3 gap-3">
+            <div className="mt-6 grid grid-cols-2 gap-3">
               <Button
-                href="#"
+                onClick={() => {
+                  void signIn("google");
+                }}
+                intent="tertiary"
+                className="w-full justify-center text-zinc-600"
+              >
+                <span className="sr-only">Sign in with Google</span>
+                <svg
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                  data-icon="google"
+                  viewBox="0 0 488 512"
+                  fill="currentColor"
+                >
+                  <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
+                </svg>
+              </Button>
+
+              <Button
+                onClick={() => void signIn("facebook")}
                 intent="tertiary"
                 className="w-full justify-center text-zinc-600"
               >
@@ -127,24 +124,7 @@ function Register() {
                 </svg>
               </Button>
 
-              <Button
-                href="#"
-                intent="tertiary"
-                className="w-full justify-center text-zinc-600"
-              >
-                <span className="sr-only">Sign in with Gmail</span>
-                <svg
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                  data-icon="google"
-                  viewBox="0 0 488 512"
-                  fill="currentColor"
-                >
-                  <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
-                </svg>
-              </Button>
-
-              <Button
+              {/* <Button
                 href="#"
                 intent="tertiary"
                 className="w-full justify-center text-zinc-600"
@@ -158,7 +138,7 @@ function Register() {
                 >
                   <path d="M72.16 99.73H9.927a5 5 0 0 0-5 5v199.928a5 5 0 0 0 5 5H72.16a5 5 0 0 0 5-5V104.73a5 5 0 0 0-5-5zM41.066.341C18.422.341 0 18.743 0 41.362 0 63.991 18.422 82.4 41.066 82.4c22.626 0 41.033-18.41 41.033-41.038C82.1 18.743 63.692.341 41.066.341zM230.454 94.761c-24.995 0-43.472 10.745-54.679 22.954V104.73a5 5 0 0 0-5-5h-59.599a5 5 0 0 0-5 5v199.928a5 5 0 0 0 5 5h62.097a5 5 0 0 0 5-5V205.74c0-33.333 9.054-46.319 32.29-46.319 25.306 0 27.317 20.818 27.317 48.034v97.204a5 5 0 0 0 5 5H305a5 5 0 0 0 5-5V194.995c0-49.565-9.451-100.234-79.546-100.234z" />
                 </svg>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
@@ -167,4 +147,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default SignIn;
