@@ -15,7 +15,7 @@ function SignIn() {
   const [email, setEmail] = React.useState("");
 
   if (session) {
-    void router.replace("/");
+    void router.replace("/home");
   }
 
   function sendEmail() {
