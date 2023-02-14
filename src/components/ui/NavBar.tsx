@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Fragment } from "react";
@@ -8,7 +9,7 @@ import clsx from "clsx";
 import { Layout } from "./Layout";
 import { Button } from "./Button";
 import { Logo } from "./Logo";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 function MobileNavigation() {
   return (
@@ -101,6 +102,11 @@ function MobileNavigation() {
 export function NavBar() {
   const { data: session } = useSession();
 
+  async function handleSignOut() {
+    await signOut();
+    return;
+  }
+
   return (
     <header className="py-10">
       <Layout>
@@ -135,23 +141,32 @@ export function NavBar() {
             </li> */}
             {session ? (
               <li className="ml-auto hidden md:block">
-                <Button href="/login" intent="tertiary">
-                  <span>Logged In!</span>
+                <Button onClick={handleSignOut} intent="tertiary">
+                  <span>Sign Out</span>
                 </Button>
               </li>
             ) : (
               <li className="ml-auto hidden md:block">
-                <Button href="/register" intent="tertiary">
+                <Button href="/signin" intent="tertiary">
                   <span>Login</span>
                 </Button>
               </li>
             )}
 
-            <li className="ml-auto md:ml-6">
-              <Button href="/register">
-                <span>Sign Up!</span>
-              </Button>
-            </li>
+            {session ? (
+              <li className="ml-auto md:ml-6">
+                <Button href="/home">
+                  <span>Home</span>
+                </Button>
+              </li>
+            ) : (
+              <li className="ml-auto md:ml-6">
+                <Button href="/signin">
+                  <span>Sign Up!</span>
+                </Button>
+              </li>
+            )}
+
             <li className="ml-5 -mr-1 md:hidden">
               <MobileNavigation />
             </li>
