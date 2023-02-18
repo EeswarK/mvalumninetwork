@@ -1,8 +1,7 @@
 import { CardContainer } from "@/components/ui/CardContainer";
 import { NavBar } from "@/components/ui/NavBar";
 import type { GetServerSideProps, NextPage } from "next";
-import { getSession, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
 import React from "react";
 
 const users: UserType[] = [];

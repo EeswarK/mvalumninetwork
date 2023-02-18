@@ -7,6 +7,7 @@ import Landing from "../components/Landing/Landing";
 const Home: NextPage = () => {
   return (
     <>
+      <NavBar />
       <Head>
         <title>MV Network</title>
         <meta
@@ -15,7 +16,6 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar />
       <main>
         <Landing />
       </main>
