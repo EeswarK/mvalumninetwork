@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -10,6 +12,7 @@ import { Layout } from "./Layout";
 import { Button } from "./Button";
 import { Logo } from "./Logo";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 function MobileNavigation() {
   return (
@@ -101,6 +104,9 @@ function MobileNavigation() {
 
 export function NavBar() {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  console.log("user", session?.user);
 
   async function handleSignOut() {
     await signOut();
@@ -108,9 +114,9 @@ export function NavBar() {
   }
 
   return (
-    <header className="py-10">
+    <header className="py-6">
       <Layout>
-        <nav className="relative z-50 text-sm">
+        <nav className="z-50 text-sm">
           <ul className="flex items-end">
             <li>
               <Logo />
@@ -165,6 +171,33 @@ export function NavBar() {
                   <span>Sign Up!</span>
                 </Button>
               </li>
+            )}
+
+            {session ? (
+              <li className="ml-auto hidden md:ml-6 md:block">
+                <Button
+                  onClick={() => router.replace("/settings/account")}
+                  rounded="full"
+                >
+                  <span>{session.user.name?.charAt(1)}</span>
+                  {/* {session.user.image ? (
+                    <Image src={session.user.image} alt={""} fill={true} />
+                  ) : (
+                    <span>{session.user.name?.charAt(1)}</span>
+                  )} */}
+                </Button>
+              </li>
+            ) : (
+              <>
+                <li className="ml-auto hidden md:ml-6 md:block">
+                  <Button
+                    onClick={() => router.replace("/settings/account")}
+                    rounded="full"
+                  >
+                    <span>?</span>
+                  </Button>
+                </li>
+              </>
             )}
 
             <li className="ml-5 -mr-1 md:hidden">
