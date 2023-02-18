@@ -10,7 +10,7 @@ import clsx from "clsx";
 
 import { Layout } from "./Layout";
 import { Button } from "./Button";
-import { Logo } from "./Logo";
+import { Logo } from "../Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
@@ -114,37 +114,13 @@ export function NavBar() {
   }
 
   return (
-    <header className="py-6">
+    <header className="top-0 py-6">
       <Layout>
         <nav className="z-50 text-sm">
           <ul className="flex items-end">
             <li>
               <Logo />
             </li>
-            {/* <li className="ml-20 hidden md:block">
-              <Link
-                href="#features"
-                className="rounded-lg py-1 px-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
-              >
-                <span>Features</span>
-              </Link>
-            </li>
-            <li className="ml-6 hidden md:block">
-              <Link
-                href="#testimonials"
-                className="rounded-lg py-1 px-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
-              >
-                <span>Testimonials</span>
-              </Link>
-            </li>
-            <li className="ml-6 hidden md:block">
-              <Link
-                href="#pricing"
-                className="rounded-lg py-1 px-2 text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900"
-              >
-                <span>Pricing</span>
-              </Link>
-            </li> */}
             {session ? (
               <li className="ml-auto hidden md:block">
                 <Button onClick={handleSignOut} intent="tertiary">

@@ -16,7 +16,6 @@ type UserType = {
 const Home: NextPage = () => {
   return (
     <>
-      <NavBar />
       <h1> Home </h1>
       {users.map((user) => {
         <CardContainer>

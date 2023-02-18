@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Layout } from "@/components/ui/Layout";
-import { Logo } from "@/components/ui/Logo";
+import { Logo } from "@/components/Logo";
 import TextTip from "@/components/ui/TextTip";
 import Email from "next-auth/providers/email";
 import { signIn, useSession } from "next-auth/react";
