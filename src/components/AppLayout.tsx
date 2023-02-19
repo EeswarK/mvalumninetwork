@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { NavBar } from "./ui/NavBar";
+import { NavBar } from "./NavBar";
 
 export function AppLayout(props: { children: React.ReactNode }) {
   const { children } = props;
@@ -10,9 +10,9 @@ export function AppLayout(props: { children: React.ReactNode }) {
     router.pathname === "/signin" || router.pathname === "/signup";
 
   return (
-    <>
+    <div className="min-h-screen bg-zinc-100">
       {!isNoNavBarPage && <NavBar />}
       {children}
-    </>
+    </div>
   );
 }

@@ -3,14 +3,14 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
 
-import { Layout } from "./Layout";
-import { Button } from "./Button";
-import { Logo } from "../Logo";
+import { Layout } from "./ui/Layout";
+import { Button } from "./ui/Button";
+import { Logo } from "./Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
@@ -68,29 +68,35 @@ function MobileNavigation() {
                 className="absolute inset-x-0 top-full mt-4 origin-top space-y-4 rounded-2xl bg-white p-6 text-lg tracking-tight text-zinc-900 shadow-xl ring-1 ring-zinc-900/5"
               >
                 <li>
-                  <Link href="#features">
-                    <a className="block w-full" onClick={() => close()}>
-                      Features
-                    </a>
+                  <Link
+                    href="#features"
+                    className="block w-full"
+                    onClick={() => close()}
+                  >
+                    Features
                   </Link>
                 </li>
                 <li>
-                  <Link href="#testimonials">
-                    <a className="block w-full" onClick={() => close()}>
-                      Testimonials
-                    </a>
+                  <Link
+                    href="#testimonials"
+                    className="block w-full"
+                    onClick={() => close()}
+                  >
+                    Testimonials
                   </Link>
                 </li>
                 <li>
-                  <Link href="#pricing">
-                    <a className="block w-full" onClick={() => close()}>
-                      Pricing
-                    </a>
+                  <Link
+                    href="#pricing"
+                    className="block w-full"
+                    onClick={() => close()}
+                  >
+                    Pricing
                   </Link>
                 </li>
                 <li className="border-t border-zinc-300/40 pt-4">
-                  <Link href="/login">
-                    <a className="block w-full">Sign in</a>
+                  <Link href="/login" className="block w-full">
+                    Sign in
                   </Link>
                 </li>
               </Popover.Panel>
@@ -106,18 +112,43 @@ export function NavBar() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  console.log("user", session?.user);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const seamless = router.pathname === "/";
 
   async function handleSignOut() {
     await signOut();
     return;
   }
 
+  useEffect(() => {
+    function onScroll() {
+      setIsScrolled(window.scrollY > 0);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   return (
-    <header className="top-0 py-6">
-      <Layout>
-        <nav className="z-50 text-sm">
-          <ul className="flex items-end">
+    <header
+      className={clsx(
+        "sticky top-0 z-50 bg-white ",
+        seamless
+          ? "py-10"
+          : "py-6 shadow-md shadow-slate-900/5 transition duration-500"
+        // {
+        //   "dark:bg-slate-900/95 dark:backdrop-blur dark:[@supports(backdrop-filter:blur(0))]:bg-slate-900/75":
+        //     isScrolled,
+        //   "dark:bg-transparent": !isScrolled,
+        // }
+      )}
+    >
+      <Layout className="">
+        <nav className="text-sm">
+          <ul className="flex items-center justify-between">
             <li>
               <Logo />
             </li>

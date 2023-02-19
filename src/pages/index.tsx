@@ -1,4 +1,4 @@
-import { NavBar } from "@/components/ui/NavBar";
+import { NavBar } from "@/components/NavBar";
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
@@ -7,7 +7,6 @@ import Landing from "../components/Landing/Landing";
 const Home: NextPage = () => {
   return (
     <>
-      <NavBar />
       <Head>
         <title>MV Network</title>
         <meta
