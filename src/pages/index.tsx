@@ -1,4 +1,3 @@
-import { NavBar } from "@/components/NavBar";
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import Head from "next/head";

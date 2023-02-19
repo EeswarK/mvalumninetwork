@@ -19,7 +19,7 @@ const buttonStyles = cva(
         primary:
           "bg-violet-700 hover:bg-violet-800 text-white | border-transparent focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
         secondary:
-          "text-indigo-700 bg-violet-100 hover:bg-violet-200 | border-transparent focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
+          "text-violet-700 bg-violet-100 hover:bg-violet-200 | border-transparent focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
         tertiary: "bg-white hover:bg-gray-50 | text-gray-700 | border-gray-300",
       },
       rounded: {
