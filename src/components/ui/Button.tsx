@@ -21,6 +21,8 @@ const buttonStyles = cva(
         secondary:
           "text-violet-700 bg-violet-100 hover:bg-violet-200 | border-transparent focus:ring-2 focus:ring-offset-2 focus:ring-violet-500",
         tertiary: "bg-white hover:bg-gray-50 | text-gray-700 | border-gray-300",
+        approve: "bg-green-700 hover:bg-green-800 text-white",
+        decline: "bg-red-400 hover:bg-red-500 text-white",
       },
       rounded: {
         none: "rounded-none",
@@ -40,7 +42,7 @@ interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonStyles> {
   size?: "xs" | "sm" | "md" | "lg" | "xl";
-  intent?: "primary" | "secondary" | "tertiary";
+  intent?: "primary" | "secondary" | "tertiary" | "approve" | "decline";
   rounded?: "none" | "md" | "full";
   href?: string;
 }

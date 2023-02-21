@@ -26,5 +26,5 @@ export default function Footer() {
 }
 
 const navigation = {
-  main: [{ name: "Contact Us", href: "#" }],
+  main: [{ name: "Contact Us", href: "mailto:eeswarkartikeya@gmail.com" }],
 };

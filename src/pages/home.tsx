@@ -13,7 +13,7 @@ type UserType = {
   school: string;
 };
 
-const Home: NextPage = () => {
+const userhome: NextPage = () => {
   return (
     <>
       <h1> Home </h1>
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default userhome;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);

@@ -1,12 +1,11 @@
-import HelpSupport from "@/components/Landing/HelpSupport";
 import NotificationSettings from "@/components/NotificationSettings";
 import ProfileSettings from "@/components/ProfileSettings";
 import SignInSettings from "@/components/SignInSettings";
+import UnapprovedUsers from "@/components/UnapprovedUsers";
 import {
   UserCircleIcon,
   LockClosedIcon,
   BellIcon,
-  QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 
 export const USER_SETTINGS = [
@@ -29,10 +28,15 @@ export const USER_SETTINGS = [
   //   name: "Appearance",
   //   icon: HomeIcon,
   // },
+  // {
+  //   name: "Help & Support",
+  //   icon: QuestionMarkCircleIcon,
+  //   component: HelpSupport,
+  // },
   {
-    name: "Help & Support",
-    icon: QuestionMarkCircleIcon,
-    component: HelpSupport,
+    name: "Unapproved Users",
+    icon: LockClosedIcon,
+    component: UnapprovedUsers,
   },
 ] as const;
 

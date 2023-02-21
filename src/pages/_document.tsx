@@ -54,7 +54,7 @@ const themeScript = `
 export default function Document() {
   return (
     <Html
-      className="h-full scroll-smooth bg-white antialiased [font-feature-settings:'ss01']"
+      className="scroll-smooth antialiased [font-feature-settings:'ss01']"
       lang="en"
     >
       <Head>

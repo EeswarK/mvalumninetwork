@@ -10,9 +10,9 @@ export function AppLayout(props: { children: React.ReactNode }) {
     router.pathname === "/signin" || router.pathname === "/signup";
 
   return (
-    <div className="min-h-screen">
+    <div className="relative flex min-h-screen flex-col bg-zinc-100">
       {!isNoNavBarPage && <NavBar />}
-      {children}
+      <div className="pb-24">{children}</div>
       <Footer />
     </div>
   );

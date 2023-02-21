@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/Button";
 import { Layout } from "@/components/ui/Layout";
 import { Logo } from "@/components/Logo";
 import TextTip from "@/components/ui/TextTip";
-import Email from "next-auth/providers/email";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -19,7 +18,6 @@ function SignIn() {
   }
 
   function sendEmail() {
-    console.log("rubber ducky");
     void signIn("email", { email });
     // void router.replace("/api/auth/verify-request?provider=email&type=email");
   }
