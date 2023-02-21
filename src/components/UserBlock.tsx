@@ -6,15 +6,15 @@ export default function UserBlock({
   user,
   confirm,
   setConfirm,
-  approved,
-  setApproved,
+  actionTaken,
+  setActionTaken,
   index,
 }: {
   user: User;
   confirm?: boolean;
   setConfirm: React.Dispatch<React.SetStateAction<boolean[]>>;
-  approved?: boolean;
-  setApproved: React.Dispatch<React.SetStateAction<boolean[]>>;
+  actionTaken?: boolean;
+  setActionTaken: React.Dispatch<React.SetStateAction<boolean[]>>;
   index: number;
 }) {
   const userApprove = api.users.approve.useMutation();
@@ -22,10 +22,20 @@ export default function UserBlock({
 
   function approveUser() {
     userApprove.mutate({ id: user.id });
+    setActionTaken((prevState) => {
+      const newAction = [...prevState];
+      newAction[index] = true;
+      return newAction;
+    });
   }
 
   function declineUser() {
     userDecline.mutate({ id: user.id });
+    setActionTaken((prevState) => {
+      const newAction = [...prevState];
+      newAction[index] = true;
+      return newAction;
+    });
   }
 
   return (

@@ -5,12 +5,12 @@ import UserBlock from "./UserBlock";
 export default function UnapprovedUsers() {
   const users = api.users.getAllUnapprovedUsers.useQuery();
   const [confirm, setConfirm] = useState<boolean[]>([]);
-  const [approved, setApproved] = useState<boolean[]>([]);
+  const [actionTaken, setActionTaken] = useState<boolean[]>([]);
 
   useEffect(() => {
     if (users.data) {
       setConfirm(users.data.map(() => false));
-      setApproved(users.data.map(() => false));
+      setActionTaken(users.data.map(() => false));
     }
   }, [users.data]);
 
@@ -32,14 +32,14 @@ export default function UnapprovedUsers() {
         <div className="divide-y divide-gray-900 ">
           {users.data.map(
             (user, index) =>
-              !approved[index] && (
+              !actionTaken[index] && (
                 <UserBlock
                   key={user.id}
                   user={user}
                   confirm={confirm[index]}
                   setConfirm={setConfirm}
-                  approved={approved[index]}
-                  setApproved={setApproved}
+                  actionTaken={actionTaken[index]}
+                  setActionTaken={setActionTaken}
                   index={index}
                 />
               )
