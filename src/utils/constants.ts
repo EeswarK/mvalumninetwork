@@ -1,7 +1,7 @@
-import NotificationSettings from "@/components/NotificationSettings";
-import ProfileSettings from "@/components/ProfileSettings";
-import SignInSettings from "@/components/SignInSettings";
-import UnapprovedUsers from "@/components/UnapprovedUsers";
+import NotificationSettings from "@/components/screens/settings/NotificationSettings";
+import ProfileSettings from "@/components/screens/settings/ProfileSettings";
+import SignInSettings from "@/components/screens/settings/SignInSettings";
+import UnapprovedUsers from "@/components/screens/settings/UnapprovedUsers";
 import {
   UserCircleIcon,
   LockClosedIcon,

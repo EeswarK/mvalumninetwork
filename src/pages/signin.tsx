@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/Button";
-import { Layout } from "@/components/ui/Layout";
-import { Logo } from "@/components/Logo";
-import TextTip from "@/components/ui/TextTip";
+import { Button } from "@/components/common/Button";
+import { Layout } from "@/components/common/Layout";
+import { Logo } from "@/components/common/Logo";
+import TextTip from "@/components/common/TextTip";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";

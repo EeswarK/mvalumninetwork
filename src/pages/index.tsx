@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
-import Landing from "../components/Landing/Landing";
+import Landing from "../components/screens/landing/Landing";
 
 const Home: NextPage = () => {
   return (

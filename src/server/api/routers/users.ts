@@ -48,8 +48,12 @@ export const usersRouter = createTRPCRouter({
     });
   }),
 
-  getAllUsers: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findMany();
+  getAllApprovedUsers: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.user.findMany({
+      where: {
+        approved: true,
+      },
+    });
   }),
 
   getAllUnapprovedUsers: protectedProcedure.query(({ ctx }) => {
@@ -58,5 +62,9 @@ export const usersRouter = createTRPCRouter({
         approved: null,
       },
     });
+  }),
+
+  getAllUsers: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.user.findMany();
   }),
 });

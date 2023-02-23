@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Footer from "./Footer";
-import { NavBar } from "./NavBar";
+import { NavBar } from "./NavBar/NavBar";
 
 export function AppLayout(props: { children: React.ReactNode }) {
   const { children } = props;

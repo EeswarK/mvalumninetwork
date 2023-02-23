@@ -1,5 +1,5 @@
-import { CardContainer } from "@/components/ui/CardContainer";
-import { NavBar } from "@/components/NavBar";
+import { CardContainer } from "@ui/CardContainer";
+import { NavBar } from "@/components/common/NavBar/NavBar";
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import React from "react";

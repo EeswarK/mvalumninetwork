@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Button } from "@/components/ui/Button";
-import { Layout } from "@/components/ui/Layout";
+import { Button } from "@ui/Button";
+import { Layout } from "@ui/Layout";
 import { api } from "@/utils/api";
 import React from "react";
 

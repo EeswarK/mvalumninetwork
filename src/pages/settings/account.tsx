@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from "react";
 
-import { Layout } from "@/components/ui/Layout";
+import { Layout } from "@ui/Layout";
 import type { UserSettings } from "@/utils/constants";
 import { USER_SETTINGS } from "@/utils/constants";
 import clsx from "clsx";
+import { useSession } from "next-auth/react";
 
 export default function Account() {
+  const session = useSession();
+
   const [currentTab, setCurrentTab] = React.useState<UserSettings>(
     USER_SETTINGS[0]
   );
@@ -43,6 +46,7 @@ export default function Account() {
                   <span className="truncate">{item.name}</span>
                 </a>
               ))}
+              {session.data?.user.role}
             </div>
           </nav>
         </div>
