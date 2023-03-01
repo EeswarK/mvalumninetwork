@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
@@ -13,15 +14,33 @@ export const usersRouter = createTRPCRouter({
     });
   }),
 
-  update: userProcedure
-    .input(z.object({ name: z.string() }))
+  getAuthProvider: userProcedure.query(({ ctx, input }) => {
+    const userProvider = ctx.prisma.account.findMany({
+      where: {
+        userId: input.id,
+      },
+    });
+
+    return userProvider;
+  }),
+
+  updateUser: userProcedure
+    .input(
+      z.object({
+        firstName: z.string(),
+        lastName: z.string(),
+        contactEmail: z.string(),
+      })
+    )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.user.update({
         where: {
           id: input.id,
         },
         data: {
-          name: input.name,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          contactEmail: input.contactEmail,
         },
       });
     }),

@@ -5,7 +5,9 @@ import { Layout } from "@ui/Layout";
 import type { UserSettings } from "@/utils/constants";
 import { USER_SETTINGS } from "@/utils/constants";
 import clsx from "clsx";
-import { useSession } from "next-auth/react";
+import { getSession, SessionProvider, useSession } from "next-auth/react";
+import type { GetServerSideProps } from "next";
+import { Session } from "@prisma/client";
 
 export default function Account() {
   const session = useSession();
@@ -46,7 +48,6 @@ export default function Account() {
                   <span className="truncate">{item.name}</span>
                 </a>
               ))}
-              {session.data?.user.role}
             </div>
           </nav>
         </div>
@@ -60,3 +61,20 @@ export default function Account() {
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

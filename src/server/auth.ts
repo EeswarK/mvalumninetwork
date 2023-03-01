@@ -13,6 +13,7 @@ import LinkedinProvider from "next-auth/providers/linkedin";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env.mjs";
 import { prisma } from "./db";
+import { type AdapterUser } from "next-auth/adapters";
 
 /**
  * Module augmentation for `next-auth` types.
@@ -26,7 +27,7 @@ declare module "next-auth" {
     user: {
       id: string;
       // ...other properties
-      role?: string;
+      role?: string | undefined | null;
     } & DefaultSession["user"];
   }
 
@@ -44,10 +45,21 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
+    signIn({ user }) {
+      if ("role" in user) {
+        console.log("user went through the sign in flow");
+      } else {
+        console.log("user did not go through the sign in flow; first time");
+        // return "/signinFlow";
+      }
+      return true;
+    },
+
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
         // session.user.role = user.role; <-- put other properties on the session here
+        session.user.role = "role" in user ? (user.role as string) : undefined;
       }
       return session;
     },

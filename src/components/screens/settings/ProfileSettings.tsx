@@ -1,6 +1,24 @@
+import { api } from "@/utils/api";
 import { Button } from "@ui/Button";
+import { useSession } from "next-auth/react";
 
 export default function ProfileSettings() {
+  const session = useSession();
+
+  if (session.status === "loading") return null;
+  if (session.data === null) return null;
+
+  const { data: authProvider } = api.users.getAuthProvider.useQuery({
+    id: session.data.user.id,
+  });
+
+  let firstAuthProvider;
+  if (authProvider) {
+    firstAuthProvider = authProvider[0]?.provider;
+  } else {
+    firstAuthProvider = null;
+  }
+
   return (
     <>
       <div className="">
@@ -8,6 +26,7 @@ export default function ProfileSettings() {
           <h3 className="text-lg font-medium leading-6 text-gray-900">
             Profile
           </h3>
+          <p>Currently authenticated with {firstAuthProvider}</p>
           <p className="mt-1 text-sm text-gray-500">
             This information will be displayed publicly so be careful what you
             share.

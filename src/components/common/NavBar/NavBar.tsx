@@ -152,6 +152,11 @@ export function NavBar() {
             <li>
               <Logo />
             </li>
+
+            <Button onClick={() => router.replace("/signinFlow")}>
+              check signinflow
+            </Button>
+
             {session ? (
               <li className="ml-auto hidden md:block">
                 <Button onClick={handleSignOut} intent="tertiary">
@@ -180,31 +185,15 @@ export function NavBar() {
               </li>
             )}
 
-            {session ? (
+            {session && (
               <li className="ml-auto hidden md:ml-6 md:block">
                 <Button
                   onClick={() => router.replace("/settings/account")}
                   rounded="full"
                 >
                   <span>{session.user.name?.charAt(1)}</span>
-                  {/* {session.user.image ? (
-                    <Image src={session.user.image} alt={""} fill={true} />
-                  ) : (
-                    <span>{session.user.name?.charAt(1)}</span>
-                  )} */}
                 </Button>
               </li>
-            ) : (
-              <>
-                <li className="ml-auto hidden md:ml-6 md:block">
-                  <Button
-                    onClick={() => router.replace("/settings/account")}
-                    rounded="full"
-                  >
-                    <span>?</span>
-                  </Button>
-                </li>
-              </>
             )}
 
             <li className="ml-5 -mr-1 md:hidden">

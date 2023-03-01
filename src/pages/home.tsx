@@ -1,5 +1,5 @@
+import { getServerAuthSession } from "@/server/auth";
 import { CardContainer } from "@ui/CardContainer";
-import { NavBar } from "@/components/common/NavBar/NavBar";
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import React from "react";
@@ -32,6 +32,9 @@ export default userhome;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
+  const authsession = await getServerAuthSession(context);
+
+  console.log("role", session?.user?.role);
 
   if (!session) {
     return {

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import NotificationSettings from "@/components/screens/settings/NotificationSettings";
 import ProfileSettings from "@/components/screens/settings/ProfileSettings";
-import SignInSettings from "@/components/screens/settings/SignInSettings";
+// import SignInSettings from "@/components/screens/settings/SignInSettings";
 import UnapprovedUsers from "@/components/screens/settings/UnapprovedUsers";
 import {
   UserCircleIcon,
@@ -14,11 +15,11 @@ export const USER_SETTINGS = [
     icon: UserCircleIcon,
     component: ProfileSettings,
   },
-  {
-    name: "Sign In & Security",
-    icon: LockClosedIcon,
-    component: SignInSettings,
-  },
+  // {
+  //   name: "Sign In & Security",
+  //   icon: LockClosedIcon,
+  //   component: SignInSettings,
+  // },
   {
     name: "Notifications",
     icon: BellIcon,

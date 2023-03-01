@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/Button";
+
 /* eslint-disable react/no-unescaped-entities */
 export default function NotificationSettings() {
   return (
@@ -130,6 +132,12 @@ export default function NotificationSettings() {
             </div>
           </div>
         </fieldset>
+      </div>
+      <div className="pt-5">
+        <div className="flex justify-end gap-6">
+          <Button intent="tertiary">Cancel</Button>
+          <Button>Save</Button>
+        </div>
       </div>
     </div>
   );
