@@ -60,9 +60,8 @@ model User {
   preferredName String?
   email         String?   @unique
   contactEmail  String?
-  emailVerified DateTime?
   image         String?
-
+  
   graduationClass Int?
   tagLine         String?
   major           String?
@@ -71,6 +70,7 @@ model User {
 
   approved Boolean?
 
+  emailVerified DateTime?
   accounts Account[]
   sessions Session[]
   role     Role?

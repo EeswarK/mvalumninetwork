@@ -1,23 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
-
-const userProcedure = publicProcedure.input(z.object({ id: z.string() }));
+import { adminProcedure, createTRPCRouter, userProcedure } from "../trpc";
 
 export const usersRouter = createTRPCRouter({
-  get: userProcedure.query(({ ctx, input }) => {
-    return ctx.prisma.user.findUnique({
-      where: {
-        id: input.id,
-      },
-    });
+  /**
+   * @User Functions
+   */
+  getCurrentUser: userProcedure.query(({ ctx }) => {
+    console.log("ctx", ctx);
+    return {
+      ctx,
+    };
   }),
 
   getAuthProvider: userProcedure.query(({ ctx, input }) => {
+    const { user } = ctx;
+
+    if (!user) {
+      throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+    }
+
     const userProvider = ctx.prisma.account.findMany({
       where: {
-        userId: input.id,
+        userId: user.id,
       },
     });
 
@@ -27,47 +34,73 @@ export const usersRouter = createTRPCRouter({
   updateUser: userProcedure
     .input(
       z.object({
-        firstName: z.string(),
-        lastName: z.string(),
-        contactEmail: z.string(),
+        firstName: z.string().optional(),
+        lastName: z.string().optional(),
+        preferredName: z.string().optional(),
+        contactEmail: z.string().optional(),
+        image: z.string().optional(),
+
+        graduationClass: z.number().optional(),
+        tagLine: z.string().optional(),
+        major: z.string().optional(),
+        bio: z.string().optional(),
       })
     )
+    .mutation(({ ctx, input }) => {
+      const { prisma, user } = ctx;
+
+      if (!user) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+      }
+
+      console.log("input", input);
+
+      return ctx.prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          firstName: input.firstName,
+          lastName: input.lastName,
+          contactEmail: input.contactEmail,
+          graduationClass: input.graduationClass,
+          preferredName: input.preferredName,
+          bio: input.bio,
+        },
+      });
+    }),
+
+  /**
+   * @Admin Functions
+   **/
+
+  approve: adminProcedure
+    .input(z.object({ id: z.string() }))
     .mutation(({ ctx, input }) => {
       return ctx.prisma.user.update({
         where: {
           id: input.id,
         },
         data: {
-          firstName: input.firstName,
-          lastName: input.lastName,
-          contactEmail: input.contactEmail,
+          approved: true,
         },
       });
     }),
 
-  approve: userProcedure.mutation(({ ctx, input }) => {
-    return ctx.prisma.user.update({
-      where: {
-        id: input.id,
-      },
-      data: {
-        approved: true,
-      },
-    });
-  }),
+  decline: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.user.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          approved: false,
+        },
+      });
+    }),
 
-  decline: userProcedure.mutation(({ ctx, input }) => {
-    return ctx.prisma.user.update({
-      where: {
-        id: input.id,
-      },
-      data: {
-        approved: false,
-      },
-    });
-  }),
-
-  getAllApprovedUsers: protectedProcedure.query(({ ctx }) => {
+  getAllApprovedUsers: adminProcedure.query(({ ctx }) => {
     return ctx.prisma.user.findMany({
       where: {
         approved: true,
@@ -75,7 +108,7 @@ export const usersRouter = createTRPCRouter({
     });
   }),
 
-  getAllUnapprovedUsers: protectedProcedure.query(({ ctx }) => {
+  getAllUnapprovedUsers: adminProcedure.query(({ ctx }) => {
     return ctx.prisma.user.findMany({
       where: {
         approved: null,
@@ -83,7 +116,7 @@ export const usersRouter = createTRPCRouter({
     });
   }),
 
-  getAllUsers: protectedProcedure.query(({ ctx }) => {
+  getAllUsers: adminProcedure.query(({ ctx }) => {
     return ctx.prisma.user.findMany();
   }),
 });

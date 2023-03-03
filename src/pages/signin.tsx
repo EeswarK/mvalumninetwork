@@ -42,7 +42,7 @@ function SignIn() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <div className="space-y-6">
+          <form onSubmit={sendEmail} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -69,10 +69,10 @@ function SignIn() {
               </span>
             </div>
 
-            <Button onClick={sendEmail} className="w-full justify-center">
+            <Button type="submit" className="w-full justify-center">
               Sign In
             </Button>
-          </div>
+          </form>
 
           <div className="mt-6">
             <div className="relative">

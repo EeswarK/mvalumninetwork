@@ -21,9 +21,48 @@ import { type Session } from "next-auth";
 import { getServerAuthSession } from "../auth";
 import { prisma } from "../db";
 
-type CreateContextOptions = {
-  session: Session | null;
-};
+async function getUserFromSession({ session }: { session: Maybe<Session> }) {
+  if (!session?.user?.id) {
+    return null;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      preferredName: true,
+      email: true,
+      contactEmail: true,
+      image: true,
+      bio: true,
+      role: true,
+      approved: true,
+    },
+  });
+
+  // some hacks to make sure `role` is never inferred as `null`
+  if (!user) {
+    return null;
+  }
+  const { id, role } = user;
+  if (!id) {
+    return null;
+  }
+  if (!role) {
+    return null;
+  }
+
+  // This helps to prevent reaching the 3MB payload limit by avoiding base64 and instead passing the avatar url
+  return {
+    ...user,
+    id,
+    role,
+  };
+}
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
@@ -35,10 +74,16 @@ type CreateContextOptions = {
  *
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
-const createInnerTRPCContext = (opts: CreateContextOptions) => {
+
+type CreateInnerContextOptions = {
+  session: Session | null;
+  user: Awaited<ReturnType<typeof getUserFromSession>>;
+} & Partial<GetServerSidePropsContext | CreateNextContextOptions>;
+
+const createInnerTRPCContext = (opts: CreateInnerContextOptions) => {
   return {
-    session: opts.session,
     prisma,
+    ...opts,
   };
 };
 
@@ -54,8 +99,11 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   // Get the session from the server using the getServerSession wrapper function
   const session = await getServerAuthSession({ req, res });
 
+  const user = await getUserFromSession({ session });
+
   return createInnerTRPCContext({
     session,
+    user,
   });
 };
 
@@ -65,8 +113,12 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  * This is where the tRPC API is initialized, connecting the context and
  * transformer.
  */
+import type { Maybe } from "@trpc/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
+import type { User } from "@prisma/client";
+import type { GetServerSidePropsContext } from "next";
+import { GetServerSideProps } from "next";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -123,4 +175,27 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const userProcedure = t.procedure.use(enforceUserIsAuthed);
+
+const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
+  if (ctx.session?.user.role !== "ADMIN") {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  });
+});
+
+/**
+ * Admin procedure
+ * If you want a query or mutation to ONLY be accessible to admins, use this.
+ * It verifies the session is valid and guarantees `ctx.session.user` is not
+ * null.
+ *
+ * @see https://trpc.io/docs/procedures
+ *  */
+
+export const adminProcedure = t.procedure.use(enforceUserIsAdmin);

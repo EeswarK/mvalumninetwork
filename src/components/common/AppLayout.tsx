@@ -15,7 +15,7 @@ export function AppLayout(props: { children: React.ReactNode }) {
     <div className="relative flex min-h-screen flex-col bg-zinc-100">
       {!isNoNavBarPage && <NavBar />}
       <div className="pb-24">{children}</div>
-      <Footer />
+      {!isNoNavBarPage && <Footer />}
     </div>
   );
 }
@@ -27,14 +27,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   console.log("role", session?.user?.role);
 
-  if (session?.user.role === undefined) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
+  // if (session?.user.role === undefined) {
+  //   return {
+  //     redirect: {
+  //       destination: "/",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: {},

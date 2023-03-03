@@ -1,29 +1,53 @@
-import { Logo } from "@/components/common/Logo";
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Button } from "@/components/ui/Button";
 import { Layout } from "@/components/ui/Layout";
-import TextTip from "@/components/ui/TextTip";
 import { api } from "@/utils/api";
 import type { GetServerSideProps } from "next";
-import { getSession, signIn, useSession } from "next-auth/react";
-import Link from "next/link";
-import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { ErrorMessage } from "@hookform/error-message";
+
+/*
+ *
+ * This is the page that users are redirected to after they sign in with a provider.
+ *
+ * Based on our schema in api/schema.prisma, we need to collect the following information (3/1/23):
+ * - Graduation year
+ * - First name
+ * - Last name
+ * - Email
+ * - Preferred name
+ * - Bio
+ */
+
+const OnboardingValues = z.object({
+  firstName: z.string().min(2).max(15),
+  lastName: z.string().min(2).max(15),
+  contactEmail: z.string(),
+  preferredName: z.string().min(2).max(15),
+  bio: z.string().max(1000),
+  graduationYear: z.number(),
+});
 
 export default function SignInFlow() {
-  const [email, setEmail] = useState("");
+  const { data: authProvider } = api.users.getAuthProvider.useQuery();
+  type SchemaValidation = z.infer<typeof OnboardingValues>;
 
-  const session = useSession();
-
-  if (session.status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  if (session.data === null) {
-    return <div>Loading...</div>;
-  }
-
-  const { data: authProvider } = api.users.getAuthProvider.useQuery({
-    id: session.data.user.id,
+  const {
+    register,
+    handleSubmit,
+    formState: errors,
+  } = useForm<SchemaValidation>({
+    resolver: zodResolver(OnboardingValues),
   });
+
+  const updateUser = api.users.updateUser.useMutation();
 
   let firstAuthProvider;
   if (authProvider) {
@@ -32,9 +56,23 @@ export default function SignInFlow() {
     firstAuthProvider = null;
   }
 
-  function finishSignIn() {
-    console.log("goodjob baby");
-  }
+  const submitSignInFlow: SubmitHandler<SchemaValidation> = async (data) => {
+    console.log("data", data);
+    const user = await updateUser.mutateAsync({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      contactEmail: data.contactEmail,
+      preferredName: data.preferredName,
+      bio: data.bio,
+      graduationClass: data.graduationYear,
+    });
+    console.log("updated user", user);
+    console.log("submitting");
+  };
+
+  useEffect(() => {
+    console.log("errors", errors);
+  }, [errors]);
 
   return (
     <Layout className="flex min-h-screen flex-col items-center justify-center py-12">
@@ -44,22 +82,18 @@ export default function SignInFlow() {
         </h2>
       </div>
 
-      <>
-        <div className="">
+      <form onSubmit={handleSubmit(submitSignInFlow)}>
+        <div className="mt-6">
           <div>
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
-              Profile
-            </h3>
-            <p>Currently authenticated with {firstAuthProvider}</p>
-            <p className="mt-1 text-sm text-gray-500">
-              This information will be displayed publicly so be careful what you
-              share.
+            <p className="">
+              Currently authenticated with{" "}
+              <span className="font-bold">{firstAuthProvider}</span>
             </p>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div className="sm:col-span-6">
-              <label
+              {/* <label
                 htmlFor="photo"
                 className="block text-sm font-medium text-gray-700"
               >
@@ -81,23 +115,25 @@ export default function SignInFlow() {
                 >
                   Change
                 </button>
-              </div>
+              </div> */}
             </div>
             <div className="sm:col-span-3">
               <label
                 htmlFor="first-name"
                 className="block text-sm font-medium text-gray-700"
               >
-                First name
+                Legal First name
               </label>
               <div className="mt-1">
                 <input
                   type="text"
-                  name="first-name"
                   id="first-name"
                   autoComplete="given-name"
+                  required
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  {...register("firstName")}
                 />
+                <ErrorMessage errors={errors} name="firstName" />
               </div>
             </div>
 
@@ -106,74 +142,80 @@ export default function SignInFlow() {
                 htmlFor="last-name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Last name
+                Legal Last name
               </label>
               <div className="mt-1">
                 <input
                   type="text"
-                  name="last-name"
                   id="last-name"
                   autoComplete="family-name"
+                  required
+                  {...register("lastName")}
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage errors={errors} name="lastName" />
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="last-name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Preferred First name
+              </label>
+              <div className="mt-1">
+                <input
+                  type="text"
+                  id="last-name"
+                  autoComplete="given-name"
+                  {...register("preferredName")}
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+                {errors.touchedFields.preferredName && (
+                  <span className="mt-2 block text-red-800">
+                    {errors.touchedFields.preferredName.valueOf()}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="last-name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Graduation Year
+              </label>
+              <div className="mt-1">
+                <input
+                  type="number"
+                  id="graduation-year"
+                  required
+                  {...register("graduationYear", {
+                    valueAsNumber: true,
+                    min: 1969,
+                    max: 2026,
+                  })}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
+              <ErrorMessage errors={errors} name="graduationYear" />
             </div>
-
-            <div className="sm:col-span-4">
+            <div className="sm:col-span-6">
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Contact Email address
               </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Country
-              </label>
-              <div className="mt-1">
-                <select
-                  id="country"
-                  name="country"
-                  autoComplete="country-name"
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                >
-                  <option>United States</option>
-                  <option>Canada</option>
-                  <option>Mexico</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="sm:col-span-2">
-              <label
-                htmlFor="city"
-                className="block text-sm font-medium text-gray-700"
-              >
-                City
-              </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  name="city"
-                  id="city"
-                  autoComplete="address-level2"
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                required
+                {...register("contactEmail")}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              />
+              <ErrorMessage errors={errors} name="contactEmail" />
             </div>
           </div>
 
@@ -188,12 +230,13 @@ export default function SignInFlow() {
               <div className="mt-1">
                 <textarea
                   id="about"
-                  name="about"
                   rows={3}
                   className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   defaultValue={""}
+                  {...register("bio")}
                 />
               </div>
+              <ErrorMessage errors={errors} name="bio" />
               <p className="mt-2 text-sm text-gray-500">
                 Write a few sentences about yourself.
               </p>
@@ -203,97 +246,10 @@ export default function SignInFlow() {
 
         <div className="pt-5">
           <div className="flex justify-end gap-6">
-            <Button intent="tertiary">Cancel</Button>
-            <Button>Save</Button>
+            <Button type="submit">Submit</Button>
           </div>
         </div>
-      </>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <div className="space-y-6">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-zinc-700"
-              >
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="block w-full appearance-none rounded-md border border-zinc-300 px-3 py-2 placeholder-zinc-400 shadow-sm focus:border-violet-500 focus:outline-none focus:ring-violet-500 sm:text-sm"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <span className="mt-1 flex gap-1 text-xs font-medium text-zinc-500">
-                Utilizing
-                <TextTip tip="An email will be sent to your inbox to finish signing in.">
-                  <span>passwordless sign in. </span>
-                </TextTip>
-              </span>
-            </div>
-
-            <Button onClick={finishSignIn} className="w-full justify-center">
-              Sign In
-            </Button>
-          </div>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-zinc-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-2 text-zinc-500">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <Button
-                onClick={() => {
-                  void signIn("google");
-                }}
-                intent="tertiary"
-                className="w-full justify-center text-zinc-600"
-              >
-                <span className="sr-only">Sign in with Google</span>
-                <svg
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                  data-icon="google"
-                  viewBox="0 0 488 512"
-                  fill="currentColor"
-                >
-                  <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
-                </svg>
-              </Button>
-
-              <Button
-                onClick={() => void signIn("facebook")}
-                intent="tertiary"
-                className="w-full justify-center text-zinc-600"
-              >
-                <span className="sr-only">Sign in with Facebook</span>
-                <svg
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z" />
-                </svg>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      </form>
     </Layout>
   );
 }
@@ -301,10 +257,7 @@ export default function SignInFlow() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
 
-  const header = context.req.headers["sec-fetch-site"];
-  console.log("header", header);
-
-  if (header != "cross-site" && header != "same-origin") {
+  if (!session) {
     return {
       redirect: {
         destination: "/",

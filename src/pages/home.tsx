@@ -32,18 +32,17 @@ export default userhome;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const authsession = await getServerAuthSession(context);
 
   console.log("role", session?.user?.role);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
+  // if (session?.user?.role === null || session?.user?.role === undefined) {
+  //   return {
+  //     redirect: {
+  //       destination: "/signinFlow",
+  //       permanent: true,
+  //     },
+  //   };
+  // }
 
   return {
     props: {},

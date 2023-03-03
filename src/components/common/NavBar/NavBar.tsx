@@ -13,6 +13,7 @@ import { Button } from "@ui/Button";
 import { Logo } from "../Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { api } from "@/utils/api";
 
 function MobileNavigation() {
   return (
@@ -120,6 +121,9 @@ export function NavBar() {
     await signOut();
     return;
   }
+
+  // const getCurrentUser = api.users.getCurrentUser.useQuery();
+  // console.log("getCurrentUser", getCurrentUser);
 
   useEffect(() => {
     function onScroll() {
