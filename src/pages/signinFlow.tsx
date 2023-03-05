@@ -1,17 +1,25 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Button } from "@/components/ui/Button";
 import { Layout } from "@/components/ui/Layout";
 import { api } from "@/utils/api";
-import type { GetServerSideProps } from "next";
-import { useSession } from "next-auth/react";
+import type { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { z } from "zod";
 import { ErrorMessage } from "@hookform/error-message";
+import { useRouter } from "next/router";
+import { prisma } from "@/server/db";
+import useAuthProvider from "@/lib/useAuthProvider";
+import type { inferSSRProps } from "@/lib/inferSSRProps";
+import { Steps } from "@/components/Steps";
+import { StepCard } from "@/components/StepCard";
+import BasicInfoOnboarding from "@/components/screens/onboarding/BasicInfoOnboarding";
+import AdditionalInformationOnboarding from "@/components/screens/onboarding/AdditionalInformationOnboarding";
+import ConfirmInformationOnboarding from "@/components/screens/onboarding/ConfirmInformationOnboarding";
 
 /*
  *
@@ -26,6 +34,7 @@ import { ErrorMessage } from "@hookform/error-message";
  * - Bio
  */
 
+// All the information we need to collect from the user, stored in a zod schema for type validation
 const OnboardingValues = z.object({
   firstName: z.string().min(2).max(15),
   lastName: z.string().min(2).max(15),
@@ -35,9 +44,73 @@ const OnboardingValues = z.object({
   graduationYear: z.number(),
 });
 
-export default function SignInFlow() {
-  const { data: authProvider } = api.users.getAuthProvider.useQuery();
-  type SchemaValidation = z.infer<typeof OnboardingValues>;
+type SchemaValidation = z.infer<typeof OnboardingValues>;
+
+// Onboarding Steps
+const INITIAL_STEP = "user-profile";
+const steps = [
+  "user-profile",
+  "additional-information",
+  "confirm-settings",
+] as const;
+
+// Change the current step shown
+const stepTransform = (step: (typeof steps)[number]) => {
+  const stepIndex = steps.indexOf(step);
+  if (stepIndex > -1) {
+    return steps[stepIndex];
+  }
+  return INITIAL_STEP;
+};
+
+// Step schema validation with zod
+const stepRouteSchema = z.object({
+  step: z.array(z.enum(steps)).default([INITIAL_STEP]),
+});
+
+//Page Header Names
+const headers = [
+  {
+    title: "Basic Information",
+    subtitle:
+      "We just need some basic info. Don't worry, you can change it later.",
+  },
+  {
+    title: "Additional Information",
+    subtitle:
+      "Adding a little more info will increase your chances of building your network.",
+    skipText: "Skip for now",
+  },
+  {
+    title: "Confirm your Info",
+    subtitle: "Quickly double check to make sure everything is correct.",
+  },
+];
+
+export type IOnboardingPageProps = inferSSRProps<typeof getServerSideProps>;
+
+export default function SignInFlow(props: IOnboardingPageProps) {
+  const { user } = props;
+  const router = useRouter();
+
+  const authProvider = useAuthProvider();
+  const updateUser = api.users.updateUser.useMutation();
+
+  const result = stepRouteSchema.safeParse(router.query);
+  const currentStep = result.success ? result.data.step[0]! : INITIAL_STEP;
+
+  const goToIndex = (index: number) => {
+    const newStep = steps[index];
+    void router.push(
+      {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        pathname: `/getting-started/${stepTransform(newStep!)}`,
+      },
+      undefined
+    );
+  };
+
+  const currentStepIndex = steps.indexOf(currentStep);
 
   const {
     register,
@@ -47,18 +120,8 @@ export default function SignInFlow() {
     resolver: zodResolver(OnboardingValues),
   });
 
-  const updateUser = api.users.updateUser.useMutation();
-
-  let firstAuthProvider;
-  if (authProvider) {
-    firstAuthProvider = authProvider[0]?.provider;
-  } else {
-    firstAuthProvider = null;
-  }
-
   const submitSignInFlow: SubmitHandler<SchemaValidation> = async (data) => {
-    console.log("data", data);
-    const user = await updateUser.mutateAsync({
+    await updateUser.mutateAsync({
       firstName: data.firstName,
       lastName: data.lastName,
       contactEmail: data.contactEmail,
@@ -66,57 +129,47 @@ export default function SignInFlow() {
       bio: data.bio,
       graduationClass: data.graduationYear,
     });
-    console.log("updated user", user);
-    console.log("submitting");
   };
 
-  useEffect(() => {
-    console.log("errors", errors);
-  }, [errors]);
-
   return (
-    <Layout className="flex min-h-screen flex-col items-center justify-center py-12">
+    <Layout
+      className="flex min-h-screen flex-col items-center justify-center py-12"
+      key={router.asPath}
+    >
       <div className="text-center sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-3xl font-extrabold text-zinc-900">
-          Finish signing up!
+          {headers[currentStepIndex]?.title || "Undefined title"}
         </h2>
+        <p className="font-sans text-sm font-normal text-gray-500">
+          {headers[currentStepIndex]?.subtitle || "Undefined title"}
+        </p>
       </div>
+      <Steps
+        maxSteps={steps.length}
+        currentStep={currentStepIndex + 1}
+        navigateToStep={goToIndex}
+      />
+      <StepCard>
+        {currentStep === "user-profile" && (
+          <BasicInfoOnboarding user={user} nextStep={() => goToIndex(1)} />
+        )}
 
+        {currentStep === "additional-information" && (
+          <AdditionalInformationOnboarding nextStep={() => goToIndex(2)} />
+        )}
+
+        {currentStep === "confirm-settings" && <ConfirmInformationOnboarding />}
+      </StepCard>
       <form onSubmit={handleSubmit(submitSignInFlow)}>
         <div className="mt-6">
           <div>
             <p className="">
               Currently authenticated with{" "}
-              <span className="font-bold">{firstAuthProvider}</span>
+              <span className="font-bold">{authProvider}</span>
             </p>
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-            <div className="sm:col-span-6">
-              {/* <label
-                htmlFor="photo"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Photo
-              </label>
-              <div className="mt-1 flex items-center">
-                <span className="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                  <svg
-                    className="h-full w-full text-gray-300"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </span>
-                <button
-                  type="button"
-                  className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  Change
-                </button>
-              </div> */}
-            </div>
             <div className="sm:col-span-3">
               <label
                 htmlFor="first-name"
@@ -254,19 +307,49 @@ export default function SignInFlow() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
   const session = await getSession(context);
+  console.log("session", session);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
+  if (!session?.user?.id) {
+    return { redirect: { permanent: false, destination: "/signin" } };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      preferredName: true,
+      email: true,
+      contactEmail: true,
+      image: true,
+      bio: true,
+      role: true,
+      approved: true,
+    },
+  });
+
+  // const user = {};
+
+  if (!user) {
+    throw new Error("User from session not found");
+  }
+
+  if (user?.role) {
+    return { redirect: { permanent: false, destination: "/home" } };
   }
 
   return {
-    props: {},
+    props: {
+      user: {
+        ...user,
+      },
+    },
   };
 };

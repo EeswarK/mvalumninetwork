@@ -73,7 +73,7 @@ model User {
   emailVerified DateTime?
   accounts Account[]
   sessions Session[]
-  role     Role?
+  role     String?
   Alumni   Alumni?   @relation(fields: [alumniId], references: [id])
   alumniId String?
 }

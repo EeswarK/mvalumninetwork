@@ -45,14 +45,12 @@ async function getUserFromSession({ session }: { session: Maybe<Session> }) {
   });
 
   // some hacks to make sure `role` is never inferred as `null`
+  console.log("trpc user", user);
   if (!user) {
     return null;
   }
-  const { id, role } = user;
+  const { id } = user;
   if (!id) {
-    return null;
-  }
-  if (!role) {
     return null;
   }
 
@@ -60,7 +58,6 @@ async function getUserFromSession({ session }: { session: Maybe<Session> }) {
   return {
     ...user,
     id,
-    role,
   };
 }
 
@@ -79,6 +76,8 @@ type CreateInnerContextOptions = {
   session: Session | null;
   user: Awaited<ReturnType<typeof getUserFromSession>>;
 } & Partial<GetServerSidePropsContext | CreateNextContextOptions>;
+
+export type userContextType = Awaited<ReturnType<typeof getUserFromSession>>;
 
 const createInnerTRPCContext = (opts: CreateInnerContextOptions) => {
   return {
@@ -116,9 +115,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import type { Maybe } from "@trpc/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import type { User } from "@prisma/client";
 import type { GetServerSidePropsContext } from "next";
-import { GetServerSideProps } from "next";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,

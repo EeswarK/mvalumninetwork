@@ -9,14 +9,23 @@ export const usersRouter = createTRPCRouter({
    * @User Functions
    */
   getCurrentUser: userProcedure.query(({ ctx }) => {
-    console.log("ctx", ctx);
-    return {
-      ctx,
-    };
+    const { user } = ctx;
+
+    if (!user) {
+      throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+    }
+
+    return ctx.prisma.user.findUnique({
+      where: {
+        id: user.id,
+      },
+    });
   }),
 
-  getAuthProvider: userProcedure.query(({ ctx, input }) => {
+  getAuthProvider: userProcedure.query(({ ctx }) => {
     const { user } = ctx;
+
+    console.log("user", user);
 
     if (!user) {
       throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
@@ -47,7 +56,7 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .mutation(({ ctx, input }) => {
-      const { prisma, user } = ctx;
+      const { user } = ctx;
 
       if (!user) {
         throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
