@@ -45,17 +45,6 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     signIn({ user, account, profile, email, credentials }) {
-      console.log("user", user);
-      console.log("account", account);
-      console.log("profile", profile);
-      console.log("email", email);
-      console.log("credentials", credentials);
-      if ("role" in user) {
-        console.log("user went through the sign in flow");
-      } else {
-        console.log("user did not go through the sign in flow; first time");
-        // return "/signinFlow";
-      }
       return true;
     },
 

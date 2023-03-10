@@ -33,8 +33,6 @@ export default userhome;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
 
-  console.log("role", session?.user?.role);
-
   // if (session?.user?.role === null || session?.user?.role === undefined) {
   //   return {
   //     redirect: {

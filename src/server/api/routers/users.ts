@@ -25,8 +25,6 @@ export const usersRouter = createTRPCRouter({
   getAuthProvider: userProcedure.query(({ ctx }) => {
     const { user } = ctx;
 
-    console.log("user", user);
-
     if (!user) {
       throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
     }
@@ -61,8 +59,6 @@ export const usersRouter = createTRPCRouter({
       if (!user) {
         throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
       }
-
-      console.log("input", input);
 
       return ctx.prisma.user.update({
         where: {

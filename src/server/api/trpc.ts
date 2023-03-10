@@ -45,7 +45,6 @@ async function getUserFromSession({ session }: { session: Maybe<Session> }) {
   });
 
   // some hacks to make sure `role` is never inferred as `null`
-  console.log("trpc user", user);
   if (!user) {
     return null;
   }

@@ -14,6 +14,7 @@ import { Logo } from "../Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { api } from "@/utils/api";
+import { IS_DEV } from "@/utils/utils";
 
 function MobileNavigation() {
   return (
@@ -157,9 +158,17 @@ export function NavBar() {
               <Logo />
             </li>
 
-            <Button onClick={() => router.replace("/signinFlow")}>
-              check signinflow
-            </Button>
+            {/* dev options */}
+            {IS_DEV && (
+              <li className="ml-auto">
+                <Button
+                  onClick={() => router.replace("/onboarding")}
+                  intent="secondary"
+                >
+                  check signinflow
+                </Button>
+              </li>
+            )}
 
             {session ? (
               <li className="ml-auto hidden md:block">

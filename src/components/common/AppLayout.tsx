@@ -9,7 +9,8 @@ export function AppLayout(props: { children: React.ReactNode }) {
 
   const router = useRouter();
   const isNoNavBarPage =
-    router.pathname === "/signin" || router.pathname === "/signinFlow";
+    router.pathname === "/signin" ||
+    router.pathname === "/onboarding/[[...step]]";
 
   return (
     <div className="relative flex min-h-screen flex-col bg-zinc-100">
@@ -20,23 +21,19 @@ export function AppLayout(props: { children: React.ReactNode }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const session = await getSession(context);
 
-  console.log("applayout");
+//   // if (session?.user.role === undefined) {
+//   //   return {
+//   //     redirect: {
+//   //       destination: "/",
+//   //       permanent: false,
+//   //     },
+//   //   };
+//   // }
 
-  console.log("role", session?.user?.role);
-
-  // if (session?.user.role === undefined) {
-  //   return {
-  //     redirect: {
-  //       destination: "/",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
-
-  return {
-    props: {},
-  };
-};
+//   return {
+//     props: {},
+//   };
+// };
