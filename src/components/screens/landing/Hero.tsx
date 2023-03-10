@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Button } from "@ui/Button";
 import { Layout } from "@ui/Layout";
-import { api } from "@/utils/api";
 import React from "react";
 
 export default function Hero() {
@@ -28,21 +27,6 @@ export default function Hero() {
           1500s, when an unknown printer took a galley of type and scrambled it
           to make a type specimen.
         </p>
-        <div className="mt-10 flex justify-center space-x-6">
-          <Button>Get 6 months free</Button>
-          <Button
-            href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            intent="tertiary"
-          >
-            <svg
-              aria-hidden="true"
-              className="h-3 w-3 flex-none fill-blue-600 group-active:fill-current"
-            >
-              <path d="m9.997 6.91-7.583 3.447A1 1 0 0 1 1 9.447V2.553a1 1 0 0 1 1.414-.91L9.997 5.09c.782.355.782 1.465 0 1.82Z" />
-            </svg>
-            <span className="ml-3">Watch video</span>
-          </Button>
-        </div>
       </Layout>
     </header>
   );

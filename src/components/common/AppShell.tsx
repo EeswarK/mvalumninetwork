@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Footer from "./Footer";
 import { NavBar } from "./NavBar/NavBar";
 
-export function AppLayout(props: { children: React.ReactNode }) {
+export function AppShell(props: { children: React.ReactNode }) {
   const { children } = props;
 
   const router = useRouter();
@@ -15,7 +15,7 @@ export function AppLayout(props: { children: React.ReactNode }) {
   return (
     <div className="relative flex min-h-screen flex-col bg-zinc-100">
       {!isNoNavBarPage && <NavBar />}
-      <div className="pb-24">{children}</div>
+      <div className="">{children}</div>
       {!isNoNavBarPage && <Footer />}
     </div>
   );

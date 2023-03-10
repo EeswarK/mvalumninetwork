@@ -8,12 +8,12 @@ import { getSession } from "next-auth/react";
 import { z } from "zod";
 import { useRouter } from "next/router";
 import { prisma } from "@/server/db";
-import type { inferSSRProps } from "@/lib/inferSSRProps";
 import { Steps } from "@/components/Steps";
 import { StepCard } from "@/components/StepCard";
 import BasicInfoOnboarding from "@/components/screens/onboarding/BasicInfoOnboarding";
 import AdditionalInformationOnboarding from "@/components/screens/onboarding/AdditionalInformationOnboarding";
 import ConfirmInformationOnboarding from "@/components/screens/onboarding/ConfirmInformationOnboarding";
+import { useState } from "react";
 
 /*
  *
@@ -33,10 +33,20 @@ export const OnboardingValues = z.object({
   firstName: z.string().min(2).max(15),
   lastName: z.string().min(2).max(15),
   contactEmail: z.string(),
-  preferredName: z.string().min(2).max(15),
-  bio: z.string().max(1000),
-  graduationYear: z.number(),
+  preferredName: z.string().min(2).max(15).optional(),
+  bio: z.string().max(1000).optional(),
+  graduationYear: z.number().optional(),
 });
+
+export const defaultOnboardingValues = {
+  firstName: "",
+  lastName: "",
+  contactEmail: "",
+  preferredName: "",
+  bio: "",
+};
+
+export type UserType = z.infer<typeof OnboardingValues>;
 
 // Onboarding Steps
 const INITIAL_STEP = "user-profile";
@@ -79,10 +89,10 @@ const headers = [
   },
 ];
 
-export type IOnboardingPageProps = inferSSRProps<typeof getServerSideProps>;
-
-export default function OnboardingPage(props: IOnboardingPageProps) {
-  const { user } = props;
+function SignInFlow() {
+  const [userSettings, setUserSettings] = useState<UserType>(
+    defaultOnboardingValues
+  );
   const router = useRouter();
 
   const result = stepRouteSchema.safeParse(router.query);
@@ -122,14 +132,28 @@ export default function OnboardingPage(props: IOnboardingPageProps) {
       />
       <StepCard>
         {currentStep === "user-profile" && (
-          <BasicInfoOnboarding user={user} nextStep={() => goToIndex(1)} />
+          <BasicInfoOnboarding
+            userSettings={userSettings}
+            setUserSettings={setUserSettings}
+            nextStep={() => goToIndex(1)}
+          />
         )}
 
         {currentStep === "additional-information" && (
-          <AdditionalInformationOnboarding nextStep={() => goToIndex(2)} />
+          <AdditionalInformationOnboarding
+            userSettings={userSettings}
+            setUserSettings={setUserSettings}
+            lastStep={() => goToIndex(0)}
+            nextStep={() => goToIndex(2)}
+          />
         )}
 
-        {currentStep === "confirm-settings" && <ConfirmInformationOnboarding />}
+        {currentStep === "confirm-settings" && (
+          <ConfirmInformationOnboarding
+            userSettings={userSettings}
+            lastStep={() => goToIndex(1)}
+          />
+        )}
       </StepCard>
     </Layout>
   );
@@ -180,3 +204,5 @@ export const getServerSideProps = async (
     },
   };
 };
+
+export default SignInFlow;

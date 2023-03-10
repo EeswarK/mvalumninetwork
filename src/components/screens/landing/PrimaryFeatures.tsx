@@ -1,5 +1,6 @@
+import { Layout } from "@/components/ui/Layout";
 import React from "react";
 
 export default function PrimaryFeatures() {
-  return <div>PrimaryFeatures</div>;
+  return <Layout className="flex justify-center">PrimaryFeatures</Layout>;
 }

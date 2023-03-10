@@ -119,7 +119,6 @@ export default function ProfileSettings() {
           <h3 className="text-lg font-medium leading-6 text-gray-900">
             Profile
           </h3>
-          <p>Currently authenticated with {firstAuthProvider}</p>
           <p className="mt-1 text-sm text-gray-500">
             This information will be displayed publicly so be careful what you
             share.

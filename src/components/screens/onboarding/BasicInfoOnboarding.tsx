@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import useAuthProvider from "@/lib/useAuthProvider";
-import type { UserType } from "@/pages/signinFlow";
+import type { UserType } from "@/pages/onboarding/[[...step]]";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Dispatch, SetStateAction } from "react";
@@ -23,7 +23,7 @@ const BasicOnboardingValues = z.object({
 type SchemaValidation = z.infer<typeof BasicOnboardingValues>;
 
 const BasicInfoOnboarding = (props: IBasicInfoProps) => {
-  const { setUserSettings } = props;
+  const { userSettings, setUserSettings, nextStep } = props;
   const authProvider = useAuthProvider();
   console.log("props", props);
 
@@ -33,6 +33,7 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
     formState: errors,
   } = useForm<SchemaValidation>({
     resolver: zodResolver(BasicOnboardingValues),
+    defaultValues: userSettings,
   });
 
   function submitSignInFlow(data: SchemaValidation) {
@@ -43,6 +44,7 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
       contactEmail: data.contactEmail,
       graduationYear: data.graduationYear,
     });
+    nextStep();
   }
 
   return (
@@ -72,7 +74,6 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 {...register("firstName")}
               />
-              <ErrorMessage errors={errors} name="firstName" />
             </div>
           </div>
 
@@ -92,26 +93,9 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                 {...register("lastName")}
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
-              <ErrorMessage errors={errors} name="lastName" />
             </div>
           </div>
-          {/* <div className="sm:col-span-3">
-            <label
-              htmlFor="last-name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Preferred First name
-            </label>
-            <div className="mt-1">
-              <input
-                type="text"
-                id="preferred-name"
-                autoComplete="given-name"
-                {...register("preferredName")}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-          </div> */}
+
           <div className="sm:col-span-3">
             <label
               htmlFor="last-name"
@@ -132,7 +116,6 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
-            <ErrorMessage errors={errors} name="graduationYear" />
           </div>
           <div className="sm:col-span-6">
             <label
@@ -149,7 +132,6 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
               {...register("contactEmail")}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
-            <ErrorMessage errors={errors} name="contactEmail" />
           </div>
         </div>
       </div>

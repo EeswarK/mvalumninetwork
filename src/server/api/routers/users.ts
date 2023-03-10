@@ -51,6 +51,8 @@ export const usersRouter = createTRPCRouter({
         tagLine: z.string().optional(),
         major: z.string().optional(),
         bio: z.string().optional(),
+
+        role: z.string().optional(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -67,9 +69,11 @@ export const usersRouter = createTRPCRouter({
         data: {
           firstName: input.firstName,
           lastName: input.lastName,
-          contactEmail: input.contactEmail,
-          graduationClass: input.graduationClass,
           preferredName: input.preferredName,
+          contactEmail: input.contactEmail,
+          image: input.image,
+
+          graduationClass: input.graduationClass,
           bio: input.bio,
         },
       });

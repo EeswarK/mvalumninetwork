@@ -5,7 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 import { api } from "@/utils/api";
 import Head from "next/head";
-import { AppLayout } from "@/components/common/AppLayout";
+import { AppShell } from "@/components/common/AppShell";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -21,9 +21,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
         {description && <meta name="description" content={description} />}
       </Head>
       <SessionProvider session={session}>
-        <AppLayout>
+        <AppShell>
           <Component {...pageProps} />
-        </AppLayout>
+        </AppShell>
       </SessionProvider>
     </>
   );

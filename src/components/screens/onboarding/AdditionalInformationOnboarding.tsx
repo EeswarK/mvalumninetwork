@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import type { UserType } from "@/pages/signinFlow";
+import type { UserType } from "@/pages/onboarding/[[...step]]";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Dispatch, SetStateAction } from "react";
@@ -10,6 +10,7 @@ import { z } from "zod";
 interface IBasicInfoProps {
   userSettings: UserType;
   setUserSettings: Dispatch<SetStateAction<UserType>>;
+  lastStep: () => void;
   nextStep: () => void;
 }
 
@@ -21,7 +22,7 @@ const AdditionalOnboardingValues = z.object({
 type SchemaValidation = z.infer<typeof AdditionalOnboardingValues>;
 
 const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
-  const { nextStep, userSettings, setUserSettings } = props;
+  const { userSettings, setUserSettings, lastStep, nextStep } = props;
 
   const {
     register,
@@ -29,14 +30,15 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
     formState: errors,
   } = useForm<SchemaValidation>({
     resolver: zodResolver(AdditionalOnboardingValues),
+    defaultValues: userSettings,
   });
 
   const submitSignInFlow: SubmitHandler<SchemaValidation> = (data) => {
-    // setUserSettings({
-    //   ...userSettings,
-    //   preferredName: data.preferredName,
-    //   bio: data.bio,
-    // });
+    setUserSettings({
+      ...userSettings,
+      preferredName: data.preferredName,
+      bio: data.bio,
+    });
     nextStep();
   };
 
@@ -46,6 +48,23 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
         {/* <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6"></div> */}
 
         <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="last-name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Preferred First name
+            </label>
+            <div className="mt-1">
+              <input
+                type="text"
+                id="preferred-name"
+                autoComplete="given-name"
+                {...register("preferredName")}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
           <div className="sm:col-span-6">
             <label
               htmlFor="about"
@@ -72,6 +91,9 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
 
       <div className="pt-5">
         <div className="flex justify-end gap-6">
+          <Button intent="tertiary" onClick={lastStep}>
+            Back
+          </Button>
           <Button type="submit">Next</Button>
         </div>
       </div>

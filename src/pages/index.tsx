@@ -1,7 +1,9 @@
+import Hero from "@/components/screens/landing/Hero";
+import PrimaryFeatures from "@/components/screens/landing/PrimaryFeatures";
+import SecondaryFeatures from "@/components/screens/landing/SecondaryFeatures";
 import type { GetServerSideProps, NextPage } from "next";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
-import Landing from "../components/screens/landing/Landing";
 
 const Main: NextPage = () => {
   return (
@@ -15,7 +17,10 @@ const Main: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Landing />
+        <Hero />
+        <PrimaryFeatures />
+        {/* not in use */}
+        <SecondaryFeatures />
       </main>
     </>
   );
@@ -23,26 +28,26 @@ const Main: NextPage = () => {
 
 export default Main;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const session = await getSession(context);
 
-  // if (!session) {
-  //   return {
-  //     redirect: {
-  //       destination: "/",
-  //       permanent: true,
-  //     },
-  //   };
-  // } else if (session.user.role) {
-  //   return {
-  //     redirect: {
-  //       destination: "/home",
-  //       permanent: false,
-  //     },
-  //   };
-  // } else {
-  return {
-    props: {},
-  };
-  // }
-};
+//   // if (!session) {
+//   //   return {
+//   //     redirect: {
+//   //       destination: "/",
+//   //       permanent: true,
+//   //     },
+//   //   };
+//   // } else if (session.user.role) {
+//   //   return {
+//   //     redirect: {
+//   //       destination: "/home",
+//   //       permanent: false,
+//   //     },
+//   //   };
+//   // } else {
+//   return {
+//     props: {},
+//   };
+//   // }
+// };
