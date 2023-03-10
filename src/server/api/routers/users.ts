@@ -74,6 +74,8 @@ export const usersRouter = createTRPCRouter({
           image: input.image,
 
           graduationClass: input.graduationClass,
+          tagLine: input.tagLine,
+          major: input.major,
           bio: input.bio,
         },
       });
