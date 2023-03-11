@@ -123,9 +123,6 @@ export function NavBar() {
     return;
   }
 
-  // const getCurrentUser = api.users.getCurrentUser.useQuery();
-  // console.log("getCurrentUser", getCurrentUser);
-
   useEffect(() => {
     function onScroll() {
       setIsScrolled(window.scrollY > 0);

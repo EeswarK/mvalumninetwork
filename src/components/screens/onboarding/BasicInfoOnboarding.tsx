@@ -25,7 +25,6 @@ type SchemaValidation = z.infer<typeof BasicOnboardingValues>;
 const BasicInfoOnboarding = (props: IBasicInfoProps) => {
   const { userSettings, setUserSettings, nextStep } = props;
   const authProvider = useAuthProvider();
-  console.log("props", props);
 
   const {
     register,
@@ -37,7 +36,6 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
   });
 
   function submitSignInFlow(data: SchemaValidation) {
-    console.log("data", data);
     setUserSettings({
       firstName: data.firstName,
       lastName: data.lastName,

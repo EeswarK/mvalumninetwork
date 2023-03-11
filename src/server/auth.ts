@@ -44,7 +44,7 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    signIn({ user, account, profile, email, credentials }) {
+    signIn() {
       return true;
     },
 
@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = user.id;
         // session.user.role = user.role; <-- put other properties on the session here
-        // session.user.role = "role" in user ? (user.role as string) : "";
+        session.user.role = "role" in user ? (user.role as string) : undefined;
       }
       return session;
     },

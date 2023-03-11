@@ -1,3 +1,4 @@
+import { Layout } from "@/components/ui/Layout";
 import { getServerAuthSession } from "@/server/auth";
 import { CardContainer } from "@ui/CardContainer";
 import type { GetServerSideProps, NextPage } from "next";
@@ -15,16 +16,9 @@ type UserType = {
 
 const userhome: NextPage = () => {
   return (
-    <>
-      <h1> Home </h1>
-      {users.map((user) => {
-        <CardContainer>
-          <span>{user.name}</span>
-          <span>{user.occupation}</span>
-          <span>{user.tagline}</span>
-        </CardContainer>;
-      })}
-    </>
+    <Layout protect>
+      <div>Home</div>
+    </Layout>
   );
 };
 

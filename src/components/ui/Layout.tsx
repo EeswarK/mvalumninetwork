@@ -1,7 +1,11 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import React, { useEffect } from "react";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
+import { useRouter } from "next/router";
+import { getSession, useSession } from "next-auth/react";
+import { api } from "@/utils/api";
 
 const layoutStyles = cva("max-w-7xl mx-auto", {
   variants: {
@@ -19,10 +23,14 @@ interface LayoutProps
   extends React.ButtonHTMLAttributes<HTMLDivElement>,
     VariantProps<typeof layoutStyles> {
   narrow?: boolean;
+  protect?: boolean;
 }
 
 export const Layout: React.FC<LayoutProps> = (props) => {
-  const { narrow, className } = props;
+  const { narrow, protect = false, className } = props;
+
+  useRedirectToLoginIfUnauthenticated(protect);
+  useRedirectToOnboardingIfNeeded(protect);
 
   if (narrow) {
     <div className={clsx(layoutStyles(), className)}>
@@ -34,3 +42,56 @@ export const Layout: React.FC<LayoutProps> = (props) => {
     <div className={clsx(layoutStyles(), className)}>{props.children}</div>
   );
 };
+
+function useRedirectToLoginIfUnauthenticated(isProtected: boolean) {
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isProtected) {
+      return;
+    }
+
+    if (!loading && !session) {
+      router.replace({
+        pathname: "/signin",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, session]);
+
+  return {
+    loading: loading && !session,
+    session,
+  };
+}
+
+function useRedirectToOnboardingIfNeeded(isProtected: boolean) {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  const isRedirectingToOnboarding = !session?.user.role;
+
+  useEffect(() => {
+    if (!isProtected) {
+      return;
+    }
+
+    if (isRedirectingToOnboarding) {
+      router.replace({
+        pathname: "/onboarding",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRedirectingToOnboarding]);
+}
+
+// const getServerSideProps = async (context) => {
+//   const session = await getSession(context);
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }

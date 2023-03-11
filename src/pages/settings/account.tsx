@@ -17,10 +17,10 @@ export default function Account() {
   );
 
   return (
-    <Layout className="mt-6 ">
-      <div className="flex justify-between">
+    <Layout protect className="mt-6 ">
+      <div className="flex justify-center">
         {/* Settings Side Bar */}
-        <div className="sticky hidden w-1/4 scale-110 md:flex md:flex-col md:justify-center">
+        {/* <div className="sticky hidden w-1/4 scale-110 md:flex md:flex-col md:justify-center">
           <nav aria-label="Sidebar" className=" rounded-lg bg-white p-4 shadow">
             <div className="flow-root space-y-1">
               {USER_SETTINGS.map((item) => (
@@ -50,13 +50,13 @@ export default function Account() {
               ))}
             </div>
           </nav>
-        </div>
+        </div> */}
         {/* Setting Content */}
-        <main className="md:w-2/3">
+        <div className="md:w-2/3">
           <div className="flex flex-col justify-center rounded-lg bg-white p-8 shadow-md">
             <currentTab.component />
           </div>
-        </main>
+        </div>
       </div>
     </Layout>
   );

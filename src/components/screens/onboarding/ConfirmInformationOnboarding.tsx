@@ -15,6 +15,8 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
   const router = useRouter();
 
   function onSuccess() {
+    const event = new Event("visibilitychange");
+    document.dispatchEvent(event);
     void router.replace("/home");
   }
 
@@ -27,13 +29,7 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
       preferredName: userSettings.preferredName,
       bio: userSettings.bio,
     });
-    console.log("success");
-    console.log("user", user);
   };
-
-  useEffect(() => {
-    console.log("userSettings", userSettings);
-  }, [userSettings]);
 
   return (
     <div>

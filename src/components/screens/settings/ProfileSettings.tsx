@@ -160,7 +160,7 @@ export default function ProfileSettings() {
                 </button>
               </div> */}
               </div>
-              <div className="sm:col-span-3">
+              {/* <div className="sm:col-span-3">
                 <label
                   htmlFor="first-name"
                   className="block text-sm font-medium text-gray-700"
@@ -178,9 +178,9 @@ export default function ProfileSettings() {
                   />
                   <ErrorMessage errors={errors} name="firstName" />
                 </div>
-              </div>
+              </div> */}
 
-              <div className="sm:col-span-3">
+              {/* <div className="sm:col-span-3">
                 <label
                   htmlFor="last-name"
                   className="block text-sm font-medium text-gray-700"
@@ -199,7 +199,7 @@ export default function ProfileSettings() {
                   />
                   <ErrorMessage errors={errors} name="lastName" />
                 </div>
-              </div>
+              </div> */}
               <div className="sm:col-span-3">
                 <label
                   htmlFor="last-name"
@@ -223,7 +223,7 @@ export default function ProfileSettings() {
                   )}
                 </div>
               </div>
-              <div className="sm:col-span-3">
+              {/* <div className="sm:col-span-3">
                 <label
                   htmlFor="last-name"
                   className="block text-sm font-medium text-gray-700"
@@ -247,7 +247,7 @@ export default function ProfileSettings() {
                   />
                 </div>
                 <ErrorMessage errors={errors} name="graduationYear" />
-              </div>
+              </div> */}
               <div className="sm:col-span-6">
                 <label
                   htmlFor="email"
@@ -295,40 +295,11 @@ export default function ProfileSettings() {
 
           <div className="pt-5">
             <div className="flex justify-end gap-6">
-              <Button type="submit">Submit</Button>
+              <Button intent="tertiary">Cancel</Button>
+              <Button>Save</Button>
             </div>
           </div>
         </form>
-
-        <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-          <div className="sm:col-span-6">
-            <label
-              htmlFor="about"
-              className="block text-sm font-medium text-gray-700"
-            >
-              About
-            </label>
-            <div className="mt-1">
-              <textarea
-                id="about"
-                name="about"
-                rows={3}
-                className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                defaultValue={""}
-              />
-            </div>
-            <p className="mt-2 text-sm text-gray-500">
-              Write a few sentences about yourself.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-5">
-        <div className="flex justify-end gap-6">
-          <Button intent="tertiary">Cancel</Button>
-          <Button>Save</Button>
-        </div>
       </div>
     </>
   );

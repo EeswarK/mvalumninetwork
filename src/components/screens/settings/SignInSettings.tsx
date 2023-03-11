@@ -1,4 +1,3 @@
-import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 
 export default function SignInSettings() {
@@ -7,7 +6,6 @@ export default function SignInSettings() {
   if (session.status === "loading") return null;
   if (session.data === null) return null;
 
-  const { data: user } = api.users.get.useQuery({ id: session.data.user.id });
   return (
     <>
       <div>
