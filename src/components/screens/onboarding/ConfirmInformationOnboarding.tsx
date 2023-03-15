@@ -32,7 +32,7 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
     // }
     const userRole =
       userSettings.graduationClass <= 2022 ? Role.ALUMNI : Role.STUDENT;
-    const user = await updateUser.mutateAsync({
+    await updateUser.mutateAsync({
       firstName: userSettings.firstName,
       lastName: userSettings.lastName,
       contactEmail: userSettings.contactEmail,

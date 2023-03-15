@@ -6,14 +6,12 @@ export default function UserBlock({
   user,
   confirm,
   setConfirm,
-  actionTaken,
   setActionTaken,
   index,
 }: {
   user: User;
   confirm?: boolean;
   setConfirm: React.Dispatch<React.SetStateAction<boolean[]>>;
-  actionTaken?: boolean;
   setActionTaken: React.Dispatch<React.SetStateAction<boolean[]>>;
   index: number;
 }) {

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import useAuthProvider from "@/lib/useAuthProvider";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
-import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
@@ -26,11 +25,7 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
   const { userSettings, setUserSettings, nextStep } = props;
   const authProvider = useAuthProvider();
 
-  const {
-    register,
-    handleSubmit,
-    formState: errors,
-  } = useForm<SchemaValidation>({
+  const { register, handleSubmit } = useForm<SchemaValidation>({
     resolver: zodResolver(BasicOnboardingValues),
     defaultValues: userSettings,
   });

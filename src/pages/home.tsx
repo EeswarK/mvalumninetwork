@@ -89,3 +89,14 @@ function Home() {
 }
 
 export default Home;
+
+// const UserCard = ({ user }) => {
+
+//   const [isExpanded, setIsExpanded] = useState(false);
+
+//   function handleClick() {
+//     setIsExpanded(!isExpanded);
+//   }
+
+//   return <div>user cards</div>;
+// };

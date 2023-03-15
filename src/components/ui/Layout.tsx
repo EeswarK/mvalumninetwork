@@ -94,8 +94,6 @@ function useRedirectToWaitingIfNeeded(isProtected: boolean) {
   const router = useRouter();
   const { data: session } = useSession();
 
-  console.log("session in waiting", session);
-
   const isRedirectingToWaiting = session?.user.approved === "WAITING";
 
   useEffect(() => {

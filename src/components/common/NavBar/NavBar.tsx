@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
@@ -13,7 +13,6 @@ import { Button } from "@ui/Button";
 import { Logo } from "../Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { api } from "@/utils/api";
 import { IS_DEV } from "@/utils/utils";
 
 function MobileNavigation() {
@@ -114,7 +113,7 @@ export function NavBar() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const [isScrolled, setIsScrolled] = useState(false);
+  // const [isScrolled, setIsScrolled] = useState(false);
 
   const seamless = router.pathname === "/";
 
@@ -123,16 +122,16 @@ export function NavBar() {
     return;
   }
 
-  useEffect(() => {
-    function onScroll() {
-      setIsScrolled(window.scrollY > 0);
-    }
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
+  // useEffect(() => {
+  //   function onScroll() {
+  //     setIsScrolled(window.scrollY > 0);
+  //   }
+  //   onScroll();
+  //   window.addEventListener("scroll", onScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", onScroll);
+  //   };
+  // }, []);
 
   return (
     <header

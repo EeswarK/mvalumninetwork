@@ -2,19 +2,13 @@
 import React from "react";
 
 import { Layout } from "@ui/Layout";
-import type { UserSettings } from "@/utils/constants";
-import { USER_SETTINGS } from "@/utils/constants";
-import clsx from "clsx";
-import { getSession, SessionProvider, useSession } from "next-auth/react";
-import type { GetServerSideProps } from "next";
-import { Session } from "@prisma/client";
+import ProfileSettings from "@/components/screens/settings/ProfileSettings";
+import withAuth from "@/utils/withAuth";
 
-export default function Account() {
-  const session = useSession();
-
-  const [currentTab, setCurrentTab] = React.useState<UserSettings>(
-    USER_SETTINGS[0]
-  );
+function Account() {
+  // const [currentTab, setCurrentTab] = React.useState<UserSettings>(
+  //   USER_SETTINGS[0]
+  // );
 
   return (
     <Layout protect className="mt-6 ">
@@ -54,7 +48,8 @@ export default function Account() {
         {/* Setting Content */}
         <div className="md:w-2/3">
           <div className="flex flex-col justify-center rounded-lg bg-white p-8 shadow-md">
-            <currentTab.component />
+            {/* <currentTab.component /> */}
+            <ProfileSettings />
           </div>
         </div>
       </div>
@@ -62,19 +57,5 @@ export default function Account() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-
-  // if (!session) {
-  //   return {
-  //     redirect: {
-  //       destination: "/",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
-
-  return {
-    props: {},
-  };
-};
+export default withAuth(Account, "auth");
+// export default Account;

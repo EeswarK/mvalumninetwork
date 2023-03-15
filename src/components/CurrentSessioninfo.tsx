@@ -1,14 +1,10 @@
 import type { inferSSRProps } from "@/lib/inferSSRProps";
 import type { GetServerSidePropsContext } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { Layout } from "./ui/Layout";
 
 function CurrentSessionInfo(props: inferSSRProps<typeof getServerSideProps>) {
   const { session } = props;
-  console.log("session", session);
-
-  const { data: sessionData } = useSession();
-  console.log("sessionData", sessionData);
 
   return (
     <Layout className="flex justify-center">
