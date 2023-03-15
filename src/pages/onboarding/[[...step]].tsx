@@ -7,7 +7,6 @@ import type { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
 import { z } from "zod";
 import { useRouter } from "next/router";
-import { prisma } from "@/server/db";
 import { Steps } from "@/components/Steps";
 import { StepCard } from "@/components/StepCard";
 import BasicInfoOnboarding from "@/components/screens/onboarding/BasicInfoOnboarding";
@@ -35,7 +34,7 @@ export const OnboardingValues = z.object({
   contactEmail: z.string(),
   preferredName: z.string().min(2).max(15).optional(),
   bio: z.string().max(1000).optional(),
-  graduationYear: z.number().optional(),
+  graduationClass: z.number(),
 });
 
 export const defaultOnboardingValues = {
@@ -44,6 +43,7 @@ export const defaultOnboardingValues = {
   contactEmail: "",
   preferredName: "",
   bio: "",
+  graduationClass: 2022,
 };
 
 export type UserType = z.infer<typeof OnboardingValues>;
@@ -116,6 +116,7 @@ function SignInFlow() {
       narrow
       className="flex min-h-screen flex-col items-center justify-center py-12"
       key={router.asPath}
+      protect
     >
       <div className="text-center sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-3xl font-extrabold text-zinc-900">
@@ -168,41 +169,9 @@ export const getServerSideProps = async (
     return { redirect: { permanent: false, destination: "/signin" } };
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      preferredName: true,
-      email: true,
-      contactEmail: true,
-      image: true,
-      bio: true,
-      role: true,
-      approved: true,
-    },
-  });
-
-  // const user = {};
-
-  if (!user) {
-    throw new Error("User from session not found");
-  }
-
-  if (user?.role) {
+  if (session?.user.role) {
     return { redirect: { permanent: false, destination: "/home" } };
   }
-
-  return {
-    props: {
-      user: {
-        ...user,
-      },
-    },
-  };
 };
 
 export default SignInFlow;

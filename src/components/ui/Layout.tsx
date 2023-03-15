@@ -4,8 +4,7 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { getSession, useSession } from "next-auth/react";
-import { api } from "@/utils/api";
+import { useSession } from "next-auth/react";
 
 const layoutStyles = cva("max-w-7xl mx-auto", {
   variants: {
@@ -31,6 +30,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
 
   useRedirectToLoginIfUnauthenticated(protect);
   useRedirectToOnboardingIfNeeded(protect);
+  useRedirectToWaitingIfNeeded(protect);
+  useRedirectToRejectedIfNeeded(protect);
 
   if (narrow) {
     <div className={clsx(layoutStyles(), className)}>
@@ -69,12 +70,13 @@ function useRedirectToLoginIfUnauthenticated(isProtected: boolean) {
 
 function useRedirectToOnboardingIfNeeded(isProtected: boolean) {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const isRedirectingToOnboarding = !session?.user.role;
+  const inOnboarding = router.pathname.includes("/onboarding");
 
   useEffect(() => {
-    if (!isProtected) {
+    if (!isProtected || inOnboarding) {
       return;
     }
 
@@ -83,15 +85,49 @@ function useRedirectToOnboardingIfNeeded(isProtected: boolean) {
         pathname: "/onboarding",
       });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRedirectingToOnboarding]);
 }
 
-// const getServerSideProps = async (context) => {
-//   const session = await getSession(context);
-//   return {
-//     props: {
-//       session,
-//     },
-//   };
-// }
+function useRedirectToWaitingIfNeeded(isProtected: boolean) {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  console.log("session in waiting", session);
+
+  const isRedirectingToWaiting = session?.user.approved === "WAITING";
+
+  useEffect(() => {
+    if (!isProtected) {
+      return;
+    }
+
+    if (isRedirectingToWaiting) {
+      router.replace({
+        pathname: "/waiting",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRedirectingToWaiting]);
+}
+
+function useRedirectToRejectedIfNeeded(isProtected: boolean) {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  const isRedirectingToRejected = session?.user.approved === "REJECTED";
+
+  useEffect(() => {
+    if (!isProtected) {
+      return;
+    }
+
+    if (isRedirectingToRejected) {
+      router.replace({
+        pathname: "/rejected",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRedirectingToRejected]);
+}

@@ -1,11 +1,14 @@
+import CurrentSessionInfo from "@/components/CurrentSessioninfo";
 import Hero from "@/components/screens/landing/Hero";
 import PrimaryFeatures from "@/components/screens/landing/PrimaryFeatures";
 import SecondaryFeatures from "@/components/screens/landing/SecondaryFeatures";
 import type { GetServerSideProps, NextPage } from "next";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Head from "next/head";
 
 const Main: NextPage = () => {
+  const session = useSession();
+
   return (
     <>
       <Head>
@@ -20,6 +23,8 @@ const Main: NextPage = () => {
         <Hero />
         <PrimaryFeatures />
         {/* not in use */}
+        {!session && <CurrentSessionInfo />}
+        <CurrentSessionInfo />
         <SecondaryFeatures />
       </main>
     </>

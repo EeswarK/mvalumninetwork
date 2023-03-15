@@ -14,6 +14,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// generator zod {
+//   provider      = "zod-prisma"
+//   output        = "./zod"
+//   imports       = "./zod-utils"
+//   relationModel = "default"
+// }
+
 // Necessary for Next auth
 // The data acquired from different providers when logging in
 model Account {
@@ -53,29 +60,29 @@ model VerificationToken {
 
 // User data model
 model User {
-  id            String    @id @default(cuid())
+  id            String  @id @default(cuid())
   name          String?
   firstName     String?
   lastName      String?
   preferredName String?
-  email         String?   @unique
+  email         String? @unique
   contactEmail  String?
   image         String?
-  
+
   graduationClass Int?
   tagLine         String?
   major           String?
   bio             String?
   spaces          Space[] @default([])
 
-  approved Boolean?
+  approved Approved?
 
   emailVerified DateTime?
-  accounts Account[]
-  sessions Session[]
-  role     String?
-  Alumni   Alumni?   @relation(fields: [alumniId], references: [id])
-  alumniId String?
+  accounts      Account[]
+  sessions      Session[]
+  role          Role?
+  Alumni        Alumni?   @relation(fields: [alumniId], references: [id])
+  alumniId      String?
 }
 
 model Alumni {
@@ -87,6 +94,12 @@ model Alumni {
 
   userId String @unique
   User   User[]
+}
+
+enum Approved {
+  WAITING
+  APPROVED
+  REJECTED
 }
 
 enum Role {

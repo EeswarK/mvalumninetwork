@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+import { Approved, Role } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -52,7 +54,9 @@ export const usersRouter = createTRPCRouter({
         major: z.string().optional(),
         bio: z.string().optional(),
 
-        role: z.string().optional(),
+        approved: z.nativeEnum(Approved).optional(),
+
+        role: z.nativeEnum(Role).optional(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -77,6 +81,10 @@ export const usersRouter = createTRPCRouter({
           tagLine: input.tagLine,
           major: input.major,
           bio: input.bio,
+
+          approved: input.approved as Approved,
+
+          role: input.role as Role,
         },
       });
     }),
@@ -93,7 +101,7 @@ export const usersRouter = createTRPCRouter({
           id: input.id,
         },
         data: {
-          approved: true,
+          approved: Approved.APPROVED,
         },
       });
     }),
@@ -106,7 +114,7 @@ export const usersRouter = createTRPCRouter({
           id: input.id,
         },
         data: {
-          approved: false,
+          approved: Approved.REJECTED,
         },
       });
     }),
@@ -114,12 +122,12 @@ export const usersRouter = createTRPCRouter({
   getAllApprovedUsers: adminProcedure.query(({ ctx }) => {
     return ctx.prisma.user.findMany({
       where: {
-        approved: true,
+        approved: Approved.WAITING,
       },
     });
   }),
 
-  getAllUnapprovedUsers: adminProcedure.query(({ ctx }) => {
+  getAllRejectedUsers: adminProcedure.query(({ ctx }) => {
     return ctx.prisma.user.findMany({
       where: {
         approved: null,

@@ -16,7 +16,7 @@ interface IBasicInfoProps {
 
 const AdditionalOnboardingValues = z.object({
   preferredName: z.string().min(2).max(15).optional(),
-  bio: z.string().max(1000),
+  bio: z.string().max(1000).optional(),
 });
 
 type SchemaValidation = z.infer<typeof AdditionalOnboardingValues>;

@@ -158,6 +158,7 @@ export function NavBar() {
             {/* dev option bug fixing */}
             {IS_DEV && (
               <li className="ml-auto">
+                <Button onClick={() => router.reload()}>Reload Session</Button>
                 <Button
                   onClick={() => router.replace("/onboarding")}
                   intent="secondary"

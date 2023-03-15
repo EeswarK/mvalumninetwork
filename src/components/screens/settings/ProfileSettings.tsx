@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type { userContextType } from "@/server/api/trpc";
 import { api } from "@/utils/api";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +16,7 @@ const OnboardingValues = z.object({
   contactEmail: z.string(),
   preferredName: z.string().min(2).max(15),
   bio: z.string().max(1000),
-  graduationYear: z.number(),
+  graduationClass: z.number(),
 });
 
 type SchemaValidation = z.infer<typeof OnboardingValues>;
@@ -33,7 +32,6 @@ type sanitizedUserContextType = {
     contactEmail: string;
     image: string;
     bio: string;
-    approved: boolean;
     graduationClass: number;
   };
 };
@@ -58,7 +56,6 @@ export default function ProfileSettings() {
           contactEmail: "",
           image: "",
           bio: "",
-          approved: false,
         },
       };
     }
@@ -75,7 +72,6 @@ export default function ProfileSettings() {
         contactEmail: user?.contactEmail || "",
         image: user?.image || "",
         bio: user?.bio || "",
-        approved: user?.approved || false,
       },
     };
   }
@@ -83,6 +79,8 @@ export default function ProfileSettings() {
   useEffect(() => {
     if (user) {
       sanitizedUserRef.current = sanitizeUser(user);
+      const event = new Event("visibilitychange");
+      document.dispatchEvent(event);
     }
   }, [user]);
 
@@ -108,7 +106,7 @@ export default function ProfileSettings() {
       contactEmail: data.contactEmail,
       preferredName: data.preferredName,
       bio: data.bio,
-      graduationClass: data.graduationYear,
+      graduationClass: data.graduationClass,
     });
   };
 

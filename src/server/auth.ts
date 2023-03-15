@@ -13,6 +13,7 @@ import LinkedinProvider from "next-auth/providers/linkedin";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env.mjs";
 import { prisma } from "./db";
+import type { Approved, Role } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types.
@@ -22,11 +23,12 @@ import { prisma } from "./db";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  **/
 declare module "next-auth" {
-  interface Session extends DefaultSession {
+  interface Session {
     user: {
       id: string;
       // ...other properties
-      role?: string | undefined;
+      role?: Role | undefined;
+      approved?: Approved | undefined;
     } & DefaultSession["user"];
   }
 
@@ -44,15 +46,13 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    signIn() {
-      return true;
-    },
-
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
         // session.user.role = user.role; <-- put other properties on the session here
-        session.user.role = "role" in user ? (user.role as string) : undefined;
+        session.user.role = "role" in user ? (user.role as Role) : undefined;
+        session.user.approved =
+          "approved" in user ? (user.approved as Approved) : undefined;
       }
       return session;
     },

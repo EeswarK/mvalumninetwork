@@ -17,7 +17,7 @@ const BasicOnboardingValues = z.object({
   firstName: z.string().min(2).max(15),
   lastName: z.string().min(2).max(15),
   contactEmail: z.string(),
-  graduationYear: z.number(),
+  graduationClass: z.number(),
 });
 
 type SchemaValidation = z.infer<typeof BasicOnboardingValues>;
@@ -40,7 +40,7 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
       firstName: data.firstName,
       lastName: data.lastName,
       contactEmail: data.contactEmail,
-      graduationYear: data.graduationYear,
+      graduationClass: data.graduationClass,
     });
     nextStep();
   }
@@ -66,11 +66,15 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
             <div className="mt-1">
               <input
                 type="text"
-                id="first-name"
                 autoComplete="given-name"
-                required
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                {...register("firstName")}
+                {...register("firstName", {
+                  required: "First name is required",
+                  maxLength: {
+                    value: 15,
+                    message: "First name cannot exceed 15 characters",
+                  },
+                })}
               />
             </div>
           </div>
@@ -106,7 +110,7 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                 type="number"
                 id="graduation-year"
                 required
-                {...register("graduationYear", {
+                {...register("graduationClass", {
                   valueAsNumber: true,
                   min: 1969,
                   max: 2026,

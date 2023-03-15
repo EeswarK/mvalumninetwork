@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Button } from "@/components/ui/Button";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
 import { api } from "@/utils/api";
+import { Approved, Role } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 interface IConfirmationProps {
   userSettings: UserType;
@@ -21,13 +22,25 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
   }
 
   const submitSignInFlow = async () => {
+    // let userRole: Role;
+    // if (userSettings.graduationClass === 3100) {
+    //   userRole = Role.ADMIN;
+    // } else if (userSettings.graduationClass <= 2022) {
+    //   userRole = Role.ALUMNI;
+    // } else {
+    //   userRole = Role.STUDENT;
+    // }
+    const userRole =
+      userSettings.graduationClass <= 2022 ? Role.ALUMNI : Role.STUDENT;
     const user = await updateUser.mutateAsync({
       firstName: userSettings.firstName,
       lastName: userSettings.lastName,
       contactEmail: userSettings.contactEmail,
-      graduationClass: userSettings.graduationYear,
+      graduationClass: userSettings.graduationClass,
       preferredName: userSettings.preferredName,
       bio: userSettings.bio,
+      approved: Approved.WAITING,
+      role: userRole,
     });
   };
 
@@ -49,7 +62,7 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
           </span>
           <span>
             <span className="font-bold">Graduation Class: </span>
-            {userSettings.graduationYear}
+            {userSettings.graduationClass}
           </span>
           <textarea
             id="about"
