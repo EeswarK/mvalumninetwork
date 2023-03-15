@@ -1,11 +1,7 @@
 import UserContainer from "@/components/screens/home/UserContainer";
-import { Layout } from "@/components/ui/Layout";
-import { api } from "@/utils/api";
+import { Layout } from "@/components/new-ui/Layout";
 import withAuth from "@/utils/withAuth";
-import { Role } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { CardContainer } from "../components/ui/CardContainer";
 
 export default withAuth(Home, "auth", "/home");
 function Home() {

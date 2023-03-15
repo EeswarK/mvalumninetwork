@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import { CardContainer } from "@/components/ui/CardContainer";
+import { CardContainer } from "@/components/new-ui/CardContainer";
 import { api } from "@/utils/api";
-import { Role } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import { Session } from "next-auth";
 import { useEffect } from "react";
 
@@ -27,7 +27,7 @@ function UserContainer(props: UserContainerProps) {
     <div className="flex">
       {getUsers.data && (
         <div>
-          {getUsers.data.map((user) => (
+          {getUsers.data.map((user: User) => (
             <CardContainer key={user.id}>
               <div>
                 {user.firstName} {user.lastName}

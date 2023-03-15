@@ -8,12 +8,38 @@ import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
 
-import { Layout } from "@ui/Layout";
-import { Button } from "@ui/Button";
+import { Layout } from "@/components/new-ui/Layout";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Logo } from "../Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { IS_DEV } from "@/utils/utils";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent,
+} from "@/components/ui/dropdown-menu";
+import {
+  User,
+  CreditCard,
+  Settings,
+  Keyboard,
+  Users,
+  UserPlus,
+  Mail,
+  MessageSquare,
+  PlusCircle,
+  LogOut,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 function MobileNavigation() {
   return (
@@ -117,11 +143,6 @@ export function NavBar() {
 
   const seamless = router.pathname === "/";
 
-  async function handleSignOut() {
-    await signOut();
-    return;
-  }
-
   // useEffect(() => {
   //   function onScroll() {
   //     setIsScrolled(window.scrollY > 0);
@@ -136,7 +157,7 @@ export function NavBar() {
   return (
     <header
       className={clsx(
-        "sticky top-0 z-50 bg-zinc-100",
+        "sticky top-0 z-50",
         seamless
           ? "py-10"
           : "py-6 shadow-md shadow-slate-900/5 transition duration-500"
@@ -155,48 +176,92 @@ export function NavBar() {
             </li>
 
             {/* dev option bug fixing */}
-            {IS_DEV && (
-              <li className="ml-auto">
-                <Button onClick={() => router.reload()}>Reload Session</Button>
-                <Button href="/onboarding" intent="secondary">
+            {IS_DEV && session && (
+              <li className="ml-auto space-x-4">
+                <Button onClick={() => router.reload()} variant="subtle">
+                  Reload Session
+                </Button>
+                <Link
+                  href="/onboarding"
+                  className={buttonVariants({ variant: "subtle" })}
+                >
                   check signinflow
-                </Button>
+                </Link>
               </li>
             )}
 
-            {session ? (
+            {!session && (
               <li className="ml-auto hidden md:block">
-                <Button onClick={handleSignOut} intent="tertiary">
-                  <span>Sign Out</span>
-                </Button>
-              </li>
-            ) : (
-              <li className="ml-auto hidden md:block">
-                <Button href="/signin" intent="tertiary">
+                <Link href="/signin" className={buttonVariants({})}>
                   <span>Login</span>
-                </Button>
-              </li>
-            )}
-
-            {session ? (
-              <li className="ml-auto md:ml-6">
-                <Button href="/home">
-                  <span>Home</span>
-                </Button>
-              </li>
-            ) : (
-              <li className="ml-auto md:ml-6">
-                <Button href="/signin">
-                  <span>Sign Up!</span>
-                </Button>
+                </Link>
               </li>
             )}
 
             {session && (
-              <li className="ml-auto hidden md:ml-6 md:block">
-                <Button href="/settings/account" rounded="full">
+              <li className="md:ml-6 md:block">
+                {/* <Link href="/settings/account">
                   <span>{session.user.name?.charAt(1)}</span>
-                </Button>
+                </Link> */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="relative h-10 w-10 rounded-full"
+                    >
+                      {session.user.name?.charAt(1)}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem>
+                        <Users className="mr-2 h-4 w-4" />
+                        <span>Team</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                          <UserPlus className="mr-2 h-4 w-4" />
+                          <span>Invite users</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                          <DropdownMenuSubContent forceMount>
+                            <DropdownMenuItem>
+                              <Mail className="mr-2 h-4 w-4" />
+                              <span>Email</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <MessageSquare className="mr-2 h-4 w-4" />
+                              <span>Message</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                              <PlusCircle className="mr-2 h-4 w-4" />
+                              <span>More...</span>
+                            </DropdownMenuItem>
+                          </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                      </DropdownMenuSub>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => signOut()}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </li>
             )}
 

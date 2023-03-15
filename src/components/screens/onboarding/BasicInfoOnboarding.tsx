@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/new-ui/Button";
 import useAuthProvider from "@/lib/useAuthProvider";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
 import { zodResolver } from "@hookform/resolvers/zod";

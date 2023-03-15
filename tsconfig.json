@@ -21,9 +21,8 @@
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@screens/*": ["src/components/screens/*"],
-      "@ui/*": ["src/components/ui/*"],
-      "@ui-lib/*": ["src/components/imported-ui/*"],
-      "@/lib/*": ["src/lib"]
+      "@ui/*": ["src/components/new-ui/*"],
+      "@lib/*": ["src/lib"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],

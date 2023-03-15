@@ -7,8 +7,6 @@ import Head from "next/head";
 
 export default Main;
 function Main() {
-  const session = useSession();
-
   return (
     <>
       <Head>
@@ -21,10 +19,8 @@ function Main() {
       </Head>
       <main>
         <Hero />
-        <PrimaryFeatures />
+        {/* <PrimaryFeatures /> */}
         {/* not in use */}
-        {!session && <CurrentSessionInfo />}
-        <CurrentSessionInfo />
         <SecondaryFeatures />
       </main>
     </>

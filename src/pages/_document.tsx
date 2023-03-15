@@ -73,10 +73,8 @@ export default function Document() {
         />
       </Head>
       <body>
-        {/* <AppShell> */}
         <Main />
         <NextScript />
-        {/* </AppShell> */}
       </body>
     </Html>
   );

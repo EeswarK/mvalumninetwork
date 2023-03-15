@@ -1,5 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Layout } from "@ui/Layout";
+import { Button } from "@/components/ui/button";
+import { Layout } from "@/components/new-ui/Layout";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent,
+} from "@/components/ui/dropdown-menu";
+import {
+  User,
+  CreditCard,
+  Settings,
+  Keyboard,
+  Users,
+  UserPlus,
+  Mail,
+  MessageSquare,
+  PlusCircle,
+  LogOut,
+} from "lucide-react";
 import React from "react";
 
 export default function Hero() {

@@ -4,7 +4,7 @@ import { api } from "@/utils/api";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { User } from "@prisma/client";
-import { Button } from "@ui/Button";
+import { Button } from "@/components/new-ui/Button";
 import { useEffect, useRef } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";

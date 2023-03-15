@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/new-ui/Button";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
 import { api } from "@/utils/api";
 import { Approved, Role } from "@prisma/client";

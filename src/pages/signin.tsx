@@ -1,11 +1,17 @@
-import { Button } from "@ui/Button";
-import { Layout } from "@ui/Layout";
+import { Button } from "@/components/new-ui/Button";
+import { Layout } from "@/components/new-ui/Layout";
 import { Logo } from "@/components/common/Logo";
-import TextTip from "@ui/TextTip";
+import TextTip from "@/components/new-ui/TextTip";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function SignIn() {
   const router = useRouter();
@@ -29,15 +35,6 @@ function SignIn() {
         <h2 className="mt-6 text-3xl font-extrabold text-zinc-900">
           Sign in to your account
         </h2>
-        <p className="mt-2 text-sm text-zinc-600">
-          Or{" "}
-          <Link
-            href="/signup"
-            className="font-medium text-violet-600 hover:text-violet-500"
-          >
-            sign up here
-          </Link>
-        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -62,10 +59,15 @@ function SignIn() {
                 />
               </div>
               <span className="mt-1 flex gap-1 text-xs font-medium text-zinc-500">
-                Utilizing
-                <TextTip tip="An email will be sent to your inbox to finish signing in.">
-                  <span>passwordless sign in. </span>
-                </TextTip>
+                Utilizing{" "}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>passwordless sign in.</TooltipTrigger>
+                    <TooltipContent>
+                      You'll receive an email to sign in.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </span>
             </div>
 
