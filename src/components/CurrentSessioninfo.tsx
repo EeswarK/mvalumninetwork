@@ -1,7 +1,7 @@
 import type { inferSSRProps } from "@/lib/inferSSRProps";
 import type { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
-import { Layout } from "./new-ui/Layout";
+import { Layout } from "./ui/layout";
 
 function CurrentSessionInfo(props: inferSSRProps<typeof getServerSideProps>) {
   const { session } = props;

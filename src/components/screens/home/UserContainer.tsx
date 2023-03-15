@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import { CardContainer } from "@/components/new-ui/CardContainer";
+import { CardContainer } from "@/components/ui/card-container";
 import { api } from "@/utils/api";
 import { Role, User } from "@prisma/client";
 import { Session } from "next-auth";
@@ -24,16 +24,16 @@ function UserContainer(props: UserContainerProps) {
   }, [getUsers.data]);
 
   return (
-    <div className="flex">
+    <div>
       {getUsers.data && (
-        <div>
+        <div className="grid sm:grid-cols-1 md:grid-cols-3 md:space-x-12">
           {getUsers.data.map((user: User) => (
-            <CardContainer key={user.id}>
+            <CardContainer className=" w-80" key={user.id}>
               <div>
                 {user.firstName} {user.lastName}
               </div>
-              <span>body</span>
-              <span>footer</span>
+              <span>{user.contactEmail}</span>
+              <span>{user.major ?? "no major"}</span>
             </CardContainer>
           ))}
         </div>

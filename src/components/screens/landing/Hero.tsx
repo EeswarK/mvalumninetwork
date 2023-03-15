@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Button } from "@/components/ui/button";
-import { Layout } from "@/components/new-ui/Layout";
+import { Layout } from "@/components/ui/layout";
 import {
   DropdownMenu,
   DropdownMenuTrigger,

@@ -1,4 +1,4 @@
-import { Button } from "@/components/new-ui/Button";
+import { Button } from "@/components/deprecated-ui/Button";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";

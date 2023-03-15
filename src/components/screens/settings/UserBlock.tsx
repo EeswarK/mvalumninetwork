@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 import type { User } from "@prisma/client";
-import { Button } from "@/components/new-ui/Button";
+import { Button } from "@/components/deprecated-ui/Button";
 
 export default function UserBlock({
   user,

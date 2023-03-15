@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 interface CardContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode[];
   onClick?: () => void;
@@ -7,7 +9,10 @@ export const CardContainer = (props: CardContainerProps) => {
   const [title, body, footer] = props.children;
   return (
     <div
-      className="cursor-pointer select-none overflow-hidden rounded-lg shadow-2xl"
+      className={cn(
+        "cursor-pointer select-none overflow-hidden rounded-lg shadow-2xl",
+        props.className
+      )}
       onClick={props.onClick}
     >
       <div className="px-4 pt-4 sm:px-6 sm:pt-5">{title}</div>

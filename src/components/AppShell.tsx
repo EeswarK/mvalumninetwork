@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/router";
-import { ThemeProvider } from "../theme-provider";
+import { ThemeProvider } from "./theme-provider";
 import Footer from "./Footer";
-import { NavBar } from "./NavBar/NavBar";
+import { NavBar } from "./NavBar";
 
 export function AppShell(props: { children: React.ReactNode }) {
   const { children } = props;

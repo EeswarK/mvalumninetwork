@@ -1,4 +1,4 @@
-import { Button } from "@/components/new-ui/Button";
+import { Button } from "@/components/deprecated-ui/Button";
 
 /* eslint-disable react/no-unescaped-entities */
 export default function NotificationSettings() {

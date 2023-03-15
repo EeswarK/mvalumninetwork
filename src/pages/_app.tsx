@@ -5,7 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 import { api } from "@/utils/api";
 import Head from "next/head";
-import { AppShell } from "@/components/common/AppShell";
+import { AppShell } from "@/components/AppShell";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

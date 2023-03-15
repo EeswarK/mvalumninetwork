@@ -8,9 +8,9 @@ import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
 
-import { Layout } from "@/components/new-ui/Layout";
+import { Layout } from "@/components/ui/layout";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Logo } from "../Logo";
+import { Logo } from "./Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { IS_DEV } from "@/utils/utils";
