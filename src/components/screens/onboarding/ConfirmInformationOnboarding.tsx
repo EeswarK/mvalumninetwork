@@ -18,18 +18,10 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
   function onSuccess() {
     const event = new Event("visibilitychange");
     document.dispatchEvent(event);
-    void router.replace("/home");
+    router.replace("/home");
   }
 
   const submitSignInFlow = async () => {
-    // let userRole: Role;
-    // if (userSettings.graduationClass === 3100) {
-    //   userRole = Role.ADMIN;
-    // } else if (userSettings.graduationClass <= 2022) {
-    //   userRole = Role.ALUMNI;
-    // } else {
-    //   userRole = Role.STUDENT;
-    // }
     const userRole =
       userSettings.graduationClass <= 2022 ? Role.ALUMNI : Role.STUDENT;
     await updateUser.mutateAsync({

@@ -1,3 +1,4 @@
+import { AppShell } from "@/components/common/AppShell";
 import { Head, Html, Main, NextScript } from "next/document";
 
 const themeScript = `
@@ -72,8 +73,10 @@ export default function Document() {
         />
       </Head>
       <body>
+        {/* <AppShell> */}
         <Main />
         <NextScript />
+        {/* </AppShell> */}
       </body>
     </Html>
   );

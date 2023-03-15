@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import type { User } from "@prisma/client";
+import { Approved } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import * as React from "react";
+import { useEffect } from "react";
 
 export interface WithAuthProps {
   user: User;
@@ -10,6 +12,10 @@ export interface WithAuthProps {
 
 const HOME_ROUTE = "/";
 const LOGIN_ROUTE = "/signin";
+const ONBOARDING_ROUTE = "/onboarding";
+const WAITING_ROUTE = "/waiting";
+const REJECTED_ROUTE = "/rejected";
+const ERROR_ROUTE = "/error";
 
 const ROUTE_ROLES = [
   /**
@@ -17,6 +23,7 @@ const ROUTE_ROLES = [
    * @example /login /register
    */
   "auth",
+  "waiting",
   /**
    * Optional authentication
    * It doesn't push to login page if user is not authenticated
@@ -38,57 +45,57 @@ type RouteRole = (typeof ROUTE_ROLES)[number];
  */
 export default function withAuth<T extends WithAuthProps = WithAuthProps>(
   Component: React.ComponentType<T>,
-  routeRole: RouteRole
+  routeRole: RouteRole,
+  route: string
 ) {
   const ComponentWithAuth = (props: Omit<T, keyof WithAuthProps>) => {
     const router = useRouter();
     const { query } = router;
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
-    const isAuthenticated = session?.user.approved === "APPROVED";
-    const user = session?.user;
+    const isAuthenticated = session?.user.approved === Approved.APPROVED;
+    const isLoading = status === "loading";
+    const needsToLogin = !!session;
+    const needsToOnboard = !session?.user.role;
+    const needsToWait = session?.user.approved === Approved.WAITING;
+    const isRejected = session?.user.approved === Approved.REJECTED;
 
-    console.log("isAuthenticated", isAuthenticated);
-    console.log("user", user);
-    console.log("query redirect", query?.redirect);
+    // print all variables
+    // console.log({
+    //   isAuthenticated,
+    //   isLoading,
+    //   needsToOnboard,
+    //   needsToWait,
+    //   isRejected,
+    // });
 
-    React.useEffect(() => {
-      if (isAuthenticated) {
-        // Prevent authenticated user from accessing auth or other role pages
-        if (routeRole === "auth") {
-          if (query?.redirect) {
-            router.replace(query.redirect as string);
-          } else {
-            router.replace(HOME_ROUTE);
-          }
+    useEffect(() => {
+      if (isLoading) return;
+      if (routeRole === "auth") {
+        if (isAuthenticated) {
+          router.replace((query?.redirect as string) ?? route);
+        } else if (needsToLogin) {
+          router.replace(LOGIN_ROUTE);
+        } else if (needsToOnboard) {
+          router.replace(ONBOARDING_ROUTE);
+        } else if (needsToWait) {
+          router.replace(WAITING_ROUTE);
+        } else if (isRejected) {
+          router.replace(REJECTED_ROUTE);
+        } else {
+          router.replace(HOME_ROUTE);
         }
-      } else {
-        // Prevent unauthenticated user from accessing protected pages
-        if (routeRole !== "auth" && routeRole !== "optional") {
-          router.replace(
-            `${LOGIN_ROUTE}?redirect=${router.asPath}`,
-            `${LOGIN_ROUTE}`
-          );
+      } else if (routeRole === "waiting") {
+        if (needsToWait) {
+          router.replace(route);
+        } else {
+          router.replace(ERROR_ROUTE);
         }
       }
-    }, [isAuthenticated, query, router, user]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthenticated, isLoading, query, router]);
 
-    // if (
-    //   // If unauthenticated user want to access protected pages
-    //   !isAuthenticated &&
-    //   // auth pages and optional pages are allowed to access without login
-    //   routeRole !== "auth" &&
-    //   routeRole !== "optional"
-    // ) {
-    //   return (
-    //     <div className="flex min-h-screen flex-col items-center justify-center text-gray-800">
-    //       <ImSpinner8 className="mb-4 animate-spin text-4xl" />
-    //       <p>Loading...</p>
-    //     </div>
-    //   );
-    // }
-
-    return <Component {...(props as T)} user={user} />;
+    return <Component {...(props as T)} />;
   };
 
   return ComponentWithAuth;

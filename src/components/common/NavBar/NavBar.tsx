@@ -158,10 +158,7 @@ export function NavBar() {
             {IS_DEV && (
               <li className="ml-auto">
                 <Button onClick={() => router.reload()}>Reload Session</Button>
-                <Button
-                  onClick={() => router.replace("/onboarding")}
-                  intent="secondary"
-                >
+                <Button href="/onboarding" intent="secondary">
                   check signinflow
                 </Button>
               </li>
@@ -197,10 +194,7 @@ export function NavBar() {
 
             {session && (
               <li className="ml-auto hidden md:ml-6 md:block">
-                <Button
-                  onClick={() => router.replace("/settings/account")}
-                  rounded="full"
-                >
+                <Button href="/settings/account" rounded="full">
                   <span>{session.user.name?.charAt(1)}</span>
                 </Button>
               </li>

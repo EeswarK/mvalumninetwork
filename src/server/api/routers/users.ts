@@ -135,7 +135,13 @@ export const usersRouter = createTRPCRouter({
     });
   }),
 
-  getAllUsers: adminProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findMany();
-  }),
+  getAllUsers: userProcedure
+    .input(z.object({ role: z.nativeEnum(Role) }))
+    .query(({ ctx, input }) => {
+      return ctx.prisma.user.findMany({
+        where: {
+          role: input.role,
+        },
+      });
+    }),
 });

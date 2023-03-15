@@ -2,11 +2,11 @@ import CurrentSessionInfo from "@/components/CurrentSessioninfo";
 import Hero from "@/components/screens/landing/Hero";
 import PrimaryFeatures from "@/components/screens/landing/PrimaryFeatures";
 import SecondaryFeatures from "@/components/screens/landing/SecondaryFeatures";
-import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 
-const Main: NextPage = () => {
+export default Main;
+function Main() {
   const session = useSession();
 
   return (
@@ -29,30 +29,4 @@ const Main: NextPage = () => {
       </main>
     </>
   );
-};
-
-export default Main;
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const session = await getSession(context);
-
-//   // if (!session) {
-//   //   return {
-//   //     redirect: {
-//   //       destination: "/",
-//   //       permanent: true,
-//   //     },
-//   //   };
-//   // } else if (session.user.role) {
-//   //   return {
-//   //     redirect: {
-//   //       destination: "/home",
-//   //       permanent: false,
-//   //     },
-//   //   };
-//   // } else {
-//   return {
-//     props: {},
-//   };
-//   // }
-// };
+}

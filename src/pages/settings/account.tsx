@@ -11,7 +11,7 @@ function Account() {
   // );
 
   return (
-    <Layout protect className="mt-6 ">
+    <Layout className="mt-6 ">
       <div className="flex justify-center">
         {/* Settings Side Bar */}
         {/* <div className="sticky hidden w-1/4 scale-110 md:flex md:flex-col md:justify-center">
@@ -57,5 +57,5 @@ function Account() {
   );
 }
 
-export default withAuth(Account, "auth");
+export default withAuth(Account, "auth", "/settings/account");
 // export default Account;

@@ -72,7 +72,7 @@ function useRedirectToOnboardingIfNeeded(isProtected: boolean) {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const isRedirectingToOnboarding = !session?.user.role;
+  const isRedirectingToOnboarding = !!session?.user.role;
   const inOnboarding = router.pathname.includes("/onboarding");
 
   useEffect(() => {

@@ -172,6 +172,10 @@ export const getServerSideProps = async (
   if (session?.user.role) {
     return { redirect: { permanent: false, destination: "/home" } };
   }
+
+  return {
+    props: {},
+  };
 };
 
 export default SignInFlow;

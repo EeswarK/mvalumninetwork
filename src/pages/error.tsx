@@ -1,8 +1,8 @@
 import { Layout } from "@/components/ui/Layout";
 import withAuth from "@/utils/withAuth";
 
-export default withAuth(Waiting, "waiting", "/waiting");
-function Waiting() {
+export default withAuth(Error, "all", "/error");
+function Error() {
   return (
     <Layout className="flex justify-center align-middle" protect>
       <h1 className="text-4xl font-bold">waiting</h1>
