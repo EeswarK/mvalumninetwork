@@ -91,7 +91,7 @@ function SignIn() {
                 onClick={() => {
                   void signIn("google");
                 }}
-                variant="ghost"
+                variant="outline"
                 className="w-full justify-center text-zinc-600"
               >
                 <span className="sr-only">Sign in with Google</span>
@@ -108,7 +108,7 @@ function SignIn() {
 
               <Button
                 onClick={() => void signIn("facebook")}
-                variant="ghost"
+                variant="outline"
                 className="w-full justify-center text-zinc-600"
               >
                 <span className="sr-only">Sign in with Facebook</span>
