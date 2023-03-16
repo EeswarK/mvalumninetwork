@@ -34,7 +34,7 @@ const Steps = (props: ISteps) => {
           ) : (
             <div
               key={`step-${index}`}
-              className="h-1 w-full rounded-[1px] bg-black bg-opacity-25"
+              className="h-1 w-full rounded-[1px] bg-black/25"
             />
           );
         })}

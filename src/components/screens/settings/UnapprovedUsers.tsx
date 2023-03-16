@@ -38,7 +38,6 @@ export default function UnapprovedUsers() {
                   user={user}
                   confirm={confirm[index]}
                   setConfirm={setConfirm}
-                  actionTaken={actionTaken[index]}
                   setActionTaken={setActionTaken}
                   index={index}
                 />

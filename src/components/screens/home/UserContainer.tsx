@@ -3,7 +3,6 @@ import { CardContainer } from "@/components/ui/card-container";
 import { api } from "@/utils/api";
 import { Role, User } from "@prisma/client";
 import { Session } from "next-auth";
-import { useEffect } from "react";
 
 type UserContainerProps = {
   session: Session | null;
@@ -19,9 +18,9 @@ function UserContainer(props: UserContainerProps) {
     role: roleToQueryFor,
   });
 
-  useEffect(() => {
-    console.log(getUsers.data);
-  }, [getUsers.data]);
+  // useEffect(() => {
+  //   console.log(getUsers.data);
+  // }, [getUsers.data]);
 
   return (
     <div>

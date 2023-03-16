@@ -1,36 +1,12 @@
+/* eslint-disable tailwindcss/classnames-order */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/ui/layout";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuPortal,
-  DropdownMenuSubContent,
-} from "@/components/ui/dropdown-menu";
-import {
-  User,
-  CreditCard,
-  Settings,
-  Keyboard,
-  Users,
-  UserPlus,
-  Mail,
-  MessageSquare,
-  PlusCircle,
-  LogOut,
-} from "lucide-react";
 import React from "react";
 
 export default function Hero() {
   return (
     <Layout className="pt-20 pb-16 text-center lg:pt-32">
+      {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
       <h1 className="mx-auto max-w-4xl font-display text-5xl font-semibold text-zinc-900 sm:text-6xl">
         Networking for{" "}
         <span className="relative whitespace-nowrap text-violet-700">

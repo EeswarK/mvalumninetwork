@@ -1,8 +1,5 @@
-import CurrentSessionInfo from "@/components/CurrentSessioninfo";
 import Hero from "@/components/screens/landing/Hero";
-import PrimaryFeatures from "@/components/screens/landing/PrimaryFeatures";
 import SecondaryFeatures from "@/components/screens/landing/SecondaryFeatures";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
 
 export default Main;
