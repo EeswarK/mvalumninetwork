@@ -1,5 +1,5 @@
-import { Button } from "@/components/deprecated-ui/Button";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
+import { Button } from "@components/ui/button";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Dispatch, SetStateAction } from "react";
@@ -91,7 +91,7 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
 
       <div className="pt-5">
         <div className="flex justify-end gap-6">
-          <Button intent="tertiary" onClick={lastStep}>
+          <Button variant="ghost" onClick={lastStep}>
             Back
           </Button>
           <Button type="submit">Next</Button>

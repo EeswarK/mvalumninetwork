@@ -1,4 +1,4 @@
-import { Button } from "@/components/deprecated-ui/Button";
+import { Button } from "@components/ui/button";
 
 /* eslint-disable react/no-unescaped-entities */
 export default function NotificationSettings() {
@@ -135,7 +135,7 @@ export default function NotificationSettings() {
       </div>
       <div className="pt-5">
         <div className="flex justify-end gap-6">
-          <Button intent="tertiary">Cancel</Button>
+          <Button variant="ghost">Cancel</Button>
           <Button>Save</Button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
+import { Button } from "@components/ui/button";
 import type { User } from "@prisma/client";
-import { Button } from "@/components/deprecated-ui/Button";
 
 export default function UserBlock({
   user,
@@ -46,12 +46,12 @@ export default function UserBlock({
       </div>
       <div className="space-x-4">
         {confirm ? (
-          <Button intent="tertiary" onClick={declineUser}>
+          <Button variant="ghost" onClick={declineUser}>
             Are you sure?
           </Button>
         ) : (
           <Button
-            intent="tertiary"
+            variant="ghost"
             onClick={() =>
               setConfirm((prevState) => {
                 const newConfirm = [...prevState];
@@ -63,7 +63,7 @@ export default function UserBlock({
             Decline
           </Button>
         )}
-        <Button intent="approve" onClick={approveUser}>
+        <Button variant="default" onClick={approveUser}>
           Approve
         </Button>
       </div>

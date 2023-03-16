@@ -1,6 +1,6 @@
-import { Button } from "@/components/deprecated-ui/Button";
 import useAuthProvider from "@/lib/useAuthProvider";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
+import { Button } from "@components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";

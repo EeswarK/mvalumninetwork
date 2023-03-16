@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Button } from "@/components/deprecated-ui/Button";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
 import { api } from "@/utils/api";
+import { Button } from "@components/ui/button";
 import { Approved, Role } from "@prisma/client";
 import { useRouter } from "next/router";
 
@@ -68,7 +68,7 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
 
       <div className="pt-5">
         <div className="flex justify-end gap-6">
-          <Button intent="secondary" onClick={lastStep}>
+          <Button variant="outline" onClick={lastStep}>
             Back
           </Button>
           <Button onClick={submitSignInFlow}>Yes</Button>

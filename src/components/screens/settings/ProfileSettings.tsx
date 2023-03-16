@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { api } from "@/utils/api";
+import { Button } from "@components/ui/button";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { User } from "@prisma/client";
-import { Button } from "@/components/deprecated-ui/Button";
 import { useEffect, useRef } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -293,7 +293,7 @@ export default function ProfileSettings() {
 
           <div className="pt-5">
             <div className="flex justify-end gap-6">
-              <Button intent="tertiary">Cancel</Button>
+              <Button variant="ghost">Cancel</Button>
               <Button>Save</Button>
             </div>
           </div>

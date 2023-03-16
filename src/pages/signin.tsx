@@ -1,4 +1,3 @@
-import { Button } from "@/components/deprecated-ui/Button";
 import { Layout } from "@ui/layout";
 import { Logo } from "@/components/Logo";
 import { signIn, useSession } from "next-auth/react";
@@ -10,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@ui/tooltip";
+import { Button } from "@components/ui/button";
 
 function SignIn() {
   const router = useRouter();
@@ -91,7 +91,7 @@ function SignIn() {
                 onClick={() => {
                   void signIn("google");
                 }}
-                intent="tertiary"
+                variant="ghost"
                 className="w-full justify-center text-zinc-600"
               >
                 <span className="sr-only">Sign in with Google</span>
@@ -108,7 +108,7 @@ function SignIn() {
 
               <Button
                 onClick={() => void signIn("facebook")}
-                intent="tertiary"
+                variant="ghost"
                 className="w-full justify-center text-zinc-600"
               >
                 <span className="sr-only">Sign in with Facebook</span>
