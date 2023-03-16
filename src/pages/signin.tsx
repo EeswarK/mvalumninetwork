@@ -1,5 +1,5 @@
 import { Button } from "@/components/deprecated-ui/Button";
-import { Layout } from "@/components/ui/layout";
+import { Layout } from "@ui/layout";
 import { Logo } from "@/components/Logo";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -9,7 +9,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@ui/tooltip";
 
 function SignIn() {
   const router = useRouter();

@@ -1,6 +1,6 @@
 /* eslint-disable tailwindcss/classnames-order */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Layout } from "@/components/ui/layout";
+import { Layout } from "@ui/layout";
 import React from "react";
 
 export default function Hero() {

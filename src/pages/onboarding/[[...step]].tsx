@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { Layout } from "@/components/ui/layout";
+import { Layout } from "@ui/layout";
 import type { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
 import { z } from "zod";

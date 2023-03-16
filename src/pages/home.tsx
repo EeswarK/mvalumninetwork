@@ -1,8 +1,8 @@
 import UserContainer from "@/components/screens/home/UserContainer";
-import { Layout } from "@/components/ui/layout";
+import { Layout } from "@ui/layout";
 import withAuth from "@/utils/withAuth";
 import { useSession } from "next-auth/react";
-import { Input } from "@/components/ui/input";
+import { Input } from "@ui/input";
 
 export default withAuth(Home, "auth", "/home");
 function Home() {

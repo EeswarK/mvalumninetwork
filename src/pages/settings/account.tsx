@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from "react";
 
-import { Layout } from "@/components/ui/layout";
+import { Layout } from "@ui/layout";
 import ProfileSettings from "@/components/screens/settings/ProfileSettings";
 import withAuth from "@/utils/withAuth";
 

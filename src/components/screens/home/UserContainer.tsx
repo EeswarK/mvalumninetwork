@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import { CardContainer } from "@/components/ui/card-container";
+import { CardContainer } from "@ui/card-container";
 import { api } from "@/utils/api";
 import { Role, User } from "@prisma/client";
 import { Session } from "next-auth";

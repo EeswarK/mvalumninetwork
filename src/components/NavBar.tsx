@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuGroup,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+} from "@ui/dropdown-menu";
 import { User, Settings, LogOut } from "lucide-react";
 
 function MobileNavigation() {

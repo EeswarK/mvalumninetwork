@@ -1,4 +1,4 @@
-import { Layout } from "@/components/ui/layout";
+import { Layout } from "@ui/layout";
 import React from "react";
 
 export default function PrimaryFeatures() {
