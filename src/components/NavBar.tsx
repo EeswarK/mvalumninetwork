@@ -9,7 +9,7 @@ import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
 
 import { Layout } from "@ui/layout";
-import { Button, buttonVariants } from "@ui/button";
+import { Button, buttonVariants } from "@components/ui/button";
 import { Logo } from "./Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";

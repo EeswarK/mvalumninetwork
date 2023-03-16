@@ -18,11 +18,11 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "@*": ["./src/*"],
       "@components/*": ["./src/components/*"],
       "@screens/*": ["./src/components/screens/*"],
       "@ui/*": ["./src/components/ui/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@*": ["./src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],
