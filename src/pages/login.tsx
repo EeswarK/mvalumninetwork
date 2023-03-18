@@ -1,4 +1,4 @@
-import { Layout } from "@ui/layout";
+import { Layout } from "@components/layout";
 import { Logo } from "@/components/Logo";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";

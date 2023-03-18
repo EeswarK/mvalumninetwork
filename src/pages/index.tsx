@@ -1,8 +1,9 @@
 import Hero from "@/components/screens/landing/Hero";
 import SecondaryFeatures from "@/components/screens/landing/SecondaryFeatures";
+import withAuth from "@utils/withAuth";
 import Head from "next/head";
 
-export default Main;
+export default withAuth(Main, "all", "/");
 function Main() {
   return (
     <>
@@ -23,3 +24,18 @@ function Main() {
     </>
   );
 }
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const session = await getSession(context);
+//   if (session) {
+//     return {
+//       redirect: {
+//         destination: "/home",
+//         permanent: true,
+//       },
+//     };
+//   }
+//   return {
+//     props: {},
+//   };
+// };

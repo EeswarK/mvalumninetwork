@@ -3,14 +3,17 @@ import { useRouter } from "next/router";
 import { ThemeProvider } from "./theme-provider";
 import Footer from "./Footer";
 import { NavBar } from "./NavBar";
+import { getSession } from "next-auth/react";
+import type { GetServerSidePropsContext } from "next";
 
 export function AppShell(props: { children: React.ReactNode }) {
   const { children } = props;
 
   const router = useRouter();
   const isNoNavBarPage =
-    router.pathname === "/signin" ||
+    router.pathname === "/login" ||
     router.pathname === "/onboarding/[[...step]]";
+  console.log("pathname", router.pathname);
 
   return (
     <div
@@ -28,3 +31,22 @@ export function AppShell(props: { children: React.ReactNode }) {
     </div>
   );
 }
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/home",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

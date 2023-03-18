@@ -11,11 +11,10 @@ export interface WithAuthProps {
 }
 
 const HOME_ROUTE = "/";
-const LOGIN_ROUTE = "/signin";
+const LOGIN_ROUTE = "/login";
 const ONBOARDING_ROUTE = "/onboarding";
 const WAITING_ROUTE = "/waiting";
 const REJECTED_ROUTE = "/rejected";
-const ERROR_ROUTE = "/error";
 
 const ROUTE_ROLES = [
   /**
@@ -23,7 +22,7 @@ const ROUTE_ROLES = [
    * @example /login /register
    */
   "auth",
-  "waiting",
+  // "waiting",
   /**
    * Optional authentication
    * It doesn't push to login page if user is not authenticated
@@ -54,11 +53,13 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
     const { data: session, status } = useSession();
 
     const isAuthenticated = session?.user.approved === Approved.APPROVED;
-    const isLoading = status === "loading";
-    const needsToLogin = !!session;
-    const needsToOnboard = !session?.user.role;
     const needsToWait = session?.user.approved === Approved.WAITING;
     const isRejected = session?.user.approved === Approved.REJECTED;
+
+    const isLoading = status === "loading";
+
+    const needsToLogin = !!session;
+    const needsToOnboard = !session?.user.role;
 
     // print all variables
     // console.log({
@@ -70,26 +71,35 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
     // });
 
     useEffect(() => {
-      if (isLoading) return;
-      if (routeRole === "auth") {
+      if (isLoading) {
         if (isAuthenticated) {
-          router.replace((query?.redirect as string) ?? route);
-        } else if (needsToLogin) {
-          router.replace(LOGIN_ROUTE);
-        } else if (needsToOnboard) {
-          router.replace(ONBOARDING_ROUTE);
-        } else if (needsToWait) {
-          router.replace(WAITING_ROUTE);
-        } else if (isRejected) {
-          router.replace(REJECTED_ROUTE);
+          if (routeRole === "auth") {
+            if (needsToLogin) {
+              router.replace(LOGIN_ROUTE);
+            } else if (needsToOnboard) {
+              router.replace(ONBOARDING_ROUTE);
+            } else if (needsToWait) {
+              router.replace(WAITING_ROUTE);
+            } else if (isRejected) {
+              router.replace(REJECTED_ROUTE);
+            } else {
+              router.replace((query?.redirect as string) ?? route);
+            }
+            // } else if (routeRole === "waiting") {
+            //   if (needsToWait) {
+            //     router.replace(route);
+            //   } else {
+            //     router.replace(ERROR_ROUTE);
+            //   }
+          }
         } else {
-          router.replace(HOME_ROUTE);
-        }
-      } else if (routeRole === "waiting") {
-        if (needsToWait) {
-          router.replace(route);
-        } else {
-          router.replace(ERROR_ROUTE);
+          // Prevent unauthenticated user from accessing protected pages
+          if (routeRole !== "all" && routeRole !== "optional") {
+            router.replace(
+              `${LOGIN_ROUTE}?redirect=${router.asPath}`,
+              `${LOGIN_ROUTE}`
+            );
+          }
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps

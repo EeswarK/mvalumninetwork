@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { Layout } from "@ui/layout";
+import { Layout } from "@components/layout";
 import type { GetServerSidePropsContext } from "next";
 import { getSession } from "next-auth/react";
 import { z } from "zod";
@@ -166,7 +166,7 @@ export const getServerSideProps = async (
   const session = await getSession(context);
 
   if (!session?.user?.id) {
-    return { redirect: { permanent: false, destination: "/signin" } };
+    return { redirect: { permanent: false, destination: "/login" } };
   }
 
   if (session?.user.role) {

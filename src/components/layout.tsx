@@ -56,7 +56,7 @@ function useRedirectToLoginIfUnauthenticated(isProtected: boolean) {
 
     if (!loading && !session) {
       router.replace({
-        pathname: "/signin",
+        pathname: "/login",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,8 +72,10 @@ function useRedirectToOnboardingIfNeeded(isProtected: boolean) {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const isRedirectingToOnboarding = !!session?.user.role;
+  const isRedirectingToOnboarding = !session?.user.role;
   const inOnboarding = router.pathname.includes("/onboarding");
+  console.log("user sesssion role", session?.user.role);
+  console.log("isRedirectingToOnboarding", isRedirectingToOnboarding);
 
   useEffect(() => {
     if (!isProtected || inOnboarding) {

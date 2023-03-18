@@ -1,6 +1,15 @@
 import useAuthProvider from "@/lib/useAuthProvider";
 import type { UserType } from "@/pages/onboarding/[[...step]]";
-import { Button } from "@components/ui/button";
+import {
+  Button,
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@components/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
@@ -52,17 +61,11 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
 
         <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div className="sm:col-span-3">
-            <label
-              htmlFor="first-name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Legal First name
-            </label>
+            <Label htmlFor="first-name">Legal First name</Label>
             <div className="mt-1">
-              <input
+              <Input
                 type="text"
                 autoComplete="given-name"
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 {...register("firstName", {
                   required: "First name is required",
                   maxLength: {
@@ -75,33 +78,22 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
           </div>
 
           <div className="sm:col-span-3">
-            <label
-              htmlFor="last-name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Legal Last name
-            </label>
+            <Label htmlFor="last-name">Legal Last name</Label>
             <div className="mt-1">
-              <input
+              <Input
                 type="text"
                 id="last-name"
                 autoComplete="family-name"
                 required
                 {...register("lastName")}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
           </div>
 
           <div className="sm:col-span-3">
-            <label
-              htmlFor="last-name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Graduation Year
-            </label>
+            <Label htmlFor="last-name">Graduation Year</Label>
             <div className="mt-1">
-              <input
+              <Input
                 type="number"
                 id="graduation-year"
                 required
@@ -110,24 +102,44 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                   min: 1969,
                   max: 2026,
                 })}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
           </div>
+
+          <div className="sm:col-span-3">
+            <Label htmlFor="last-name">Major</Label>
+            <div className="mt-1">
+              <Select>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light">Light</SelectItem>
+                  <SelectItem value="dark">Dark</SelectItem>
+                  <SelectItem value="system">System</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input
+                type="number"
+                id="graduation-year"
+                required
+                {...register("graduationClass", {
+                  valueAsNumber: true,
+                  min: 1969,
+                  max: 2026,
+                })}
+              />
+            </div>
+          </div>
+
           <div className="sm:col-span-6">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Contact Email address
-            </label>
-            <input
+            <Label htmlFor="email">Contact Email address</Label>
+            <Input
               id="email"
               type="email"
               autoComplete="email"
               required
               {...register("contactEmail")}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
         </div>

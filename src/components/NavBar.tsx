@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
 
-import { Layout } from "@ui/layout";
+import { Layout } from "@components/layout";
 import { Button, buttonVariants } from "@components/ui/button";
 import { Logo } from "./Logo";
 import { signOut, useSession } from "next-auth/react";
@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
 } from "@ui/dropdown-menu";
 import { User, Settings, LogOut } from "lucide-react";
+import { Role } from "@prisma/client";
 
 function MobileNavigation() {
   return (
@@ -176,7 +177,7 @@ export function NavBar() {
 
             {!session && (
               <li className="ml-auto hidden md:block">
-                <Link href="/signin" className={buttonVariants({})}>
+                <Link href="/login" className={buttonVariants({})}>
                   <span>Login</span>
                 </Link>
               </li>
@@ -212,8 +213,23 @@ export function NavBar() {
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => signOut()}>
+                    {session.user.role === Role.ADMIN && (
+                      <>
+                        <DropdownMenuItem
+                          onClick={() => router.replace("/admin")}
+                        >
+                          <Settings className="mr-2 h-4 w-4" />
+                          <span>Admin</span>
+                        </DropdownMenuItem>
+
+                        <DropdownMenuSeparator />
+                      </>
+                    )}
+                    <DropdownMenuItem
+                      onClick={() => {
+                        signOut({ redirect: false, callbackUrl: "/" });
+                      }}
+                    >
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Log out</span>
                     </DropdownMenuItem>

@@ -1,7 +1,7 @@
-import { Layout } from "@ui/layout";
+import { Layout } from "@components/layout";
 import withAuth from "@/utils/withAuth";
 
-export default withAuth(Waiting, "waiting", "/waiting");
+export default withAuth(Waiting, "auth", "/waiting");
 function Waiting() {
   return (
     <Layout className="flex justify-center align-middle" protect>

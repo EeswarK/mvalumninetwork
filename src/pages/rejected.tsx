@@ -1,4 +1,4 @@
-import { Layout } from "@ui/layout";
+import { Layout } from "@components/layout";
 import withAuth from "@/utils/withAuth";
 
 export default withAuth(Rejected, "auth", "/rejected");
