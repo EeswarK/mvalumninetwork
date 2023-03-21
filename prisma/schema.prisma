@@ -71,7 +71,7 @@ model User {
 
   graduationClass Int?
   tagLine         String?
-  major           String?
+  major           String? // ! This is a string for now, but should be an array
   bio             String?
   spaces          Space[] @default([])
 

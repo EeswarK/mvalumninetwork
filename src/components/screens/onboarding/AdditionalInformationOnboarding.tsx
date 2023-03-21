@@ -1,4 +1,11 @@
 import type { UserType } from "@/pages/onboarding/[[...step]]";
+import {
+  Input,
+  Label,
+  RadioGroup,
+  RadioGroupItem,
+  Textarea,
+} from "@components/ui";
 import { Button } from "@components/ui/button";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +24,7 @@ interface IBasicInfoProps {
 const AdditionalOnboardingValues = z.object({
   preferredName: z.string().min(2).max(15).optional(),
   bio: z.string().max(1000).optional(),
+  notifications: z.boolean().optional(),
 });
 
 type SchemaValidation = z.infer<typeof AdditionalOnboardingValues>;
@@ -38,6 +46,7 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
       ...userSettings,
       preferredName: data.preferredName,
       bio: data.bio,
+      notifications: data.notifications,
     });
     nextStep();
   };
@@ -49,14 +58,9 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
 
         <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div className="sm:col-span-3">
-            <label
-              htmlFor="last-name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Preferred First name
-            </label>
+            <Label htmlFor="last-name">Preferred First name</Label>
             <div className="mt-1">
-              <input
+              <Input
                 type="text"
                 id="preferred-name"
                 autoComplete="given-name"
@@ -66,14 +70,9 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
             </div>
           </div>
           <div className="sm:col-span-6">
-            <label
-              htmlFor="about"
-              className="block text-sm font-medium text-gray-700"
-            >
-              About
-            </label>
+            <Label htmlFor="about">About</Label>
             <div className="mt-1">
-              <textarea
+              <Textarea
                 id="about"
                 rows={3}
                 className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -86,6 +85,22 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
               Write a few sentences about yourself.
             </p>
           </div>
+        </div>
+        <div className="sm:col-span-6">
+          <Label htmlFor="notifications">Notification Preferences</Label>
+          <div className="mt-1">
+            <RadioGroup defaultValue="option-one">
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="option-one" id="option-one" />
+                <Label htmlFor="option-one">Option One</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="option-two" id="option-two" />
+                <Label htmlFor="option-two">Option Two</Label>
+              </div>
+            </RadioGroup>
+          </div>
+          <ErrorMessage errors={errors} name="bio" />
         </div>
       </div>
 

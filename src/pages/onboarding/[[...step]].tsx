@@ -35,15 +35,16 @@ export const OnboardingValues = z.object({
   preferredName: z.string().min(2).max(15).optional(),
   bio: z.string().max(1000).optional(),
   graduationClass: z.number(),
+  majors: z.string().optional(),
+  notifications: z.boolean().optional(),
 });
 
 export const defaultOnboardingValues = {
   firstName: "",
   lastName: "",
   contactEmail: "",
-  preferredName: "",
-  bio: "",
   graduationClass: 2022,
+  majors: "",
 };
 
 export type UserType = z.infer<typeof OnboardingValues>;

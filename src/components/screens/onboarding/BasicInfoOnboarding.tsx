@@ -10,8 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@components/ui";
+import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MAJORS } from "@utils/constants";
 import type { Dispatch, SetStateAction } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -26,6 +29,7 @@ const BasicOnboardingValues = z.object({
   lastName: z.string().min(2).max(15),
   contactEmail: z.string(),
   graduationClass: z.number(),
+  major: z.string().optional(),
 });
 
 type SchemaValidation = z.infer<typeof BasicOnboardingValues>;
@@ -34,7 +38,11 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
   const { userSettings, setUserSettings, nextStep } = props;
   const authProvider = useAuthProvider();
 
-  const { register, handleSubmit } = useForm<SchemaValidation>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SchemaValidation>({
     resolver: zodResolver(BasicOnboardingValues),
     defaultValues: userSettings,
   });
@@ -45,11 +53,14 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
       lastName: data.lastName,
       contactEmail: data.contactEmail,
       graduationClass: data.graduationClass,
+      majors: data.major,
     });
     nextStep();
   }
 
+  // handleSubmit(submitSignInFlow)
   return (
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     <form onSubmit={handleSubmit(submitSignInFlow)}>
       <div className="mt-6">
         <div>
@@ -73,6 +84,11 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                     message: "First name cannot exceed 15 characters",
                   },
                 })}
+              />
+              <ErrorMessage
+                errors={errors}
+                name="firstName"
+                render={({ message }) => <Input>{message}</Input>}
               />
             </div>
           </div>
@@ -106,41 +122,43 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
             </div>
           </div>
 
-          <div className="sm:col-span-3">
+          {/* <div className="sm:col-span-3">
             <Label htmlFor="last-name">Major</Label>
             <div className="mt-1">
               <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Theme" />
+                <SelectTrigger>
+                  <SelectValue
+                    placeholder="Choose Major"
+                    {...register("major")}
+                  ></SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
+                  {MAJORS.map((major) => (
+                    <SelectItem key={major} value={major}>
+                      {major}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
-              <Input
-                type="number"
-                id="graduation-year"
-                required
-                {...register("graduationClass", {
-                  valueAsNumber: true,
-                  min: 1969,
-                  max: 2026,
-                })}
+              <ErrorMessage
+                errors={errors}
+                name="major"
+                render={({ message }) => <p>{message}</p>}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="sm:col-span-6">
             <Label htmlFor="email">Contact Email address</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              required
-              {...register("contactEmail")}
-            />
+            <div className="mt-1">
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                required
+                {...register("contactEmail")}
+              />
+            </div>
           </div>
         </div>
       </div>

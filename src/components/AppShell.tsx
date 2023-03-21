@@ -31,22 +31,3 @@ export function AppShell(props: { children: React.ReactNode }) {
     </div>
   );
 }
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getSession(context);
-
-  if (session) {
-    return {
-      redirect: {
-        destination: "/home",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

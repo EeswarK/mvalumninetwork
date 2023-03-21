@@ -227,7 +227,7 @@ export function NavBar() {
                     )}
                     <DropdownMenuItem
                       onClick={() => {
-                        signOut({ redirect: false, callbackUrl: "/" });
+                        signOut({ callbackUrl: "/" });
                       }}
                     >
                       <LogOut className="mr-2 h-4 w-4" />
