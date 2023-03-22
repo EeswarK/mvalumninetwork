@@ -1,9 +1,10 @@
 import Hero from "@/components/screens/landing/Hero";
 import SecondaryFeatures from "@/components/screens/landing/SecondaryFeatures";
-import withAuth from "@utils/withAuth";
+import type { GetServerSidePropsContext } from "next";
+import { getSession } from "next-auth/react";
 import Head from "next/head";
 
-export default withAuth(Main, "all", "/");
+export default Main;
 function Main() {
   return (
     <>
@@ -25,17 +26,18 @@ function Main() {
   );
 }
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const session = await getSession(context);
-//   if (session) {
-//     return {
-//       redirect: {
-//         destination: "/home",
-//         permanent: true,
-//       },
-//     };
-//   }
-//   return {
-//     props: {},
-//   };
-// };
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context);
+
+  if (session && context.req.headers["sec-fetch-site"] != "same-origin") {
+    return {
+      redirect: {
+        destination: "/home",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}

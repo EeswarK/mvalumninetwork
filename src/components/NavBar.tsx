@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
@@ -124,20 +124,20 @@ export function NavBar() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  // const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const seamless = router.pathname === "/";
 
-  // useEffect(() => {
-  //   function onScroll() {
-  //     setIsScrolled(window.scrollY > 0);
-  //   }
-  //   onScroll();
-  //   window.addEventListener("scroll", onScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", onScroll);
-  //   };
-  // }, []);
+  useEffect(() => {
+    function onScroll() {
+      setIsScrolled(window.scrollY > 0);
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   return (
     <header

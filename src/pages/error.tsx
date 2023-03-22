@@ -1,7 +1,6 @@
 import { Layout } from "@components/layout";
-import withAuth from "@/utils/withAuth";
 
-export default withAuth(Error, "all", "/error");
+export default Error;
 function Error() {
   return (
     <Layout className="flex justify-center align-middle" protect>

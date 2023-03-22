@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 import { ThemeProvider } from "./theme-provider";
 import Footer from "./Footer";
 import { NavBar } from "./NavBar";
-import { getSession } from "next-auth/react";
-import type { GetServerSidePropsContext } from "next";
 
 export function AppShell(props: { children: React.ReactNode }) {
   const { children } = props;
@@ -13,7 +11,6 @@ export function AppShell(props: { children: React.ReactNode }) {
   const isNoNavBarPage =
     router.pathname === "/login" ||
     router.pathname === "/onboarding/[[...step]]";
-  console.log("pathname", router.pathname);
 
   return (
     <div

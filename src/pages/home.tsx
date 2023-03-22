@@ -3,10 +3,9 @@ import { Layout } from "@components/layout";
 import { useSession } from "next-auth/react";
 import { Input } from "@ui/input";
 import type { GetServerSidePropsContext } from "next";
-import { checkAuth } from "@utils/protectedPage";
+import { verifyAuth } from "@utils/verifyAuth";
 
-export default Home;
-function Home() {
+export default function Home() {
   const { data: session } = useSession();
 
   return (
@@ -19,7 +18,7 @@ function Home() {
 }
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
-  return checkAuth(context, () => {
+  return verifyAuth(context, () => {
     return {
       props: {},
     };

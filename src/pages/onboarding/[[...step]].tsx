@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Layout } from "@components/layout";
 import type { GetServerSidePropsContext } from "next";
-import { getSession } from "next-auth/react";
 import { z } from "zod";
 import { useRouter } from "next/router";
 import { Steps } from "@/components/Steps";
@@ -13,6 +12,8 @@ import BasicInfoOnboarding from "@/components/screens/onboarding/BasicInfoOnboar
 import AdditionalInformationOnboarding from "@/components/screens/onboarding/AdditionalInformationOnboarding";
 import ConfirmInformationOnboarding from "@/components/screens/onboarding/ConfirmInformationOnboarding";
 import { useState } from "react";
+import { verifyAuth } from "@utils/verifyAuth";
+import { getSession } from "next-auth/react";
 
 /*
  *
@@ -90,6 +91,7 @@ const headers = [
   },
 ];
 
+export default SignInFlow;
 function SignInFlow() {
   const [userSettings, setUserSettings] = useState<UserType>(
     defaultOnboardingValues
@@ -161,22 +163,30 @@ function SignInFlow() {
   );
 }
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getSession(context);
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession();
 
-  if (!session?.user?.id) {
-    return { redirect: { permanent: false, destination: "/login" } };
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
   }
 
-  if (session?.user.role) {
-    return { redirect: { permanent: false, destination: "/home" } };
+  if (session.user.role != null) {
+    return {
+      redirect: {
+        destination: "/home",
+        permanent: false,
+      },
+    };
   }
 
-  return {
-    props: {},
-  };
-};
-
-export default SignInFlow;
+  return verifyAuth(context, () => {
+    return {
+      props: {},
+    };
+  });
+}
