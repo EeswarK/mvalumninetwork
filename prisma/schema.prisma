@@ -14,13 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// generator zod {
-//   provider      = "zod-prisma"
-//   output        = "./zod"
-//   imports       = "./zod-utils"
-//   relationModel = "default"
-// }
-
 // Necessary for Next auth
 // The data acquired from different providers when logging in
 model Account {
@@ -41,7 +34,7 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-// For users stored locally after logged in. We often check if the user is logged in by checking if the session exists
+// For user current logged in session.
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -61,39 +54,57 @@ model VerificationToken {
 // User data model
 model User {
   id            String  @id @default(cuid())
-  name          String?
   firstName     String?
   lastName      String?
   preferredName String?
-  email         String? @unique
   contactEmail  String?
-  image         String?
+  image         String? // ! Store in S3
 
   graduationClass Int?
-  tagLine         String?
   major           String? // ! This is a string for now, but should be an array
   bio             String?
-  spaces          Space[] @default([])
 
   approved Approved?
+  role     Role?
 
+  Education  Education[] // Will have MV, along with any other education
+  Experience Experience[]
+
+  // Mentorship
+  openToMentoring Boolean?
+
+  // Required fields for Next-auth
+  name          String?
+  email         String?   @unique
   emailVerified DateTime?
   accounts      Account[]
   sessions      Session[]
-  role          Role?
-  Alumni        Alumni?   @relation(fields: [alumniId], references: [id])
-  alumniId      String?
 }
 
-model Alumni {
+model Education {
   id String @id @default(cuid())
 
-  mentor   Boolean
-  location String
-  job      String
+  schoolName      String
+  degree          String
+  major           String
+  minor           String?
+  graduationClass Int
 
-  userId String @unique
-  User   User[]
+  userId String
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Experience {
+  id String @id @default(cuid())
+
+  companyName String
+  jobTitle    String
+  startDate   DateTime
+  endDate     DateTime?
+  description String
+
+  userId String
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Approved {
@@ -106,13 +117,4 @@ enum Role {
   ADMIN
   ALUMNI
   STUDENT
-}
-
-enum Space {
-  DESIGN
-  DEVELOPMENT
-  MARKETING
-  PRODUCT
-  PROJECT_MANAGEMENT
-  STRATEGY
 }
