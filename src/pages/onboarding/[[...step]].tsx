@@ -3,7 +3,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Layout } from "@components/layout";
-import type { GetServerSidePropsContext } from "next";
 import { z } from "zod";
 import { useRouter } from "next/router";
 import { Steps } from "@/components/Steps";
@@ -12,8 +11,7 @@ import BasicInfoOnboarding from "@/components/screens/onboarding/BasicInfoOnboar
 import AdditionalInformationOnboarding from "@/components/screens/onboarding/AdditionalInformationOnboarding";
 import ConfirmInformationOnboarding from "@/components/screens/onboarding/ConfirmInformationOnboarding";
 import { useState } from "react";
-import { verifyAuth } from "@utils/verifyAuth";
-import { getSession } from "next-auth/react";
+import { requireAuth } from "@utils/auth";
 
 /*
  *
@@ -163,30 +161,6 @@ function SignInFlow() {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession();
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-
-  if (session.user.role != null) {
-    return {
-      redirect: {
-        destination: "/home",
-        permanent: false,
-      },
-    };
-  }
-
-  return verifyAuth(context, () => {
-    return {
-      props: {},
-    };
-  });
-}
+export const getServerSideProps = requireAuth(async () => {
+  return { props: {} };
+});

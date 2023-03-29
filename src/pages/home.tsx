@@ -2,8 +2,7 @@ import UserContainer from "@/components/screens/home/UserContainer";
 import { Layout } from "@components/layout";
 import { useSession } from "next-auth/react";
 import { Input } from "@ui/input";
-import type { GetServerSidePropsContext } from "next";
-import { verifyAuth } from "@utils/verifyAuth";
+import { requireAuth } from "@utils/auth";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -17,10 +16,6 @@ export default function Home() {
   );
 }
 
-export function getServerSideProps(context: GetServerSidePropsContext) {
-  return verifyAuth(context, () => {
-    return {
-      props: {},
-    };
-  });
-}
+export const getServerSideProps = requireAuth(async () => {
+  return { props: {} };
+});

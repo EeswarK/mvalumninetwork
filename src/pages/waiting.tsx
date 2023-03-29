@@ -1,10 +1,7 @@
 import { Layout } from "@components/layout";
-import withAuth from "@/utils/withAuth";
-import { verifyAuth } from "@utils/verifyAuth";
-import type { GetServerSidePropsContext } from "next";
+import { requireAuth } from "@utils/auth";
 
-export default withAuth(Waiting, "auth", "/waiting");
-function Waiting() {
+export default function Waiting() {
   return (
     <Layout className="flex justify-center align-middle" protect>
       <h1 className="text-4xl font-bold">waiting</h1>
@@ -12,10 +9,6 @@ function Waiting() {
   );
 }
 
-export function getServerSideProps(context: GetServerSidePropsContext) {
-  return verifyAuth(context, () => {
-    return {
-      props: {},
-    };
-  });
-}
+export const getServerSideProps = requireAuth(async () => {
+  return { props: {} };
+});

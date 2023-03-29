@@ -10,8 +10,7 @@ import {
   TooltipTrigger,
 } from "@ui/tooltip";
 import { Button } from "@components/ui/button";
-import type { GetServerSidePropsContext } from "next";
-import { verifyAuth } from "@utils/verifyAuth";
+import { requireAuth } from "@utils/auth";
 
 export default Login;
 function Login() {
@@ -148,10 +147,6 @@ function Login() {
   );
 }
 
-export function getServerSideProps(context: GetServerSidePropsContext) {
-  return verifyAuth(context, () => {
-    return {
-      props: {},
-    };
-  });
-}
+export const getServerSideProps = requireAuth(async () => {
+  return { props: {} };
+});

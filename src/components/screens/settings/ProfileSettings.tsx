@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import { Button } from "@components/ui/button";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useAuthProvider from "@lib/useAuthProvider";
 import type { User } from "@prisma/client";
 import { useEffect, useRef } from "react";
 import type { SubmitHandler } from "react-hook-form";
@@ -37,29 +38,12 @@ type sanitizedUserContextType = {
 };
 
 export default function ProfileSettings() {
-  const { data: authProvider } = api.users.getAuthProvider.useQuery();
+  const authProvider = useAuthProvider();
   const updateUser = api.users.updateUser.useMutation();
   const { data: user } = api.users.getCurrentUser.useQuery();
   const sanitizedUserRef = useRef<sanitizedUserContextType>();
 
   function sanitizeUser(user: User): sanitizedUserContextType {
-    if (!user) {
-      return {
-        user: {
-          id: "",
-          role: "",
-          firstName: "",
-          lastName: "",
-          graduationClass: 0,
-          preferredName: "",
-          email: "",
-          contactEmail: "",
-          image: "",
-          bio: "",
-        },
-      };
-    }
-
     return {
       user: {
         id: user?.id || "",
@@ -92,13 +76,6 @@ export default function ProfileSettings() {
     resolver: zodResolver(OnboardingValues),
   });
 
-  let firstAuthProvider;
-  if (authProvider) {
-    firstAuthProvider = authProvider[0]?.provider;
-  } else {
-    firstAuthProvider = "loading...";
-  }
-
   const submitSignInFlow: SubmitHandler<SchemaValidation> = async (data) => {
     await updateUser.mutateAsync({
       firstName: data.firstName,
@@ -123,12 +100,12 @@ export default function ProfileSettings() {
           </p>
         </div>
 
-        <form onSubmit={void handleSubmit(submitSignInFlow)}>
+        <form onSubmit={handleSubmit(submitSignInFlow)}>
           <div className="mt-6">
             <div>
               <p className="">
                 Currently authenticated with{" "}
-                <span className="font-bold">{firstAuthProvider}</span>
+                <span className="font-bold">{authProvider}</span>
               </p>
             </div>
 

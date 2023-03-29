@@ -3,8 +3,7 @@ import React from "react";
 
 import { Layout } from "@components/layout";
 import ProfileSettings from "@/components/screens/settings/ProfileSettings";
-import { verifyAuth } from "@utils/verifyAuth";
-import type { GetServerSidePropsContext } from "next";
+import { requireAuth } from "@utils/auth";
 
 export default Account;
 function Account() {
@@ -23,10 +22,6 @@ function Account() {
   );
 }
 
-export function getServerSideProps(context: GetServerSidePropsContext) {
-  return verifyAuth(context, () => {
-    return {
-      props: {},
-    };
-  });
-}
+export const getServerSideProps = requireAuth(async () => {
+  return { props: {} };
+});

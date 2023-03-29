@@ -30,7 +30,7 @@ import { Layout } from "./layout";
 
 export default function Footer() {
   return (
-    <Layout className="container">
+    <Layout className="container mt-auto">
       <div className="flex flex-col items-center justify-between gap-4 border-t border-t-slate-200 py-10 dark:border-t-slate-700 md:h-24 md:flex-row md:py-0">
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           {/* <Icons.logo className="h-6 w-6" /> */}
@@ -52,6 +52,6 @@ export default function Footer() {
   );
 }
 
-const navigation = {
-  main: [{ name: "Contact Us", href: "mailto:eeswarkartikeya@gmail.com" }],
-};
+// const navigation = {
+//   main: [{ name: "Contact Us", href: "mailto:eeswarkartikeya@gmail.com" }],
+// };

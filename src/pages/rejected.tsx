@@ -1,6 +1,5 @@
 import { Layout } from "@components/layout";
-import { verifyAuth } from "@utils/verifyAuth";
-import type { GetServerSidePropsContext } from "next";
+import { requireAuth } from "@utils/auth";
 
 export default Rejected;
 function Rejected() {
@@ -11,10 +10,6 @@ function Rejected() {
   );
 }
 
-export function getServerSideProps(context: GetServerSidePropsContext) {
-  return verifyAuth(context, () => {
-    return {
-      props: {},
-    };
-  });
-}
+export const getServerSideProps = requireAuth(async () => {
+  return { props: {} };
+});
