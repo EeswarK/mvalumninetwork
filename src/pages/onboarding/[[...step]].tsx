@@ -10,7 +10,6 @@ import { StepCard } from "@/components/StepCard";
 import BasicInfoOnboarding from "@/components/screens/onboarding/BasicInfoOnboarding";
 import AdditionalInformationOnboarding from "@/components/screens/onboarding/AdditionalInformationOnboarding";
 import ConfirmInformationOnboarding from "@/components/screens/onboarding/ConfirmInformationOnboarding";
-import { useState } from "react";
 import { requireAuth } from "@utils/auth";
 import { OnboardingProvider } from "@utils/onboardingContext";
 
@@ -103,7 +102,6 @@ function SignInFlow() {
           {currentStep === "user-profile" && (
             <BasicInfoOnboarding
               nextStep={() => {
-                console.log("trying index1");
                 goToIndex(1);
               }}
             />

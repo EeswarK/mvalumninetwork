@@ -51,7 +51,7 @@ export const usersRouter = createTRPCRouter({
 
         graduationClass: z.number().optional(),
         tagLine: z.string().optional(),
-        major: z.string().optional(),
+        majors: z.array(z.string()).optional(),
         bio: z.string().optional(),
 
         approved: z.nativeEnum(Approved).optional(),
@@ -78,12 +78,22 @@ export const usersRouter = createTRPCRouter({
           image: input.image,
 
           graduationClass: input.graduationClass,
-          major: input.major,
+          majors: input.majors,
           bio: input.bio,
 
           approved: input.approved as Approved,
 
           role: input.role as Role,
+        },
+      });
+    }),
+
+  getAllUsers: userProcedure
+    .input(z.object({ role: z.nativeEnum(Role) }))
+    .query(({ ctx, input }) => {
+      return ctx.prisma.user.findMany({
+        where: {
+          role: input.role,
         },
       });
     }),
@@ -133,14 +143,4 @@ export const usersRouter = createTRPCRouter({
       },
     });
   }),
-
-  getAllUsers: userProcedure
-    .input(z.object({ role: z.nativeEnum(Role) }))
-    .query(({ ctx, input }) => {
-      return ctx.prisma.user.findMany({
-        where: {
-          role: input.role,
-        },
-      });
-    }),
 });

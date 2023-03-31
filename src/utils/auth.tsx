@@ -7,8 +7,7 @@ import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 export const requireAuth =
   (func: GetServerSideProps) => async (ctx: GetServerSidePropsContext) => {
     const session = await getServerAuthSession(ctx);
-    console.log("ctx req url", ctx.req.url);
-    console.log("session", session);
+    // console.log("session", session);
 
     /**
      * * Must be logged to use network
@@ -55,7 +54,8 @@ export const requireAuth =
      * * If user is waiting, redirect to waiting page
      **/
     if (session.user.approved === Approved.WAITING) {
-      if (!(ctx.req.url === "/waiting")) {
+      if (!ctx.req.url?.includes("/waiting")) {
+        // console.log("take me to waiting");
         return {
           redirect: {
             destination: "/waiting",
@@ -64,7 +64,7 @@ export const requireAuth =
         };
       }
     } else if (session.user.approved === Approved.REJECTED) {
-      if (!(ctx.req.url === "/rejected")) {
+      if (!ctx.req.url?.includes("/rejected")) {
         return {
           redirect: {
             destination: "/rejected",
@@ -73,7 +73,7 @@ export const requireAuth =
         };
       }
     } else if (session.user.approved == null) {
-      if (!(ctx.req.url === "/oops")) {
+      if (!ctx.req.url?.includes("/oops")) {
         return {
           redirect: {
             destination: "/oops",
@@ -90,9 +90,9 @@ export const requireAuth =
 
     if (session.user.approved === Approved.APPROVED) {
       if (
-        ctx.req.url === "/login" ||
-        ctx.req.url === "/waiting" ||
-        ctx.req.url === "/rejected" ||
+        ctx.req.url?.includes("/waiting") ||
+        ctx.req.url?.includes("/rejected") ||
+        ctx.req.url?.includes("/login") ||
         ctx.req.url?.includes("/onboarding")
       ) {
         return {

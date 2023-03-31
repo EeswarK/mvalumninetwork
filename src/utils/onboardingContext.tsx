@@ -18,22 +18,22 @@ import { z } from "zod";
 
 // All the information we need to collect from the user, stored in a zod schema for type validation
 export const OnboardingValues = z.object({
-  firstName: z.string().min(2).max(15),
-  lastName: z.string().min(2).max(15),
-  contactEmail: z.string(),
-  preferredName: z.string().min(2).max(15).optional(),
+  firstName: z.string().min(2).max(15).optional(),
+  lastName: z.string().min(2).max(15).optional(),
+  contactEmail: z.string().optional(),
+  preferredName: z.string().optional(),
   bio: z.string().max(1000).optional(),
-  graduationClass: z.number(),
-  majors: z.string().optional(),
+  graduationClass: z.number().optional(),
+  majors: z.array(z.string()).optional(),
   notifications: z.boolean().optional(),
 });
 
 export const defaultOnboardingValues = {
-  firstName: "",
-  lastName: "",
-  contactEmail: "",
-  graduationClass: 2022,
-  majors: "",
+  // firstName: "",
+  // lastName: "",
+  // contactEmail: "",
+  // graduationClass: 2022,
+  majors: [],
 };
 
 type OnboardingContextType = {
@@ -44,7 +44,7 @@ type OnboardingContextType = {
 export type UserType = z.infer<typeof OnboardingValues>;
 
 export const OnboardingContext = createContext<OnboardingContextType>({
-  userSettings: defaultOnboardingValues,
+  userSettings: {},
   setUserSettings: () => {},
 });
 

@@ -161,7 +161,7 @@ export function NavBar() {
             </li>
 
             {/* dev option bug fixing */}
-            {IS_DEV && session && (
+            {/* {IS_DEV && session && (
               <li className="ml-auto space-x-4">
                 <Button onClick={() => router.reload()} variant="subtle">
                   Reload Session
@@ -173,7 +173,7 @@ export function NavBar() {
                   check signinflow
                 </Link>
               </li>
-            )}
+            )} */}
 
             {!session && (
               <li className="ml-auto hidden md:block">

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { api } from "@/utils/api";
 import { Button } from "@components/ui/button";
@@ -24,7 +25,7 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
 
   const submitSignInFlow = async () => {
     const userRole =
-      userSettings.graduationClass <= 2022 ? Role.ALUMNI : Role.STUDENT;
+      userSettings.graduationClass! <= 2022 ? Role.ALUMNI : Role.STUDENT;
     await updateUser.mutateAsync({
       firstName: userSettings.firstName,
       lastName: userSettings.lastName,
@@ -32,6 +33,7 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
       graduationClass: userSettings.graduationClass,
       preferredName: userSettings.preferredName,
       bio: userSettings.bio,
+      // majors: userSettings.majors ?? [],
       approved: Approved.WAITING,
       role: userRole,
     });
@@ -49,13 +51,19 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
             <span className="font-bold">Last Name: </span>
             {userSettings.lastName}
           </span>
-          <span>
-            <span className="font-bold">Preferred Name: </span>
-            {userSettings.preferredName}
-          </span>
+          {userSettings.preferredName && (
+            <span>
+              <span className="font-bold">Preferred Name: </span>
+              {userSettings.preferredName}
+            </span>
+          )}
           <span>
             <span className="font-bold">Graduation Class: </span>
             {userSettings.graduationClass}
+          </span>
+          <span>
+            <span className="font-bold">Email: </span>
+            {userSettings.contactEmail}
           </span>
           <textarea
             id="about"
@@ -69,6 +77,14 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
 
       <div className="pt-5">
         <div className="flex justify-end gap-6">
+          <Button
+            variant="outline"
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            print
+          </Button>
           <Button variant="outline" onClick={lastStep}>
             Back
           </Button>

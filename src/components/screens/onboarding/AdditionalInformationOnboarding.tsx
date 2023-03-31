@@ -1,10 +1,4 @@
-import {
-  Input,
-  Label,
-  RadioGroup,
-  RadioGroupItem,
-  Textarea,
-} from "@components/ui";
+import { Input, Label, Textarea } from "@components/ui";
 import { Button } from "@components/ui/button";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +13,7 @@ interface IBasicInfoProps {
 }
 
 const AdditionalOnboardingValues = z.object({
-  preferredName: z.string().min(2).max(15).optional(),
+  preferredName: z.string().optional(),
   bio: z.string().max(1000).optional(),
   notifications: z.boolean().optional(),
 });
@@ -108,7 +102,6 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
             variant="outline"
             onClick={(e) => {
               e.preventDefault();
-              console.log("context user settings", userSettings);
             }}
           >
             print

@@ -58,10 +58,10 @@ model User {
   lastName      String?
   preferredName String?
   contactEmail  String?
-  image         String? // ! Store in S3
+  image         String? // ! Should store in S3
 
   graduationClass Int?
-  major           String? // ! This is a string for now, but should be an array
+  majors           String[] // ! This is a string for now, but should be an array
   bio             String?
 
   approved Approved?

@@ -1,4 +1,4 @@
-export const MAJORS = [
+export const MAJORS: readonly string[] = [
   "Business",
   "Engineering",
   "Education",
@@ -16,5 +16,15 @@ export const MAJORS = [
   "Public Policy",
   "Undecided",
 ];
+
+type SelectOption = {
+  readonly options: string;
+  readonly label: string;
+};
+
+export const MAJORS_MAP: SelectOption[] = MAJORS.map((major) => ({
+  options: major,
+  label: major,
+}));
 
 export const majorsType = typeof MAJORS;

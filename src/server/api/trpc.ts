@@ -35,9 +35,12 @@ async function getUserFromSession({ session }: { session: Maybe<Session> }) {
       firstName: true,
       lastName: true,
       preferredName: true,
-      email: true,
       contactEmail: true,
       image: true,
+
+      graduationClass: true,
+
+      email: true,
       bio: true,
       role: true,
       approved: true,

@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import useAuthProvider from "@/lib/useAuthProvider";
 import { Button, Input, Label } from "@components/ui";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MAJORS, MAJORS_MAP } from "@utils/constants";
 import { useOnboardingContext } from "@utils/onboardingContext";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import type { MultiValue } from "react-select";
+import Select from "react-select";
 import { z } from "zod";
 
 interface IBasicInfoProps {
@@ -13,9 +18,9 @@ interface IBasicInfoProps {
 const BasicOnboardingValues = z.object({
   firstName: z.string().min(2).max(15),
   lastName: z.string().min(2).max(15),
-  contactEmail: z.string(),
-  graduationClass: z.number(),
-  // major: z.string().optional(),
+  contactEmail: z.string().email(),
+  graduationClass: z.number().min(1969).max(2027),
+  majors: z.array(z.string()).optional(),
 });
 
 type SchemaValidation = z.infer<typeof BasicOnboardingValues>;
@@ -25,6 +30,7 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
   const authProvider = useAuthProvider();
 
   const { userSettings, setUserSettings } = useOnboardingContext();
+  const [selectedMajors, setSelectedMajors] = useState<MultiValue<string>>([]);
 
   const {
     register,
@@ -34,9 +40,18 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
     resolver: zodResolver(BasicOnboardingValues),
     defaultValues: userSettings,
   });
+  const [showErr, setShowErr] = useState(false);
 
   function submitSignInFlow(data: SchemaValidation) {
-    console.log("data", data);
+    if (
+      errors.firstName ||
+      errors.lastName ||
+      errors.contactEmail ||
+      errors.graduationClass
+    ) {
+      setShowErr(true);
+      return;
+    }
     setUserSettings({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -44,7 +59,6 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
       graduationClass: data.graduationClass,
       // majors: data.major,
     });
-    console.log("userSettings", userSettings);
     nextStep();
   }
 
@@ -67,13 +81,22 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                 autoComplete="given-name"
                 {...register("firstName", {
                   required: "First name is required",
-                  maxLength: {
-                    value: 15,
-                    message: "First name cannot exceed 15 characters",
-                  },
+                  // minLength: {
+                  //   value: 2,
+                  //   message: "First name must be at least 2 characters",
+                  // },
+                  // maxLength: {
+                  //   value: 15,
+                  //   message: "First name cannot exceed 15 characters",
+                  // },
                 })}
               />
             </div>
+            {errors.firstName && (
+              <p className="text-sm font-semibold text-red-400">
+                {errors.firstName.message}
+              </p>
+            )}
           </div>
 
           <div className="sm:col-span-3">
@@ -83,10 +106,24 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                 type="text"
                 id="last-name"
                 autoComplete="family-name"
-                required
-                {...register("lastName")}
+                {...register("lastName", {
+                  required: "Last name is required",
+                  // minLength: {
+                  //   value: 2,
+                  //   message: "First name must be at least 2 characters",
+                  // },
+                  // maxLength: {
+                  //   value: 15,
+                  //   message: "First name cannot exceed 15 characters",
+                  // },
+                })}
               />
             </div>
+            {errors.lastName && (
+              <p className="text-sm font-semibold text-red-400">
+                {errors.lastName.message}
+              </p>
+            )}
           </div>
 
           <div className="sm:col-span-3">
@@ -95,8 +132,8 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
               <Input
                 type="number"
                 id="graduation-year"
-                required
                 {...register("graduationClass", {
+                  required: "Graduation year is required",
                   valueAsNumber: true,
                   min: 1969,
                   max: 2026,
@@ -106,26 +143,21 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
           </div>
 
           {/* <div className="sm:col-span-3">
-            <Label htmlFor="last-name">Major</Label>
+            <Label htmlFor="major">Major</Label>
             <div className="mt-1">
-              <Select>
-                <SelectTrigger>
-                  <SelectValue
-                    placeholder="Choose Major"
-                    {...register("major")}
-                  ></SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {MAJORS.map((major) => (
-                    <SelectItem key={major} value={major}>
-                      {major}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Select
+                isMulti
+                options={MAJORS_MAP}
+                value={selectedMajors}
+                onChange={(o, _) => setSelectedMajors(o)}
+                isOptionDisabled={() => selectedMajors.length >= 2}
+                // className="mb-8"
+                placeholder="Majors"
+              />
+
               <ErrorMessage
                 errors={errors}
-                name="major"
+                name="majors"
                 render={({ message }) => <p>{message}</p>}
               />
             </div>
@@ -139,7 +171,9 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                 type="email"
                 autoComplete="email"
                 required
-                {...register("contactEmail")}
+                {...register("contactEmail", {
+                  required: "Email is required",
+                })}
               />
             </div>
           </div>
@@ -148,17 +182,12 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
 
       <div className="pt-5">
         <div className="flex justify-end gap-6">
-          <ErrorMessage
-            name="firstName"
-            errors={errors}
-            render={({ message }) => <p>{message}</p>}
-          />
           <Button
             variant="outline"
             onClick={(e) => {
               e.preventDefault();
-              console.log("context user settings", userSettings);
             }}
+            type="button"
           >
             print
           </Button>
