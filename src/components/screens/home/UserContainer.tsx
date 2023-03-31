@@ -25,7 +25,7 @@ function UserContainer(props: UserContainerProps) {
   const { session } = props;
 
   const roleToQueryFor =
-    session?.user.role !== Role.STUDENT ? Role.ALUMNI : Role.STUDENT;
+    session?.user.role === Role.STUDENT ? Role.ALUMNI : Role.STUDENT;
   const getUsers = api.users.getAllUsers.useQuery({
     role: roleToQueryFor,
   });

@@ -1,4 +1,3 @@
-import type { UserType } from "@/pages/onboarding/[[...step]]";
 import {
   Input,
   Label,
@@ -9,14 +8,12 @@ import {
 import { Button } from "@components/ui/button";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Dispatch, SetStateAction } from "react";
+import { useOnboardingContext } from "@utils/onboardingContext";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 interface IBasicInfoProps {
-  userSettings: UserType;
-  setUserSettings: Dispatch<SetStateAction<UserType>>;
   lastStep: () => void;
   nextStep: () => void;
 }
@@ -30,7 +27,8 @@ const AdditionalOnboardingValues = z.object({
 type SchemaValidation = z.infer<typeof AdditionalOnboardingValues>;
 
 const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
-  const { userSettings, setUserSettings, lastStep, nextStep } = props;
+  const { lastStep, nextStep } = props;
+  const { userSettings, setUserSettings } = useOnboardingContext();
 
   const {
     register,
@@ -86,7 +84,7 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
             </p>
           </div>
         </div>
-        <div className="sm:col-span-6">
+        {/* <div className="sm:col-span-6">
           <Label htmlFor="notifications">Notification Preferences</Label>
           <div className="mt-1">
             <RadioGroup defaultValue="option-one">
@@ -101,11 +99,20 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
             </RadioGroup>
           </div>
           <ErrorMessage errors={errors} name="bio" />
-        </div>
+        </div> */}
       </div>
 
       <div className="pt-5">
         <div className="flex justify-end gap-6">
+          <Button
+            variant="outline"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log("context user settings", userSettings);
+            }}
+          >
+            print
+          </Button>
           <Button variant="ghost" onClick={lastStep}>
             Back
           </Button>

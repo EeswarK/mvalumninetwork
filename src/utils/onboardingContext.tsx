@@ -1,0 +1,66 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import React, { useContext, useState } from "react";
+import { createContext } from "react";
+import { z } from "zod";
+
+/**
+ *
+ * * This is the onboarding information we need to get from users are redirected to after they sign in with a provider.
+ *
+ * Based on our schema in api/schema.prisma, we need to collect the following information (3/1/23):
+ * - Graduation year
+ * - First name
+ * - Last name
+ * - Email
+ * - Preferred name
+ * - Bio
+ **/
+
+// All the information we need to collect from the user, stored in a zod schema for type validation
+export const OnboardingValues = z.object({
+  firstName: z.string().min(2).max(15),
+  lastName: z.string().min(2).max(15),
+  contactEmail: z.string(),
+  preferredName: z.string().min(2).max(15).optional(),
+  bio: z.string().max(1000).optional(),
+  graduationClass: z.number(),
+  majors: z.string().optional(),
+  notifications: z.boolean().optional(),
+});
+
+export const defaultOnboardingValues = {
+  firstName: "",
+  lastName: "",
+  contactEmail: "",
+  graduationClass: 2022,
+  majors: "",
+};
+
+type OnboardingContextType = {
+  userSettings: UserType;
+  setUserSettings: React.Dispatch<React.SetStateAction<UserType>>;
+};
+
+export type UserType = z.infer<typeof OnboardingValues>;
+
+export const OnboardingContext = createContext<OnboardingContextType>({
+  userSettings: defaultOnboardingValues,
+  setUserSettings: () => {},
+});
+
+export const useOnboardingContext = () => {
+  return useContext(OnboardingContext);
+};
+
+export function OnboardingProvider(props: { children: React.ReactNode }) {
+  const { children } = props;
+  const [userSettings, setUserSettings] = useState<UserType>(
+    defaultOnboardingValues
+  );
+
+  return (
+    <OnboardingContext.Provider value={{ userSettings, setUserSettings }}>
+      {children}
+    </OnboardingContext.Provider>
+  );
+}

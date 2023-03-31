@@ -23,7 +23,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@ui/dropdown-menu";
-import { User, Settings, LogOut } from "lucide-react";
+import { User, Settings, LogOut, AlignRight } from "lucide-react";
 import { Role } from "@prisma/client";
 
 function MobileNavigation() {
@@ -190,11 +190,9 @@ export function NavBar() {
                 </Link> */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="relative h-10 w-10 rounded-full"
-                    >
-                      {session.user.name?.charAt(1)}
+                    <Button variant="outline" className="relative rounded-full">
+                      {/* {session.user.name?.charAt(1)} */}
+                      <AlignRight className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -238,9 +236,9 @@ export function NavBar() {
               </li>
             )}
 
-            <li className="ml-5 -mr-1 md:hidden">
+            {/* <li className="ml-5 -mr-1 md:hidden">
               <MobileNavigation />
-            </li>
+            </li> */}
           </ul>
         </nav>
       </Layout>

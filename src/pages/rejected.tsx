@@ -1,8 +1,7 @@
 import { Layout } from "@components/layout";
 import { requireAuth } from "@utils/auth";
 
-export default Rejected;
-function Rejected() {
+export default function Rejected() {
   return (
     <Layout className="flex justify-center align-middle" protect>
       <h1 className="text-4xl font-bold">rejected</h1>

@@ -1,26 +1,12 @@
 import useAuthProvider from "@/lib/useAuthProvider";
-import type { UserType } from "@/pages/onboarding/[[...step]]";
-import {
-  Button,
-  Input,
-  Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@components/ui";
+import { Button, Input, Label } from "@components/ui";
 import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MAJORS } from "@utils/constants";
-import type { Dispatch, SetStateAction } from "react";
-import { useEffect } from "react";
+import { useOnboardingContext } from "@utils/onboardingContext";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 interface IBasicInfoProps {
-  userSettings: UserType;
-  setUserSettings: Dispatch<SetStateAction<UserType>>;
   nextStep: () => void;
 }
 
@@ -29,14 +15,16 @@ const BasicOnboardingValues = z.object({
   lastName: z.string().min(2).max(15),
   contactEmail: z.string(),
   graduationClass: z.number(),
-  major: z.string().optional(),
+  // major: z.string().optional(),
 });
 
 type SchemaValidation = z.infer<typeof BasicOnboardingValues>;
 
 const BasicInfoOnboarding = (props: IBasicInfoProps) => {
-  const { userSettings, setUserSettings, nextStep } = props;
+  const { nextStep } = props;
   const authProvider = useAuthProvider();
+
+  const { userSettings, setUserSettings } = useOnboardingContext();
 
   const {
     register,
@@ -48,19 +36,19 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
   });
 
   function submitSignInFlow(data: SchemaValidation) {
+    console.log("data", data);
     setUserSettings({
       firstName: data.firstName,
       lastName: data.lastName,
       contactEmail: data.contactEmail,
       graduationClass: data.graduationClass,
-      majors: data.major,
+      // majors: data.major,
     });
+    console.log("userSettings", userSettings);
     nextStep();
   }
 
-  // handleSubmit(submitSignInFlow)
   return (
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     <form onSubmit={handleSubmit(submitSignInFlow)}>
       <div className="mt-6">
         <div>
@@ -84,11 +72,6 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
                     message: "First name cannot exceed 15 characters",
                   },
                 })}
-              />
-              <ErrorMessage
-                errors={errors}
-                name="firstName"
-                render={({ message }) => <Input>{message}</Input>}
               />
             </div>
           </div>
@@ -165,6 +148,20 @@ const BasicInfoOnboarding = (props: IBasicInfoProps) => {
 
       <div className="pt-5">
         <div className="flex justify-end gap-6">
+          <ErrorMessage
+            name="firstName"
+            errors={errors}
+            render={({ message }) => <p>{message}</p>}
+          />
+          <Button
+            variant="outline"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log("context user settings", userSettings);
+            }}
+          >
+            print
+          </Button>
           <Button type="submit">Next</Button>
         </div>
       </div>

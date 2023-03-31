@@ -12,41 +12,9 @@ import AdditionalInformationOnboarding from "@/components/screens/onboarding/Add
 import ConfirmInformationOnboarding from "@/components/screens/onboarding/ConfirmInformationOnboarding";
 import { useState } from "react";
 import { requireAuth } from "@utils/auth";
-
-/*
- *
- * This is the page that users are redirected to after they sign in with a provider.
- *
- * Based on our schema in api/schema.prisma, we need to collect the following information (3/1/23):
- * - Graduation year
- * - First name
- * - Last name
- * - Email
- * - Preferred name
- * - Bio
- */
+import { OnboardingProvider } from "@utils/onboardingContext";
 
 // All the information we need to collect from the user, stored in a zod schema for type validation
-export const OnboardingValues = z.object({
-  firstName: z.string().min(2).max(15),
-  lastName: z.string().min(2).max(15),
-  contactEmail: z.string(),
-  preferredName: z.string().min(2).max(15).optional(),
-  bio: z.string().max(1000).optional(),
-  graduationClass: z.number(),
-  majors: z.string().optional(),
-  notifications: z.boolean().optional(),
-});
-
-export const defaultOnboardingValues = {
-  firstName: "",
-  lastName: "",
-  contactEmail: "",
-  graduationClass: 2022,
-  majors: "",
-};
-
-export type UserType = z.infer<typeof OnboardingValues>;
 
 // Onboarding Steps
 const INITIAL_STEP = "user-profile";
@@ -91,9 +59,6 @@ const headers = [
 
 export default SignInFlow;
 function SignInFlow() {
-  const [userSettings, setUserSettings] = useState<UserType>(
-    defaultOnboardingValues
-  );
   const router = useRouter();
 
   const result = stepRouteSchema.safeParse(router.query);
@@ -113,51 +78,50 @@ function SignInFlow() {
   const currentStepIndex = steps.indexOf(currentStep);
 
   return (
-    <Layout
-      narrow
-      className="flex min-h-screen flex-col items-center justify-center py-12"
-      key={router.asPath}
-      protect
-    >
-      <div className="text-center sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-3xl font-extrabold text-zinc-900">
-          {headers[currentStepIndex]?.title || "Undefined title"}
-        </h2>
-        <p className="font-sans text-sm font-normal text-gray-500">
-          {headers[currentStepIndex]?.subtitle || "Undefined title"}
-        </p>
-      </div>
-      <Steps
-        maxSteps={steps.length}
-        currentStep={currentStepIndex + 1}
-        navigateToStep={goToIndex}
-      />
-      <StepCard>
-        {currentStep === "user-profile" && (
-          <BasicInfoOnboarding
-            userSettings={userSettings}
-            setUserSettings={setUserSettings}
-            nextStep={() => goToIndex(1)}
-          />
-        )}
+    <OnboardingProvider>
+      <Layout
+        narrow
+        className="flex min-h-screen flex-col items-center justify-center py-12"
+        key={router.asPath}
+        protect
+      >
+        <div className="text-center sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="mt-6 text-3xl font-extrabold text-zinc-900">
+            {headers[currentStepIndex]?.title || "Undefined title"}
+          </h2>
+          <p className="font-sans text-sm font-normal text-gray-500">
+            {headers[currentStepIndex]?.subtitle || "Undefined title"}
+          </p>
+        </div>
 
-        {currentStep === "additional-information" && (
-          <AdditionalInformationOnboarding
-            userSettings={userSettings}
-            setUserSettings={setUserSettings}
-            lastStep={() => goToIndex(0)}
-            nextStep={() => goToIndex(2)}
-          />
-        )}
+        <Steps
+          maxSteps={steps.length}
+          currentStep={currentStepIndex + 1}
+          navigateToStep={goToIndex}
+        />
+        <StepCard>
+          {currentStep === "user-profile" && (
+            <BasicInfoOnboarding
+              nextStep={() => {
+                console.log("trying index1");
+                goToIndex(1);
+              }}
+            />
+          )}
 
-        {currentStep === "confirm-settings" && (
-          <ConfirmInformationOnboarding
-            userSettings={userSettings}
-            lastStep={() => goToIndex(1)}
-          />
-        )}
-      </StepCard>
-    </Layout>
+          {currentStep === "additional-information" && (
+            <AdditionalInformationOnboarding
+              lastStep={() => goToIndex(0)}
+              nextStep={() => goToIndex(2)}
+            />
+          )}
+
+          {currentStep === "confirm-settings" && (
+            <ConfirmInformationOnboarding lastStep={() => goToIndex(1)} />
+          )}
+        </StepCard>
+      </Layout>
+    </OnboardingProvider>
   );
 }
 

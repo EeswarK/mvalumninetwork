@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import type { UserType } from "@/pages/onboarding/[[...step]]";
 import { api } from "@/utils/api";
 import { Button } from "@components/ui/button";
 import { Approved, Role } from "@prisma/client";
+import { useOnboardingContext } from "@utils/onboardingContext";
 import { useRouter } from "next/router";
 
 interface IConfirmationProps {
-  userSettings: UserType;
   lastStep: () => void;
 }
 
 const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
-  const { userSettings, lastStep } = props;
+  const { lastStep } = props;
+  const { userSettings } = useOnboardingContext();
+
   const updateUser = api.users.updateUser.useMutation({ onSuccess: onSuccess });
   const router = useRouter();
 
