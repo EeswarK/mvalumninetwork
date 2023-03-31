@@ -4,15 +4,12 @@ import { api } from "@/utils/api";
 import { Role, User } from "@prisma/client";
 import { Session } from "next-auth";
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Input,
   Label,
 } from "@components/ui";
 
@@ -42,7 +39,7 @@ function UserContainer(props: UserContainerProps) {
                     {user.firstName} {user.lastName}
                   </div>
                   <span>{user.contactEmail}</span>
-                  <span>{user.major ?? "no major"}</span>
+                  <span>{user.majors ?? "no major"}</span>
                 </CardContainer>
               </DialogTrigger>
               <DialogContent className="sm:max-w-lg">

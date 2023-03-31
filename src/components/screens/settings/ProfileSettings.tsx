@@ -175,6 +175,14 @@ export default function ProfileSettings() {
                   <ErrorMessage errors={errors} name="lastName" />
                 </div>
               </div> */}
+              <span>
+                <span className="font-bold">First Name: </span>
+                {sanitizedUserRef.current?.user.firstName}
+              </span>
+              <span>
+                <span className="font-bold">Last Name: </span>
+                {sanitizedUserRef.current?.user.lastName}
+              </span>
               <div className="sm:col-span-3">
                 <label
                   htmlFor="last-name"
