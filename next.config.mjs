@@ -20,5 +20,25 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  images: {
+    domains: ["lh3.googleusercontent.com", "media.licdn.com"],
+    // remotePatterns: [
+    //   {
+    //     protocol: "https",
+    //     hostname: "lh3.googleusercontent.com",
+    //     port: "",
+    //     pathname: "/",
+    //   },
+    //   {
+    //     protocol: "https",
+    //     hostname: "hydeparkwinterwonderland.com",
+    //   },
+    //   {
+    //     protocol: "https",
+    //     hostname: "wembleypark.com",
+    //   },
+    // ],
+  },
 };
 export default config;

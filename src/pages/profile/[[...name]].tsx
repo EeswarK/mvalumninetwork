@@ -4,14 +4,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 
 import { requireAuth } from "@utils/auth";
-import { useRouter } from "next/router";
 
 // Change the current step shown
 
 export default ProfilePage;
 function ProfilePage() {
-  const router = useRouter();
-
   return <div></div>;
 }
 

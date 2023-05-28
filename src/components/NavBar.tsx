@@ -13,7 +13,6 @@ import { Button, buttonVariants } from "@components/ui/button";
 import { Logo } from "./Logo";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { IS_DEV } from "@/utils/utils";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -26,6 +25,7 @@ import {
 import { User, Settings, LogOut, AlignRight } from "lucide-react";
 import { Role } from "@prisma/client";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function MobileNavigation() {
   return (
     <Popover>
@@ -124,7 +124,8 @@ export function NavBar() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const [isScrolled, setIsScrolled] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_isScrolled, setIsScrolled] = useState(false);
 
   const seamless = router.pathname === "/";
 
@@ -142,7 +143,7 @@ export function NavBar() {
   return (
     <header
       className={clsx(
-        "sticky top-0 z-50",
+        "sticky top-0 z-50 bg-zinc-100",
         seamless
           ? "py-10"
           : "py-6 shadow-md shadow-slate-900/5 transition duration-500"

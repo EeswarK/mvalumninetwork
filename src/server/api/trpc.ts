@@ -81,6 +81,7 @@ type CreateInnerContextOptions = {
 
 export type userContextType = Awaited<ReturnType<typeof getUserFromSession>>;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const createInnerTRPCContext = (opts: CreateInnerContextOptions) => {
   return {
     prisma,
@@ -101,11 +102,17 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const session = await getServerAuthSession({ req, res });
 
   const user = await getUserFromSession({ session });
+  const userId = user?.id || null;
 
-  return createInnerTRPCContext({
-    session,
-    user,
-  });
+  return {
+    prisma,
+    userId,
+  };
+
+  // return createInnerTRPCContext({
+  //   session,
+  //   user,
+  // });
 };
 
 /**
@@ -154,13 +161,21 @@ export const publicProcedure = t.procedure;
  * procedure.
  */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
+  if (!ctx.userId) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
+  const user = ctx.prisma.user.findUnique({
+    where: {
+      id: ctx.userId,
+    },
+  });
+
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
+      user,
+      userId: ctx.userId,
     },
   });
 });
@@ -176,14 +191,28 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  */
 export const userProcedure = t.procedure.use(enforceUserIsAuthed);
 
-const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
-  if (ctx.session?.user.role !== "ADMIN") {
+const enforceUserIsAdmin = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.userId) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
+  const user = await ctx.prisma.user.findUnique({
+    where: {
+      id: ctx.userId,
+    },
+    select: {
+      role: true,
+    },
+  });
+
+  if (!user || user.role !== "ADMIN") {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
+      user,
     },
   });
 });

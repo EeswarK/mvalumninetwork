@@ -15,9 +15,9 @@ export const CardContainer = (props: CardContainerProps) => {
       )}
       onClick={props.onClick}
     >
-      <div className="px-4 pt-4 sm:px-6 sm:pt-5">{title}</div>
-      <div className="px-4 py-1 sm:px-6">{body}</div>
-      <div className="px-4 pb-4 sm:px-6 sm:pb-5">{footer}</div>
+      <div className="px-4 pt-4 text-center sm:px-6 sm:pt-5">{title}</div>
+      <div className="px-4 py-1 text-center sm:px-6">{body}</div>
+      <div className="px-4 pb-4 text-center sm:px-6 sm:pb-5">{footer}</div>
     </div>
   );
 };

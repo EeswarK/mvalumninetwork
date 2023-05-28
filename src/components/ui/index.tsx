@@ -11,7 +11,7 @@ export {
   AlertDialogCancel,
 } from "./alert-dialog";
 export { AspectRatio } from "./aspect-ratio";
-export { Avatar } from "./avatar";
+export { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 export { Button } from "./button";
 export { CardContainer } from "./card-container";
 export { Checkbox } from "./checkbox";

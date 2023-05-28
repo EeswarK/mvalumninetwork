@@ -7,14 +7,12 @@ import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 export const requireAuth =
   (func: GetServerSideProps) => async (ctx: GetServerSidePropsContext) => {
     const session = await getServerAuthSession(ctx);
-    // console.log("session", session);
 
     /**
      * * Must be logged to use network
      * * If user is not logged in, redirect to login page
      **/
     if (!session) {
-      // console.log("redirect to login");
       if (!ctx.req.url?.includes("/login")) {
         return {
           redirect: {
@@ -33,7 +31,6 @@ export const requireAuth =
      * * Role options are: "STUDENT" | "ALUMNI" | "ADMIN"
      **/
     if (!session.user.role) {
-      // console.log("redirect to onboarding");
       if (!ctx.req.url?.includes("/onboarding")) {
         return {
           redirect: {
