@@ -19,13 +19,13 @@ export default function UnapprovedUsers() {
   }, [users]);
 
   return (
-    <div className="">
+    <div className="w-2/3">
       <div>
         <h3 className="text-lg font-medium leading-6 text-gray-900">
           Unapproved Users
         </h3>
         <p className="mt-1 text-sm text-gray-500">
-          As an admin, you can approve or reject users here. Use your brain.
+          As an admin, you can approve or reject users here.
         </p>
       </div>
       {users.data && (

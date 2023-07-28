@@ -54,6 +54,7 @@
     "@trpc/server": "^10.14.1",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
+    "cmdk": "^0.2.0",
     "heroicons": "^2.0.16",
     "jotai": "^2.0.3",
     "lucide-react": "^0.125.0",
@@ -67,8 +68,8 @@
     "react-icons": "^4.8.0",
     "react-select": "^5.7.0",
     "superjson": "^1.12.2",
-    "tailwind-merge": "^1.10.0",
-    "tailwindcss-animate": "^1.0.5",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.6",
     "zod": "^3.21.4"
   },
   "devDependencies": {

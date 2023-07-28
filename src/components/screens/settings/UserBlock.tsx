@@ -1,6 +1,7 @@
 import { api } from "@/utils/api";
 import { Button } from "@components/ui/button";
 import type { User } from "@prisma/client";
+import UserContainer from "../home/UserContainer";
 
 export default function UserBlock({
   user,
@@ -37,21 +38,18 @@ export default function UserBlock({
   }
 
   return (
-    <div key={user.id} className="flex justify-between py-3">
-      <div>
-        <h3 className="text-lg font-medium leading-6 text-gray-900">
-          {user.name}
-        </h3>
-        <p className="mt-1 text-sm text-gray-500">{user.email}</p>
+    <div key={user.id} className="flex items-center justify-between py-3">
+      <div className="w-1/2">
+        <UserContainer key={user.id} user={user} />
       </div>
       <div className="space-x-4">
         {confirm ? (
-          <Button variant="ghost" onClick={declineUser}>
+          <Button variant="outline" onClick={declineUser}>
             Are you sure?
           </Button>
         ) : (
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() =>
               setConfirm((prevState) => {
                 const newConfirm = [...prevState];

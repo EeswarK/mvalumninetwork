@@ -29,7 +29,8 @@ function Main() {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
 
-  if (session && context.req.headers["sec-fetch-site"] != "same-origin") {
+  //  && context.req.headers["sec-fetch-site"] == "same-origin"
+  if (session) {
     return {
       redirect: {
         destination: "/home",

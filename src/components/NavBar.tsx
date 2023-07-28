@@ -143,7 +143,7 @@ export function NavBar() {
   return (
     <header
       className={clsx(
-        "sticky top-0 z-50 bg-zinc-100",
+        "sticky top-0 z-50",
         seamless
           ? "py-10"
           : "py-6 shadow-md shadow-slate-900/5 transition duration-500"
