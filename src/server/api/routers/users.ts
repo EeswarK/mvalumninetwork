@@ -84,26 +84,51 @@ export const usersRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
       }
 
-      return ctx.prisma.user.update({
-        where: {
-          id: userId,
-        },
-        data: {
-          firstName: input.firstName,
-          lastName: input.lastName,
-          preferredName: input.preferredName,
-          contactEmail: input.contactEmail,
-          image: input.image,
+      return ctx.prisma.user
+        .update({
+          where: {
+            id: userId,
+          },
+          data: {
+            firstName: input.firstName,
+            lastName: input.lastName,
+            preferredName: input.preferredName,
+            contactEmail: input.contactEmail,
+            image: input.image,
 
-          graduationClass: input.graduationClass,
-          majors: input.majors,
-          bio: input.bio,
+            graduationClass: input.graduationClass,
+            majors: input.majors,
+            bio: input.bio,
 
-          approved: input.approved as Approved,
+            approved: input.approved as Approved,
 
-          role: input.role as Role,
-        },
-      });
+            role: input.role as Role,
+          },
+        })
+        .then(
+          ({
+            id,
+            firstName,
+            lastName,
+            preferredName,
+            graduationClass,
+            majors,
+            bio,
+            role,
+          }) => {
+            ctx.algolia.saveObject({
+              objectID: id,
+              firstName: firstName,
+              lastName: lastName,
+              preferredName: preferredName,
+              graduationClass: graduationClass,
+              majors: majors,
+              bio: bio,
+              role: role,
+              type: "Users",
+            });
+          }
+        );
     }),
 
   getAllUsers: userProcedure

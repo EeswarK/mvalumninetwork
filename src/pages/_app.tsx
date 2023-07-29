@@ -6,6 +6,8 @@ import "../styles/globals.css";
 import { api } from "@/utils/api";
 import Head from "next/head";
 import { AppShell } from "@/components/AppShell";
+import { InstantSearch } from "react-instantsearch-hooks-web";
+import { ALGOLIA_INDEX_NAME, searchClient } from "@utils/constants";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -22,7 +24,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
       </Head>
       <SessionProvider session={session}>
         <AppShell>
-          <Component {...pageProps} />
+          <InstantSearch
+            searchClient={searchClient}
+            indexName={ALGOLIA_INDEX_NAME}
+          >
+            <Component {...pageProps} />
+          </InstantSearch>
         </AppShell>
       </SessionProvider>
     </>

@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
+import algoliasearch from "algoliasearch";
+import { env } from "process";
+
 export const MAJORS: readonly string[] = [
   "Business",
   "Engineering",
@@ -28,3 +33,10 @@ export const MAJORS_MAP: SelectOption[] = MAJORS.map((major) => ({
 }));
 
 export const majorsType = typeof MAJORS;
+
+export const searchClient = algoliasearch(
+  env.NEXT_PUBLIC_ALGOLIA_API_ID!,
+  env.NEXT_PUBLIC_ALGOLIA_SEARCH_ONLY_KEY!
+);
+
+export const ALGOLIA_INDEX_NAME = env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME;

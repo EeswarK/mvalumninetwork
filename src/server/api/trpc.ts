@@ -107,6 +107,8 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   return {
     prisma,
     userId,
+    algolia: algoliaIndex,
+    algoliaClient: client,
   };
 
   // return createInnerTRPCContext({
@@ -125,6 +127,7 @@ import type { Maybe } from "@trpc/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import type { GetServerSidePropsContext } from "next";
+import { algoliaIndex, client } from "@server/helpers/algolia";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,

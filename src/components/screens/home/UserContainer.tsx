@@ -19,16 +19,15 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
 
 type UserContainerProps = {
-  key: string;
   user: User;
 };
 
 export default UserContainer;
 function UserContainer(props: UserContainerProps) {
-  const { key, user } = props;
+  const { user } = props;
 
   return (
-    <Dialog key={key}>
+    <Dialog key={user.id}>
       <DialogTrigger asChild>
         <Card className="cursor-default transition-colors hover:bg-gray-50 ">
           <CardContent className="flex flex-row items-center space-x-6 py-6">
