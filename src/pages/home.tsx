@@ -26,6 +26,8 @@ type HitProps = {
   }>;
 };
 
+// build
+
 function HitUsers({ hit }: HitProps) {
   return (
     <>
