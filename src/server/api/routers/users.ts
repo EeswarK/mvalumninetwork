@@ -125,7 +125,6 @@ export const usersRouter = createTRPCRouter({
               majors: majors,
               bio: bio,
               role: role,
-              type: "Users",
             });
           }
         );
@@ -171,7 +170,7 @@ export const usersRouter = createTRPCRouter({
       });
     }),
 
-  getAllApprovedUsers: adminProcedure.query(({ ctx }) => {
+  getAllWaitingUsers: adminProcedure.query(({ ctx }) => {
     return ctx.prisma.user.findMany({
       where: {
         approved: Approved.WAITING,

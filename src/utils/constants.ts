@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import algoliasearch from "algoliasearch";
+import algoliasearch from "algoliasearch/lite";
 import { env } from "process";
 
 export const MAJORS: readonly string[] = [
@@ -39,4 +39,5 @@ export const searchClient = algoliasearch(
   env.NEXT_PUBLIC_ALGOLIA_SEARCH_ONLY_KEY!
 );
 
-export const ALGOLIA_INDEX_NAME = env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME;
+// export const ALGOLIA_INDEX_NAME = "Users";
+export const ALGOLIA_INDEX_NAME = env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME!;

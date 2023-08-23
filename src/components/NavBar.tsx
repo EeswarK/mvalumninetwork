@@ -22,7 +22,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@ui/dropdown-menu";
-import { User, Settings, LogOut, AlignRight } from "lucide-react";
+import { Settings, LogOut, AlignRight } from "lucide-react";
 import { Role } from "@prisma/client";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -200,10 +200,10 @@ export function NavBar() {
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>
+                      {/* <DropdownMenuItem>
                         <User className="mr-2 h-4 w-4" />
                         <span>Profile</span>
-                      </DropdownMenuItem>
+                      </DropdownMenuItem> */}
                       <DropdownMenuItem
                         onClick={() => router.replace("/settings/account")}
                       >

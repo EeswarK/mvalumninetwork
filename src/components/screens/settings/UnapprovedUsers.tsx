@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import UserBlock from "./UserBlock";
 
 export default function UnapprovedUsers() {
-  const users = api.users.getAllRejectedUsers.useQuery();
+  const users = api.users.getAllWaitingUsers.useQuery();
   const [confirm, setConfirm] = useState<boolean[]>([]);
   const [actionTaken, setActionTaken] = useState<boolean[]>([]);
 

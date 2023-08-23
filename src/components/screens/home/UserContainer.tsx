@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-import { CardContainer } from "@ui/card-container";
-import { api } from "@/utils/api";
-import { Role, User } from "@prisma/client";
-import { Session } from "next-auth";
+import { User } from "@prisma/client";
+// import { Session } from "next-auth";
 import {
   Avatar,
   AvatarImage,
@@ -16,7 +14,7 @@ import {
   DialogTrigger,
   Label,
 } from "@components/ui";
-import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
+import { Card, CardContent } from "@components/ui/card";
 
 type UserContainerProps = {
   user: User;

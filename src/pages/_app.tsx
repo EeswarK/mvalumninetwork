@@ -23,14 +23,14 @@ const MyApp: AppType<{ session: Session | null }> = ({
         {description && <meta name="description" content={description} />}
       </Head>
       <SessionProvider session={session}>
-        <AppShell>
-          <InstantSearch
-            searchClient={searchClient}
-            indexName={ALGOLIA_INDEX_NAME}
-          >
+        <InstantSearch
+          searchClient={searchClient}
+          indexName={ALGOLIA_INDEX_NAME}
+        >
+          <AppShell>
             <Component {...pageProps} />
-          </InstantSearch>
-        </AppShell>
+          </AppShell>
+        </InstantSearch>
       </SessionProvider>
     </>
   );
