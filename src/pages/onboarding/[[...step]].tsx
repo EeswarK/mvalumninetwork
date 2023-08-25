@@ -82,7 +82,7 @@ function SignInFlow() {
         narrow
         className="flex min-h-screen flex-col items-center justify-center py-12"
         key={router.asPath}
-        protect
+        // protect
       >
         <div className="text-center sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-3xl font-extrabold text-zinc-900">

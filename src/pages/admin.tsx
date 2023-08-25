@@ -1,5 +1,6 @@
 import { Layout } from "@components/layout";
 import UnapprovedUsers from "@components/screens/settings/UnapprovedUsers";
+import { requireAuth } from "@utils/auth";
 
 export default function Admin() {
   return (
@@ -8,3 +9,9 @@ export default function Admin() {
     </Layout>
   );
 }
+
+export const getServerSideProps = requireAuth(async () => {
+  return {
+    props: {},
+  };
+});

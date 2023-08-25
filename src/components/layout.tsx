@@ -28,10 +28,10 @@ interface LayoutProps
 export const Layout: React.FC<LayoutProps> = (props) => {
   const { narrow, protect = false, className } = props;
 
-  useRedirectToLoginIfUnauthenticated(protect);
-  useRedirectToOnboardingIfNeeded(protect);
-  useRedirectToWaitingIfNeeded(protect);
-  useRedirectToRejectedIfNeeded(protect);
+  // useRedirectToLoginIfUnauthenticated(protect);
+  // useRedirectToOnboardingIfNeeded(protect);
+  // useRedirectToWaitingIfNeeded(protect);
+  // useRedirectToRejectedIfNeeded(protect);
 
   if (narrow) {
     <div className={clsx(layoutStyles(), className)}>

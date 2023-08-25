@@ -64,7 +64,7 @@ function UserContainer(props: UserContainerProps) {
               {user.firstName} {user.lastName}
             </DialogTitle>
             <DialogDescription className="flex flex-col">
-              <span>{user.contactEmail}</span>
+              <span>{user.contactEmail ?? ""}</span>
               <span>Class of {user.graduationClass}</span>
             </DialogDescription>
           </div>

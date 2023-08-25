@@ -34,9 +34,14 @@ export const MAJORS_MAP: SelectOption[] = MAJORS.map((major) => ({
 
 export const majorsType = typeof MAJORS;
 
+// export const searchClient = algoliasearch(
+//   env.NEXT_PUBLIC_ALGOLIA_API_ID!,
+//   env.NEXT_PUBLIC_ALGOLIA_SEARCH_ONLY_KEY!
+// );
+
 export const searchClient = algoliasearch(
-  env.NEXT_PUBLIC_ALGOLIA_API_ID!,
-  env.NEXT_PUBLIC_ALGOLIA_SEARCH_ONLY_KEY!
+  "6GU0SE5YJI",
+  "2bf98c76aa322cf9d7058f8f7872434e"
 );
 
 // export const ALGOLIA_INDEX_NAME = "Users";
