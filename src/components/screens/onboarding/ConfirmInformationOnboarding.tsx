@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { api } from "@/utils/api";
+import { Textarea } from "@components/ui";
 import { Button } from "@components/ui/button";
 import { Approved, Role } from "@prisma/client";
 import { useOnboardingContext } from "@utils/onboardingContext";
@@ -33,7 +34,7 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
       graduationClass: userSettings.graduationClass,
       preferredName: userSettings.preferredName,
       bio: userSettings.bio,
-      // majors: userSettings.majors ?? [],
+      tagLine: userSettings.tagLine,
       approved: Approved.WAITING,
       role: userRole,
     });
@@ -65,7 +66,11 @@ const AdditionalInformationOnboarding = (props: IConfirmationProps) => {
             <span className="font-bold">Email: </span>
             {userSettings.contactEmail}
           </span>
-          <textarea
+          <span>
+            <span className="font-bold">Tag line: </span>
+            {userSettings.tagLine}
+          </span>
+          <Textarea
             id="about"
             rows={3}
             className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"

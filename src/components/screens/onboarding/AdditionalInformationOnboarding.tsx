@@ -39,7 +39,7 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
       ...userSettings,
       preferredName: data.preferredName,
       bio: data.bio,
-      notifications: data.notifications,
+      tagLine: data.tagLine,
     });
     nextStep();
   };
@@ -58,7 +58,7 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
                 id="preferred-name"
                 autoComplete="given-name"
                 {...register("preferredName")}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                // className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
           </div>
@@ -77,7 +77,7 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
               <Textarea
                 id="about"
                 rows={3}
-                className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                // className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 defaultValue={""}
                 {...register("bio")}
               />
@@ -100,7 +100,13 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
           >
             print
           </Button>
-          <Button variant="ghost" onClick={lastStep}>
+          <Button
+            variant="ghost"
+            onClick={(e) => {
+              lastStep;
+              // e.preventDefault();
+            }}
+          >
             Back
           </Button>
           <Button type="submit">Next</Button>

@@ -24,17 +24,8 @@ export const OnboardingValues = z.object({
   preferredName: z.string().optional(),
   bio: z.string().max(1000).optional(),
   graduationClass: z.number().optional(),
-  majors: z.array(z.string()).optional(),
-  notifications: z.boolean().optional(),
+  tagLine: z.string().max(100).optional(),
 });
-
-export const defaultOnboardingValues = {
-  // firstName: "",
-  // lastName: "",
-  // contactEmail: "",
-  // graduationClass: 2022,
-  majors: [],
-};
 
 type OnboardingContextType = {
   userSettings: UserType;
@@ -54,9 +45,7 @@ export const useOnboardingContext = () => {
 
 export function OnboardingProvider(props: { children: React.ReactNode }) {
   const { children } = props;
-  const [userSettings, setUserSettings] = useState<UserType>(
-    defaultOnboardingValues
-  );
+  const [userSettings, setUserSettings] = useState<UserType>({});
 
   return (
     <OnboardingContext.Provider value={{ userSettings, setUserSettings }}>
