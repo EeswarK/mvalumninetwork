@@ -6,6 +6,7 @@ import "../styles/globals.css";
 import { api } from "@/utils/api";
 import Head from "next/head";
 import { AppShell } from "@/components/AppShell";
+import { Toaster } from "@components/ui";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -24,6 +25,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <AppShell>
           <Component {...pageProps} />
         </AppShell>
+        <Toaster />
       </SessionProvider>
     </>
   );

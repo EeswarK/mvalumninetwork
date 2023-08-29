@@ -63,7 +63,6 @@ export const usersRouter = createTRPCRouter({
 
         graduationClass: z.number().optional(),
         tagLine: z.string().optional(),
-        majors: z.array(z.string()).optional(),
         bio: z.string().optional(),
 
         approved: z.nativeEnum(Approved).optional(),
@@ -97,7 +96,7 @@ export const usersRouter = createTRPCRouter({
             image: input.image,
 
             graduationClass: input.graduationClass,
-            majors: input.majors,
+            tagLine: input.tagLine,
             bio: input.bio,
 
             approved: input.approved as Approved,
@@ -111,21 +110,27 @@ export const usersRouter = createTRPCRouter({
             firstName,
             lastName,
             preferredName,
+            contactEmail,
+            image,
             graduationClass,
-            majors,
+            tagLine,
             bio,
             role,
           }) => {
-            ctx.algolia.saveObject({
-              objectID: id,
-              firstName: firstName,
-              lastName: lastName,
-              preferredName: preferredName,
-              graduationClass: graduationClass,
-              majors: majors,
-              bio: bio,
-              role: role,
-            });
+            if (input.approved === Approved.APPROVED) {
+              ctx.algolia.saveObject({
+                objectID: id,
+                firstName: firstName,
+                lastName: lastName,
+                preferredName: preferredName,
+                contactEmail: contactEmail,
+                image: image,
+                graduationClass: graduationClass,
+                tagLine: tagLine,
+                bio: bio,
+                role: role,
+              });
+            }
           }
         );
     }),
@@ -157,14 +162,42 @@ export const usersRouter = createTRPCRouter({
   approve: adminProcedure
     .input(z.object({ id: z.string() }))
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.user.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          approved: Approved.APPROVED,
-        },
-      });
+      return ctx.prisma.user
+        .update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            approved: Approved.APPROVED,
+          },
+        })
+        .then(
+          ({
+            id,
+            firstName,
+            lastName,
+            preferredName,
+            contactEmail,
+            image,
+            graduationClass,
+            tagLine,
+            bio,
+            role,
+          }) => {
+            ctx.algolia.saveObject({
+              objectID: id,
+              firstName: firstName,
+              lastName: lastName,
+              preferredName: preferredName,
+              contactEmail: contactEmail,
+              image: image,
+              graduationClass: graduationClass,
+              tagLine: tagLine,
+              bio: bio,
+              role: role,
+            });
+          }
+        );
     }),
 
   decline: adminProcedure

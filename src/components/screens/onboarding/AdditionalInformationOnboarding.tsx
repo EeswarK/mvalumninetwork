@@ -14,6 +14,7 @@ interface IBasicInfoProps {
 
 const AdditionalOnboardingValues = z.object({
   preferredName: z.string().optional(),
+  tagLine: z.string().max(100).optional(),
   bio: z.string().max(1000).optional(),
   notifications: z.boolean().optional(),
 });
@@ -61,6 +62,15 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
               />
             </div>
           </div>
+          <div className="col-span-6">
+            <Label htmlFor="tag-line">Tag line</Label>
+            <Input
+              id="tag-line"
+              type="text"
+              {...register("tagLine")}
+              className="mt-1"
+            />
+          </div>
           <div className="sm:col-span-6">
             <Label htmlFor="about">About</Label>
             <div className="mt-1">
@@ -78,22 +88,6 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
             </p>
           </div>
         </div>
-        {/* <div className="sm:col-span-6">
-          <Label htmlFor="notifications">Notification Preferences</Label>
-          <div className="mt-1">
-            <RadioGroup defaultValue="option-one">
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="option-one" id="option-one" />
-                <Label htmlFor="option-one">Option One</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="option-two" id="option-two" />
-                <Label htmlFor="option-two">Option Two</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          <ErrorMessage errors={errors} name="bio" />
-        </div> */}
       </div>
 
       <div className="pt-5">

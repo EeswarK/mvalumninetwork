@@ -6,7 +6,6 @@ import { requireAuth } from "@utils/auth";
 import algoliasearch from "algoliasearch/lite";
 import type { Hit as AlgoliaHit } from "instantsearch.js";
 import type { GetServerSideProps } from "next";
-import { SessionProvider } from "next-auth/react";
 import singletonRouter from "next/router";
 import React from "react";
 import { renderToString } from "react-dom/server";
@@ -31,39 +30,20 @@ type HitProps = {
     firstName: string;
     lastName: string;
     preferredName: string;
+    contactEmail: string;
+    image: string;
     graduationClass: number;
-    majors: string[];
+    tagLine: string;
     bio: string;
     role: string;
     type: "Users";
   }>;
 };
 
-export type PartialUser = Pick<
-  User,
-  | "id"
-  | "firstName"
-  | "lastName"
-  | "preferredName"
-  | "graduationClass"
-  | "majors"
-  | "bio"
-  | "role"
-  | "contactEmail"
-  | "image"
->;
-
 function Hit({ hit }: HitProps) {
-  const getUser = api.users.getUserById.useQuery({ id: hit.objectID });
+  const user = hit as unknown as User;
 
-  return (
-    <>
-      <Highlight hit={hit} attribute="firstName" />
-      <span className="">{hit.graduationClass}</span>
-      {getUser.data && <UserContainer user={getUser.data} />}
-      {/* <UserContainer user={getUser.data} /> */}
-    </>
-  );
+  return <UserContainer user={user} />;
 }
 
 type HomePageProps = {
@@ -72,6 +52,8 @@ type HomePageProps = {
 };
 
 export default function HomePage({ serverState, url }: HomePageProps) {
+  // const user = api.users.getCurrentUser.useQuery();
+
   return (
     <InstantSearchSSRProvider {...serverState}>
       <InstantSearch
@@ -83,9 +65,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
             singletonRouter,
           }),
         }}
-        insights={true}
       >
-        {/* <SessionProvider session={session}> */}
         <Layout className="mt-16 flex flex-col items-center justify-center space-y-8">
           <div className="w-full">
             <div>
@@ -99,13 +79,16 @@ export default function HomePage({ serverState, url }: HomePageProps) {
                   root: "mx-auto",
                   input:
                     "h-10 w-5/6 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-                  submit: "pl-2 scale-150",
+                  submit: "pl-4 scale-150",
                   resetIcon: "hidden",
                 }}
               />
-              <Hits />
+
+              {/* <RefinementList attribute="graduationClass" /> */}
+
               <Hits
                 classNames={{
+                  root: "mt-6",
                   list: "grid gap-4 md:grid-cols-2 lg:grid-cols-3",
                 }}
                 hitComponent={Hit}
@@ -119,7 +102,11 @@ export default function HomePage({ serverState, url }: HomePageProps) {
 }
 
 function FallbackComponent({ attribute }: { attribute: string }) {
-  return <RefinementList attribute={attribute} />;
+  return (
+    <Panel header={attribute}>
+      <RefinementList attribute={attribute} />
+    </Panel>
+  );
 }
 
 export const getServerSideProps: GetServerSideProps<HomePageProps> =
@@ -138,3 +125,21 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> =
       },
     };
   });
+
+export function Panel({
+  children,
+  header,
+  footer,
+}: {
+  children: React.ReactNode;
+  header?: React.ReactNode;
+  footer?: React.ReactNode;
+}) {
+  return (
+    <div className="ais-Panel">
+      {header && <div className="ais-Panel-header">{header}</div>}
+      <div className="ais-Panel-body">{children}</div>
+      {footer && <div className="ais-Panel-footer">{footer}</div>}
+    </div>
+  );
+}

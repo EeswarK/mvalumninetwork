@@ -24,6 +24,8 @@ import {
 } from "@ui/dropdown-menu";
 import { Settings, LogOut, AlignRight } from "lucide-react";
 import { Role } from "@prisma/client";
+import { IS_DEV } from "@utils/utils";
+import { api } from "@utils/api";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function MobileNavigation() {
@@ -162,7 +164,7 @@ export function NavBar() {
             </li>
 
             {/* dev option bug fixing */}
-            {/* {IS_DEV && session && (
+            {IS_DEV && session && (
               <li className="ml-auto space-x-4">
                 <Button onClick={() => router.reload()} variant="subtle">
                   Reload Session
@@ -174,7 +176,7 @@ export function NavBar() {
                   check signinflow
                 </Link>
               </li>
-            )} */}
+            )}
 
             {!session && (
               <li className="ml-auto hidden md:block">

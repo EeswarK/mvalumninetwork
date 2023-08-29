@@ -1,5 +1,8 @@
+/* eslint-disable tailwindcss/classnames-order */
+/* eslint-disable tailwindcss/no-custom-classname */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
+/* eslint-disable-next-line tailwindcss/classnames-order, tailwindcss/no-custom-classname */
 import { User } from "@prisma/client";
 // import { Session } from "next-auth";
 import {
@@ -45,14 +48,16 @@ function UserContainer(props: UserContainerProps) {
             </Avatar>
 
             <div>
-              <span className="text-sm font-normal">Computer Science</span>
+              <span className="text-sm font-normal">{user.tagLine}</span>
               <div className="text-xl font-bold">
                 {user.firstName} {user.lastName}
               </div>
-              {/* eslint-disable-next-line tailwindcss/classnames-order, tailwindcss/no-custom-classname */}
               <p className="text-xs text-muted-foreground">
                 Class of {user.graduationClass}
               </p>
+              {/* <p className="text-xs text-muted-foreground">
+                {user.contactEmail ?? ""}
+              </p> */}
             </div>
           </CardContent>
         </Card>
@@ -92,9 +97,9 @@ function UserContainer(props: UserContainerProps) {
           </div>
           <div className="flex items-center justify-start gap-4">
             <Label htmlFor="name" className="text-right">
-              Majors
+              Tag line
             </Label>
-            <span>{user.majors}</span>
+            <span>{user.tagLine}</span>
           </div>
         </div>
       </DialogContent>

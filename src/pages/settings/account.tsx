@@ -6,22 +6,24 @@ import { requireAuth } from "@utils/auth";
 import { api } from "@/utils/api";
 import { Button } from "@components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { User } from "@prisma/client";
+import type { Approved, User } from "@prisma/client";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Avatar, Input, Label, Textarea } from "@components/ui";
 import { prisma } from "@server/db";
-import { getSession } from "next-auth/react";
 import type { inferSSRProps } from "@lib/inferSSRProps";
 import { AvatarFallback, AvatarImage } from "@components/ui/avatar";
+import { getServerAuthSession } from "@server/auth";
+import { useToast } from "@components/ui/use-toast";
 
 const OnboardingValues = z.object({
   // firstName: z.string().min(2).max(15),
   // lastName: z.string().min(2).max(15),
-  contactEmail: z.string(),
-  preferredName: z.string().min(2).max(15),
+  contactEmail: z.string().optional(),
+  preferredName: z.string().max(15).optional(),
   bio: z.string().max(1000),
+  tagLine: z.string().max(100),
   // graduationClass: z.number(),
 });
 
@@ -32,26 +34,42 @@ export default function Account(
 ) {
   const { user } = props;
 
+  const { toast } = useToast();
+
   // const authProvider = useAuthProvider();
   const updateUser = api.users.updateUser.useMutation();
 
   const {
     register,
     handleSubmit,
-    formState: errors,
+    // formState: errors,
   } = useForm<SchemaValidation>({
     resolver: zodResolver(OnboardingValues),
   });
 
   const submitSignInFlow: SubmitHandler<SchemaValidation> = async (data) => {
-    await updateUser.mutateAsync({
-      // firstName: data.firstName,
-      // lastName: data.lastName,
-      contactEmail: data.contactEmail,
-      preferredName: data.preferredName,
-      bio: data.bio,
-      // graduationClass: data.graduationClass,
-    });
+    await updateUser
+      .mutateAsync({
+        contactEmail: data.contactEmail,
+        preferredName: data.preferredName,
+        bio: data.bio,
+        image: user.image ?? "",
+        tagLine: data.tagLine,
+        approved: user.approved as Approved,
+      })
+      .then(() => {
+        toast({
+          title: "Success!",
+          description: "Your profile has been updated.",
+        });
+      })
+      .catch(() => {
+        toast({
+          variant: "destructive",
+          title: "Oops! Something went wrong.",
+          description: "Please try again in a few minutes.",
+        });
+      });
   };
 
   return (
@@ -59,22 +77,13 @@ export default function Account(
       <div className="flex justify-center">
         {/* Setting Content */}
         <div className="mt-8 md:w-2/3">
-          {/* <div>
-            <h3 className="text-2xl font-medium leading-6 text-gray-900">
-              Profile
-            </h3>
-            <p className="">
-              Currently authenticated with{" "}
-              <span className="font-bold">{authProvider}</span>
-            </p> 
-          </div> */}
           <div className="flex flex-col justify-center rounded-lg border border-zinc-200 bg-white p-8 shadow-md">
             <form onSubmit={handleSubmit(submitSignInFlow)}>
               <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div className="flex flex-col p-2 pt-3 sm:col-span-4">
                   <div>
                     <span className="text-base font-normal">
-                      Computer Science
+                      {user.tagLine}
                     </span>
                     <div className="text-3xl font-bold">
                       {user.firstName} {user.lastName}
@@ -84,12 +93,6 @@ export default function Account(
                       Class of {user.graduationClass}
                     </p>
                   </div>
-                  {/* <span className="text-3xl font-bold">
-                    {user.firstName} {user.lastName}
-                  </span>
-                  <span className=" text-base font-normal">
-                    Class of {user.graduationClass}
-                  </span> */}
                 </div>
 
                 <div className="pl-12 sm:col-span-2">
@@ -110,7 +113,7 @@ export default function Account(
                     </Avatar>
                   </div>
                 </div>
-                <div className="sm:col-span-3">
+                <div className="col-span-6 sm:col-span-3">
                   <Label
                     htmlFor="last-name"
                     className="block text-sm font-medium text-gray-700"
@@ -124,16 +127,15 @@ export default function Account(
                       autoComplete="given-name"
                       defaultValue={user.preferredName ?? ""}
                       {...register("preferredName")}
-                      // className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
-                    {errors.touchedFields.preferredName && (
+                    {/* {errors.touchedFields.preferredName && (
                       <span className="mt-2 block text-red-800">
                         {errors.touchedFields.preferredName.valueOf()}
                       </span>
-                    )}
+                    )} */}
                   </div>
                 </div>
-                <div className="sm:col-span-3">
+                <div className="col-span-6 sm:col-span-3">
                   <Label
                     htmlFor="email"
                     className="block text-sm font-medium text-gray-700"
@@ -148,24 +150,34 @@ export default function Account(
                     defaultValue={user.contactEmail ?? user.email}
                     {...register("contactEmail")}
                     className="mt-1"
-                    // className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
-              </div>
-
-              <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                <div className="sm:col-span-6">
-                  <label
+                <div className="col-span-6">
+                  <Label
+                    htmlFor="tag-line"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Tag line
+                  </Label>
+                  <Input
+                    id="tag-line"
+                    type="text"
+                    defaultValue={user.tagLine ?? ""}
+                    {...register("tagLine")}
+                    className="mt-1"
+                  />
+                </div>
+                <div className="col-span-6">
+                  <Label
                     htmlFor="bio"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Bio
-                  </label>
+                  </Label>
                   <div className="mt-1">
                     <Textarea
                       id="bio"
                       rows={3}
-                      // className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                       defaultValue={user.bio ?? ""}
                       {...register("bio")}
                     />
@@ -175,6 +187,8 @@ export default function Account(
                   </p>
                 </div>
               </div>
+
+              <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6"></div>
 
               <div className="pt-5">
                 <div className="flex justify-end gap-6">
@@ -193,7 +207,7 @@ export default function Account(
 }
 
 export const getServerSideProps = requireAuth(async (ctx) => {
-  const session = await getSession(ctx);
+  const session = await getServerAuthSession(ctx);
 
   const user = await prisma.user.findUnique({
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

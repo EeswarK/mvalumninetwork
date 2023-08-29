@@ -63,7 +63,7 @@ model User {
   image         String? // ! Should store in S3
 
   graduationClass Int?
-  majors          String[] // ! This is a string for now, but should be an array
+  tagLine         String? // ! This is a string right now, but could be an array
   bio             String?
 
   approved Approved?
@@ -90,8 +90,7 @@ model Education {
 
   schoolName      String
   degree          String
-  majors          String
-  minor           String?
+  major          String
   graduationClass Int
 
   userId String
