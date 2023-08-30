@@ -92,23 +92,6 @@ const AdditionalInformationOnboarding = (props: IBasicInfoProps) => {
 
       <div className="pt-5">
         <div className="flex justify-end gap-6">
-          <Button
-            variant="outline"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            print
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={(e) => {
-              lastStep;
-              // e.preventDefault();
-            }}
-          >
-            Back
-          </Button>
           <Button type="submit">Next</Button>
         </div>
       </div>

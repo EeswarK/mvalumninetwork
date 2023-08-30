@@ -1,7 +1,7 @@
 import { Layout } from "@components/layout";
+import { InfiniteHits } from "@components/screens/home/InfiniteHits";
 import UserContainer from "@components/screens/home/UserContainer";
 import type { User } from "@prisma/client";
-import { api } from "@utils/api";
 import { requireAuth } from "@utils/auth";
 import algoliasearch from "algoliasearch/lite";
 import type { Hit as AlgoliaHit } from "instantsearch.js";
@@ -19,6 +19,7 @@ import {
   SearchBox,
   InstantSearchSSRProvider,
   getServerState,
+  // InfiniteHits,
 } from "react-instantsearch";
 import { createInstantSearchRouterNext } from "react-instantsearch-router-nextjs";
 
@@ -86,13 +87,15 @@ export default function HomePage({ serverState, url }: HomePageProps) {
 
               {/* <RefinementList attribute="graduationClass" /> */}
 
-              <Hits
+              <InfiniteHits HitComponent={Hit} />
+              {/* <InfiniteHits
                 classNames={{
                   root: "mt-6",
-                  list: "grid gap-4 md:grid-cols-2 lg:grid-cols-3",
+                  list: "space-y-12",
+                  // list: "grid gap-4 md:grid-cols-2 lg:grid-cols-3",
                 }}
                 hitComponent={Hit}
-              />
+              /> */}
             </div>
           </div>
         </Layout>
@@ -102,11 +105,7 @@ export default function HomePage({ serverState, url }: HomePageProps) {
 }
 
 function FallbackComponent({ attribute }: { attribute: string }) {
-  return (
-    <Panel header={attribute}>
-      <RefinementList attribute={attribute} />
-    </Panel>
-  );
+  return <RefinementList attribute={attribute} />;
 }
 
 export const getServerSideProps: GetServerSideProps<HomePageProps> =
@@ -125,21 +124,3 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> =
       },
     };
   });
-
-export function Panel({
-  children,
-  header,
-  footer,
-}: {
-  children: React.ReactNode;
-  header?: React.ReactNode;
-  footer?: React.ReactNode;
-}) {
-  return (
-    <div className="ais-Panel">
-      {header && <div className="ais-Panel-header">{header}</div>}
-      <div className="ais-Panel-body">{children}</div>
-      {footer && <div className="ais-Panel-footer">{footer}</div>}
-    </div>
-  );
-}

@@ -16,8 +16,10 @@ import {
   DialogTitle,
   DialogTrigger,
   Label,
+  Textarea,
 } from "@components/ui";
 import { Card, CardContent } from "@components/ui/card";
+import Linkify from "linkify-react";
 
 type UserContainerProps = {
   user: User;
@@ -55,22 +57,19 @@ function UserContainer(props: UserContainerProps) {
               <p className="text-xs text-muted-foreground">
                 Class of {user.graduationClass}
               </p>
-              {/* <p className="text-xs text-muted-foreground">
-                {user.contactEmail ?? ""}
-              </p> */}
             </div>
           </CardContent>
         </Card>
       </DialogTrigger>
       <DialogContent className="">
-        <DialogHeader className="grid grid-cols-6">
+        <DialogHeader className="grid grid-cols-6 ">
           <div className="col-span-4">
-            <DialogTitle>
+            <DialogTitle className="mt-4">
               {user.firstName} {user.lastName}
             </DialogTitle>
             <DialogDescription className="flex flex-col">
-              <span>{user.contactEmail ?? ""}</span>
               <span>Class of {user.graduationClass}</span>
+              <span>{user.contactEmail ?? ""}</span>
             </DialogDescription>
           </div>
           <Avatar className="col-span-1 h-24 w-24">
@@ -89,17 +88,14 @@ function UserContainer(props: UserContainerProps) {
           </Avatar>
         </DialogHeader>
         <div className="flex flex-col gap-4 text-sm">
-          <div className="flex items-center justify-start gap-4">
-            <Label htmlFor="name" className="text-right">
-              Bio
-            </Label>
-            <span>{user.bio}</span>
-          </div>
-          <div className="flex items-center justify-start gap-4">
-            <Label htmlFor="name" className="text-right">
-              Tag line
-            </Label>
-            <span>{user.tagLine}</span>
+          <span className="text-lg font-medium ">{user.tagLine}</span>
+          <div className="flex flex-col justify-start gap-4 whitespace-pre-line border-t-2 pt-4">
+            <Linkify
+              options={{ target: "_blank" }}
+              className="whitespace-pre-line"
+            >
+              {user.bio}
+            </Linkify>
           </div>
         </div>
       </DialogContent>
