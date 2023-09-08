@@ -20,7 +20,7 @@ function Main() {
         <Hero />
         {/* <PrimaryFeatures /> */}
         {/* not in use */}
-        <SecondaryFeatures />
+        {/* <SecondaryFeatures /> */}
       </main>
     </>
   );

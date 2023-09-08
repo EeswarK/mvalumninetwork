@@ -4,9 +4,21 @@ import { Approved, Role } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter, userProcedure } from "../trpc";
+import {
+  adminProcedure,
+  createTRPCRouter,
+  publicProcedure,
+  userProcedure,
+} from "../trpc";
 
 export const usersRouter = createTRPCRouter({
+  /**
+   * @Public Functions
+   */
+  getTotalUsers: publicProcedure.query(({ ctx }) => {
+    return ctx.prisma.user.count();
+  }),
+
   /**
    * @User Functions
    */

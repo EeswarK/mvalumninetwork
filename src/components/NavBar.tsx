@@ -145,26 +145,30 @@ export function NavBar() {
   return (
     <header
       className={clsx(
-        "sticky top-0 z-50 bg-white",
+        "sticky top-0 z-50",
         seamless
           ? "py-10"
-          : "py-6 shadow-md shadow-slate-900/5 transition duration-500"
+          : "py-6 shadow-md shadow-zinc-900/5 transition duration-500",
+        {
+          "border-b-zinc-900/5 backdrop-blur-sm": _isScrolled,
+          "bg-transparent": !_isScrolled,
+        }
         // {
         //   "dark:bg-slate-900/95 dark:backdrop-blur dark:[@supports(backdrop-filter:blur(0))]:bg-slate-900/75":
-        //     isScrolled,
-        //   "dark:bg-transparent": !isScrolled,
+        //     _isScrolled,
+        //   "dark:bg-transparent": !_isScrolled,
         // }
       )}
     >
       <Layout className="">
         <nav className="text-sm">
           <ul className="flex items-center justify-between">
-            <li>
+            <li className="">
               <Logo />
             </li>
 
             {/* dev option bug fixing */}
-            {IS_DEV && session && (
+            {/* {IS_DEV && session && (
               <li className="ml-auto space-x-4">
                 <Button onClick={() => router.reload()} variant="subtle">
                   Reload Session
@@ -176,10 +180,10 @@ export function NavBar() {
                   check signinflow
                 </Link>
               </li>
-            )}
+            )} */}
 
             {!session && (
-              <li className="ml-auto hidden md:block">
+              <li className="ml-auto block md:block">
                 <Link href="/login" className={buttonVariants({})}>
                   <span>Login</span>
                 </Link>

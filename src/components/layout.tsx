@@ -10,7 +10,7 @@ const layoutStyles = cva("max-w-7xl mx-auto", {
   variants: {
     narrow: {
       true: "max-w-3xl mx-auto",
-      false: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+      false: "max-w-7xl mx-auto px-8 sm:px-12 lg:px-16",
     },
   },
   defaultVariants: {

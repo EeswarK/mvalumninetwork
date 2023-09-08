@@ -22,7 +22,7 @@ export function AppShell(props: { children: React.ReactNode }) {
         <div className="relative flex min-h-screen flex-col">
           {!isNoNavBarPage && <NavBar />}
           <div className="">{children}</div>
-          {!isNoNavBarPage && <Footer />}
+          {/* {!isNoNavBarPage && <Footer />} */}
         </div>
       </ThemeProvider>
     </div>

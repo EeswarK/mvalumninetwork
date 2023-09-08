@@ -1,13 +1,17 @@
 /* eslint-disable tailwindcss/classnames-order */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Layout } from "@components/layout";
+import { api } from "@utils/api";
+import Link from "next/link";
 import React from "react";
 
 export default function Hero() {
+  const numUsers = api.users.getTotalUsers.useQuery();
+
   return (
-    <Layout className="pt-20 pb-16 text-center lg:pt-32">
+    <Layout className="pb-16 text-center lg:pt-32">
       {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-      <h1 className="mx-auto max-w-4xl font-display text-5xl font-semibold text-zinc-900 sm:text-6xl">
+      <h1 className="font-display mx-auto max-w-4xl text-5xl font-semibold text-zinc-900 sm:text-6xl">
         Networking for{" "}
         <span className="relative whitespace-nowrap text-violet-700">
           <svg
@@ -23,9 +27,24 @@ export default function Hero() {
         students and alumni.
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-zinc-700">
-        Lorem Ipsum has been the industry,s standard dummy text ever since the
-        1500s, when an unknown printer took a galley of type and scrambled it to
-        make a type specimen.
+        a platform designed to empower students and foster connections with
+        exceptional monta vista alumni
+      </p>
+
+      <p className="mx-auto mt-6 max-w-2xl text-xl tracking-tight text-zinc-700">
+        {numUsers.data} users and counting!
+      </p>
+      <p className="mx-auto mt-6 max-w-2xl text-xl tracking-tight text-zinc-700">
+        <a
+          href="/signup"
+          className="font-semibold text-violet-700 hover:text-violet-600"
+        >
+          Join the network
+        </a>
+      </p>
+      {/* or login if you already have an account */}
+      <p className="mx-auto max-w-2xl text-sm tracking-tight text-zinc-700 underline">
+        <Link href="/login">or login if you already have an account</Link>
       </p>
     </Layout>
   );

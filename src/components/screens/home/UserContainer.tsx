@@ -89,13 +89,8 @@ function UserContainer(props: UserContainerProps) {
         </DialogHeader>
         <div className="flex flex-col gap-4 text-sm">
           <span className="text-lg font-medium ">{user.tagLine}</span>
-          <div className="flex flex-col justify-start gap-4 whitespace-pre-line border-t-2 pt-4">
-            <Linkify
-              options={{ target: "_blank" }}
-              className="whitespace-pre-line"
-            >
-              {user.bio}
-            </Linkify>
+          <div className="flex flex-col justify-start gap-4 whitespace-pre-line whitespace-pre-line border-t-2 pt-4">
+            <Linkify options={{ target: "_blank" }}>{user.bio}</Linkify>
           </div>
         </div>
       </DialogContent>
